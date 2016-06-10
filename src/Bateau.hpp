@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <iostream>
 #include "Position.hpp"
 
 /*
@@ -36,7 +37,8 @@ public:
   void setDir(int);
   void setEtatPos(bool,Position);
   void setCoule(bool);
-
+  void changeBoatPosition(int);
+  
   // Flux de sortie au format "<taille>;<direction>;<coule>;<etatPos>\n".
   friend std::ostream & operator<<(std::ostream & os, const Bateau & b );
   

@@ -2,10 +2,7 @@
 
 Bateau::Bateau(int taille) : _taille(taille),
 			     _coule(false)
-{
-  determinerNom(taille);
-  
-}
+{ determinerNom(taille); }
 
 void Bateau::determinerNom(int taille)
 {
@@ -61,12 +58,32 @@ void Bateau::setEtatPos(bool etat,Position pos)
       if ( _direction == 4 ) { pos._x++; continue; }
     }
 }
-// EN DEVP
+
 void Bateau::setCoule(bool etatBateau) { _coule = etatBateau; }
 
-inline std::ostream& operator <<(std::ostream& os, const Bateau& b) {
-  os << b._taille << ';' << b._direction << ';' << b._coule;
+/*
+ * Cette fonction change un bateau existant de position
+ * dans une direction souhaitée.
+ * Utilisable lors de la position des navires.
+ */
+void Bateau::changeBoatPosition(int dir)
+{
+  // récupérer la première position du bateau
+  Position basePos = _etatPos[0].second;
+  // attribuer la nouvelle direction
+  setDir(dir);
+  // effacer le vecteur etatPos existant
+  _etatPos.erase(_etatPos.begin(),_etatPos.end());
+  // le recréer avec la nouvelle direction affecté
+  setEtatPos(0,basePos);
+}
+
+std::ostream& operator <<(std::ostream& os, const Bateau& b) {
+  os << b._taille << ';' << b._direction << ';' << b._coule << ';';
+
   for ( unsigned int i=0 ; i < b._etatPos.size() ; ++i )
-    os << b._etatPos[i].first << "_" << b._etatPos[i].second._x 
+    os << b._etatPos[i].first 
+       << '_' << b._etatPos[i].second._x 
+       << '_' << b._etatPos[i].second._y << ';';
   return os;
 }

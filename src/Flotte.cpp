@@ -8,7 +8,7 @@ Flotte::Flotte() : _nbBateaux(6)
   for ( int taille=1 ; taille <= 3 ; ++taille )
     _bateaux.push_back(Bateau(taille));
   _bateaux.push_back(3);
-  for ( int taille=4 ; taille <= 6 ; ++taille )
+  for ( int taille=4 ; taille < 6 ; ++taille )
     _bateaux.push_back(Bateau(taille));
   
   genererFlotte();
@@ -24,7 +24,7 @@ void Flotte::genererFlotte()
   int directionOk;
   Position randPos;
 
-  for ( int i=1 ; i < 6 ; ++i )
+  for ( int i=0 ; i < 6 ; ++i )
     {
       do 
 	{
@@ -129,5 +129,9 @@ bool Flotte::foundInFlotte(Position p) const
 
 
 std::ostream& operator <<(std::ostream& os,const Flotte& f) {
+  for ( std::vector<Bateau>::const_iterator iter = f._bateaux.begin(); 
+	iter != f._bateaux.end(); 
+	iter++ )
+    os << *iter << '\n';
   return os;
 }

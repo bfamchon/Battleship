@@ -3,7 +3,7 @@
 
 #include "Bateau.hpp"
 #include <vector>
-
+#include <iostream>
 /*
  * Représente l'ensemble des bateaux
  *
@@ -25,8 +25,7 @@ public:
   bool estValideGauche(Position,int);
   bool estValideDroite(Position,int,int);
   bool foundInFlotte(Position) const;
+  friend std::ostream & operator<<(std::ostream & os, const Flotte &);
 };
 
-
-std::ostream & operator<<(std::ostream & os, const Flotte &);
 #endif
