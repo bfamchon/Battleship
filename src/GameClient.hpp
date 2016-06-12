@@ -41,6 +41,7 @@ private:
   void runWaitingRoom();
   void runBoards();
   void drawSpriteBG(std::string);
+  void drawSpritesGrid();
 public:
   GameClient();
   void run();

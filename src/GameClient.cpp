@@ -1,5 +1,5 @@
 #include "GameClient.hpp"
-
+#include "Position.hpp"
 /*
  * Initialise simplement la fenetre avec une taille de 800*600,
  * un titre, et une impossibilité de resize.
@@ -154,7 +154,10 @@ void GameClient::runWaitingRoom()
 		  if ( spr_radis.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    runBoards();
 		  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
-		    _flotte->genererFlotte();
+		    {
+		      _flotte->genererFlotte();
+		      drawSpritesGrid();
+		    }
 		}
 	    }
 	  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
@@ -173,6 +176,7 @@ void GameClient::runWaitingRoom()
       _window.draw(spr_wlist);
       _window.draw(spr_grid);
       _window.draw(randomPosText);
+      drawSpritesGrid();
       _window.display();
     }
   
@@ -221,6 +225,7 @@ void GameClient::runBoards()
       drawSpriteBG("../Textures/general_bg.png");
       _window.draw(spr_grid);
       _window.draw(spr_grid2);
+
       _window.display();
     }
 }
@@ -238,3 +243,32 @@ void GameClient::drawSpriteBG(std::string pathImg)
 }
 
 bool GameClient::getWantsToPlay() { return _wantsToPlay; }
+
+void GameClient::drawSpritesGrid()
+{
+  sf::Texture txt_intactCell,txt_seaCell;
+  if (!txt_intactCell.loadFromFile("../Textures/ship_intact.png"))
+    exit(-1);
+  if (!txt_seaCell.loadFromFile("../Textures/sea_cell.png"))
+    exit(-1);
+  sf::Sprite spr_intactCell,spr_seaCell;
+  spr_intactCell.setTexture(txt_intactCell);
+  spr_seaCell.setTexture(txt_seaCell);
+  
+  for ( int x=0 ; x < 10 ; x++ )
+    {
+      for ( int y=0 ; y < 10 ; y++)
+	{
+	  if ( _flotte->foundInFlotte(Position{x,y}) )
+	    {
+	      spr_intactCell.setPosition((CELL_SIZE*x)+52,(CELL_SIZE*y)+127);
+	      _window.draw(spr_intactCell);
+	    }
+	  else
+	    {
+	      spr_seaCell.setPosition((CELL_SIZE*x)+52,(CELL_SIZE*y)+127);
+	      _window.draw(spr_seaCell);
+	    }
+	}
+    }
+}
