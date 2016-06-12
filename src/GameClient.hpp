@@ -1,11 +1,18 @@
-#ifndef VUE_HPP
-#define VUE_HPP
+#ifndef GAMECLIENT_HPP
+#define GAMECLIENT_HPP
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-
+#include <SFML/Audio.hpp>
 #include <string>
 
+/*
+ * Constantes utiles pour simplifier l'écriture
+ * et la lecture du code.
+ * Elles ne sont pas toutes utilisées pour le moment.
+ *
+ * ASKME: Baptiste FAMCHON
+ */
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
@@ -22,14 +29,19 @@ const sf::Color Gray (240,240,240);
 const sf::Color DarkGray (150,150,150);
 const sf::Color RedWine (127,26,26);
 
-class Vue {
-	protected:
-		sf::RenderWindow _window;
-	public:
-		Vue(std::string);
-		virtual void run()=0;
-		void drawSpriteBG(std::string);
-		
+
+class GameClient {
+private:
+  sf::RenderWindow _window;
+  bool _wantsToPlay;
+  
+  void runWaitingRoom();
+  void runBoards();
+  void drawSpriteBG(std::string);
+public:
+  GameClient();
+  void run();
+  bool getWantsToPlay();
 };
 
 #endif
