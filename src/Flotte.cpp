@@ -5,17 +5,20 @@
 // Les 6 bateaux sont initialisés
 Flotte::Flotte() : _nbBateaux(6) 
 {
+  initFlotte();
+}
+
+void Flotte::initFlotte()
+{
   for ( int taille=1 ; taille <= 3 ; ++taille )
     _bateaux.push_back(Bateau(taille));
   _bateaux.push_back(3);
   for ( int taille=4 ; taille < 6 ; ++taille )
     _bateaux.push_back(Bateau(taille));
-  
-  genererFlotte();
 }
 
 /*
- * Generer des positions aleatoires pour la flotte
+ * Generer une nouvelle flotte avec des positions aleatoires
  */
 void Flotte::genererFlotte()
 {
@@ -23,7 +26,11 @@ void Flotte::genererFlotte()
   RandomInRange randomIn;
   int directionOk;
   Position randPos;
-
+  // Effacer l'ancienne flotte
+  _bateaux.erase(_bateaux.begin(),_bateaux.end());
+  // L'initialiser à nouveau
+  initFlotte();
+  
   for ( int i=0 ; i < 6 ; ++i )
     {
       do 

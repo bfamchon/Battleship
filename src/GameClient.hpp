@@ -6,6 +6,8 @@
 #include <SFML/Audio.hpp>
 #include <string>
 
+#include "Flotte.hpp"
+
 /*
  * Constantes utiles pour simplifier l'écriture
  * et la lecture du code.
@@ -34,7 +36,8 @@ class GameClient {
 private:
   sf::RenderWindow _window;
   bool _wantsToPlay;
-  
+  Flotte* _flotte;
+
   void runWaitingRoom();
   void runBoards();
   void drawSpriteBG(std::string);

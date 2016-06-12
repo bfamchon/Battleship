@@ -18,6 +18,7 @@ private:
 
 public:
   Flotte();
+  void initFlotte();
   void genererFlotte();
   int estValide(Position,int,int);
   bool estValideHaut(Position,int);

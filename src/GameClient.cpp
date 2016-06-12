@@ -9,7 +9,8 @@
 GameClient::GameClient() : _window(sf::VideoMode(800, 600),
 				   "Battle Not Cheap - Ready to battle ? Let's connect !",
 				   sf::Style::Titlebar | sf::Style::Close),
-			   _wantsToPlay(true)
+			   _wantsToPlay(true),
+			   _flotte(new Flotte)
 {
 	_window.setPosition(sf::Vector2i((sf::VideoMode::getDesktopMode().width-WINDOW_WIDTH)/2,
 					 (sf::VideoMode::getDesktopMode().height-WINDOW_HEIGHT)/2 ));
@@ -109,20 +110,36 @@ void GameClient::run()
 void GameClient::runWaitingRoom()
 {
   _window.setTitle("Battle Not Cheap - Let's place your ships captain !");
-  sf::Sprite spr_grid, spr_wlist;
-  sf::Texture txt_grid, txt_wlist;
-  
+  sf::Sprite spr_grid, spr_wlist,spr_radis;
+  sf::Texture txt_grid, txt_wlist,txt_radis;
+  sf::Text randomPosText;
+  sf::Font font;
+  if (!font.loadFromFile("../Fonts/DooM.ttf"))
+    exit(-1);
   if (!txt_grid.loadFromFile("../Textures/grid_bg.png"))
     exit(-1);
   if (!txt_wlist.loadFromFile("../Textures/waitinglist_bg.png"))
     exit(-1);
-  
+  if (!txt_radis.loadFromFile("../Textures/radis.png"))
+    exit(-1);
+
   spr_grid.setTexture(txt_grid);
   spr_grid.setPosition(50,125);
   
   spr_wlist.setTexture(txt_wlist);
   spr_wlist.setPosition(450,200);
-  
+
+  spr_radis.setTexture(txt_radis);
+  spr_radis.setPosition(700,525);
+
+  randomPosText.setFont(font);
+  randomPosText.setString("Generate random position");
+  randomPosText.setCharacterSize(20);
+  randomPosText.setColor(Black);
+  randomPosText.setPosition(50,500);
+
+  _flotte->genererFlotte();
+
   while (_window.isOpen())
     {
       sf::Event event;
@@ -134,16 +151,28 @@ void GameClient::runWaitingRoom()
 	    {
 	      if (event.mouseButton.button == sf::Mouse::Left)
 		{
-		  runBoards();
-		  
+		  if ( spr_radis.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+		    runBoards();
+		  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+		    _flotte->genererFlotte();
 		}
 	    }
+	  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+	    randomPosText.setColor(RedWine);
+	  if ( ! randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+	    randomPosText.setColor(Black);
+	  if ( spr_radis.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+	    spr_radis.setColor(DarkGray);
+	  if ( !spr_radis.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+	    spr_radis.setColor(White);
 	}
       
       _window.clear(White);
       drawSpriteBG("../Textures/general_bg.png");
+      _window.draw(spr_radis);
       _window.draw(spr_wlist);
       _window.draw(spr_grid);
+      _window.draw(randomPosText);
       _window.display();
     }
   

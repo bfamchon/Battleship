@@ -41,7 +41,8 @@ public:
   
   // Flux de sortie au format "<taille>;<direction>;<coule>;<etatPos>\n".
   friend std::ostream & operator<<(std::ostream & os, const Bateau & b );
-  
+  // Flux d'entrée au format "<taille>;<direction>;<coule>;<etatPos>\n".
+  //friend std::istream & operator>>(std::istream & is, Bateau & b);
 };
 
 #endif
