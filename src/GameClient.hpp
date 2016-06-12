@@ -7,6 +7,7 @@
 #include <string>
 
 #include "Flotte.hpp"
+#include "Position.hpp"
 
 /*
  * Constantes utiles pour simplifier l'écriture
@@ -41,7 +42,7 @@ private:
   void runWaitingRoom();
   void runBoards();
   void drawSpriteBG(std::string);
-  void drawSpritesGrid();
+  void drawSpritesGrid(float,float);
 public:
   GameClient();
   void run();
