@@ -15,6 +15,7 @@ const PacketType DISCONNECT = SERVEUR_MSG+1;
 const PacketType SHUTDOWN_SERVEUR = SERVEUR_MSG+2;
 const PacketType SEND_USER_WAIT = SERVEUR_MSG+3;
 const PacketType GET_USER_WAIT = SERVEUR_MSG+4;
+const PacketType SEND_LISTE_ATTENTE = SERVEUR_MSG+5;
 
 const PacketType JEU_MSG=50;
 const PacketType START_PLAY = JEU_MSG+1;
