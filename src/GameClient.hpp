@@ -1,13 +1,15 @@
 #ifndef GAMECLIENT_HPP
 #define GAMECLIENT_HPP
 
+
 #include <SFML/Window.hpp>
+#include "SFML/Network.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <string>
-
+#include "PacketType.hpp"
 #include "Flotte.hpp"
-
+#include "Client.hpp"
 /*
  * Constantes utiles pour simplifier l'écriture
  * et la lecture du code.
@@ -37,6 +39,7 @@ private:
   sf::RenderWindow _window;
   bool _wantsToPlay;
   Flotte* _flotte;
+  Client* _client;
 
   void runWaitingRoom();
   void runBoards();
