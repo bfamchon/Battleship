@@ -40,7 +40,7 @@ void Flotte::genererFlotte()
 	  randPos._y = randomIn(0,brdSize-1);
 	  
 	  // Position valide pour cette taille de bateau ?
-	  directionOk = estValide(randPos,_bateaux[i].getTaille(),brdSize-1);
+	  directionOk = estValide(randPos,_bateaux[i].getTaille());
 	  
 	} while ( directionOk == 0 );
       _bateaux[i].setDir(directionOk);
@@ -50,8 +50,9 @@ void Flotte::genererFlotte()
   
 }
 
-int Flotte::estValide(Position p,int taille,int brdSize)
+int Flotte::estValide(Position p,int taille)
 {
+  int brdSize=10;
   if ( estValideHaut(p,taille) )
     return 1;
   if ( estValideBas(p,taille,brdSize) )

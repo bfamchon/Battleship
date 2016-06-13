@@ -10,6 +10,8 @@
 #include "PacketType.hpp"
 #include "Flotte.hpp"
 #include "Client.hpp"
+#include "Position.hpp"
+
 /*
  * Constantes utiles pour simplifier l'écriture
  * et la lecture du code.
@@ -44,7 +46,7 @@ private:
   void runWaitingRoom();
   void runBoards();
   void drawSpriteBG(std::string);
-  void drawSpritesGrid();
+  void drawSpritesGrid(float,float);
 public:
   GameClient();
   void run();

@@ -20,7 +20,7 @@ public:
   Flotte();
   void initFlotte();
   void genererFlotte();
-  int estValide(Position,int,int);
+  int estValide(Position,int);
   bool estValideHaut(Position,int);
   bool estValideBas(Position,int,int);
   bool estValideGauche(Position,int);
