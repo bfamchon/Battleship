@@ -6,14 +6,16 @@
  * La fenetre est ensuite centrée sur l'écran.
  */
 
-GameClient::GameClient() : _window(sf::VideoMode(800, 600),
+GameClient::GameClient(const sf::Texture& bgPath) : _window(sf::VideoMode(800, 600),
 				   "Battle Not Cheap - Ready to battle ? Let's connect !",
 				   sf::Style::Titlebar | sf::Style::Close),
 			   _wantsToPlay(true),
-			   _flotte(new Flotte)
+			   _flotte(new Flotte),
+			   _sprBG(bgPath)
 {
 	_window.setPosition(sf::Vector2i((sf::VideoMode::getDesktopMode().width-WINDOW_WIDTH)/2,
 					 (sf::VideoMode::getDesktopMode().height-WINDOW_HEIGHT)/2 ));
+
 }
 
 /*
@@ -22,7 +24,7 @@ GameClient::GameClient() : _window(sf::VideoMode(800, 600),
  * un serveur.
  *
  */
-
+GameClient::~GameClient() { delete _flotte; }
 void GameClient::run()
 {
   sf::Text connectText,quitText;
@@ -91,8 +93,8 @@ void GameClient::run()
 	}
       
       _window.clear(White);
-      
-      drawSpriteBG("../Textures/general_bg.png");
+      _window.draw(_sprBG);
+
       _window.draw(connectText);
       _window.draw(quitText);
       _window.display();
@@ -159,7 +161,7 @@ void GameClient::runWaitingRoom()
 		      drawSpritesGrid(spr_grid.getPosition().x,spr_grid.getPosition().y);
 		    }
 		}
-	    }
+	    } 
 	  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 	    randomPosText.setColor(RedWine);
 	  if ( ! randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
@@ -171,7 +173,7 @@ void GameClient::runWaitingRoom()
 	}
       
       _window.clear(White);
-      drawSpriteBG("../Textures/general_bg.png");
+      _window.draw(_sprBG);
       _window.draw(spr_radis);
       _window.draw(spr_wlist);
       _window.draw(spr_grid);
@@ -222,24 +224,12 @@ void GameClient::runBoards()
 	}
       
       _window.clear(White);
-      drawSpriteBG("../Textures/general_bg.png");
+      _window.draw(_sprBG);
       _window.draw(spr_grid);
       _window.draw(spr_grid2);
       drawSpritesGrid(spr_grid.getPosition().x,spr_grid.getPosition().y);
       _window.display();
     }
-}
-
-void GameClient::drawSpriteBG(std::string pathImg)
-{
-  sf::Texture bgTexture;
-  if (!bgTexture.loadFromFile(pathImg))
-    exit(-1);
-  sf::Sprite bgSprite;
-  bgSprite.setTexture(bgTexture);
-  bgSprite.setPosition(0,0);
-  _window.draw(bgSprite);
-  
 }
 
 void GameClient::drawSpritesGrid(float posGridX, float posGridY)
