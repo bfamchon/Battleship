@@ -42,7 +42,7 @@ private:
   bool _wantsToPlay;
   Flotte* _flotte;
   sf::Sprite _sprBG;
-	Client* _client;
+  Client* _client;
 
   void runWaitingRoom();
   void runBoards();

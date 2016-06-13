@@ -9,9 +9,9 @@
 GameClient::GameClient(const sf::Texture& bgPath) : _window(sf::VideoMode(800, 600),
 				   "Battle Not Cheap - Ready to battle ? Let's connect !",
 				   sf::Style::Titlebar | sf::Style::Close),
-			   _wantsToPlay(true),
-			   _flotte(new Flotte),
-			   _sprBG(bgPath)
+						    _wantsToPlay(true),
+						    _flotte(new Flotte),
+						    _sprBG(bgPath)
 {
 	_window.setPosition(sf::Vector2i((sf::VideoMode::getDesktopMode().width-WINDOW_WIDTH)/2,
 					 (sf::VideoMode::getDesktopMode().height-WINDOW_HEIGHT)/2 ));
@@ -29,13 +29,17 @@ void GameClient::run()
 {
   std::string bufferIP = "127.0.0.1";
   std::string bufferPseudo = "Pseudo";
-  std::string zonetext = "Pseudo";
+  std::string zoneSaisieTexte = "NothingForTheMoment";
+
   sf::Text connectText,quitText, saisieIP, saisiePseudo;
+
   sf::RectangleShape boxPseudo(sf::Vector2f(200,30));
   sf::RectangleShape boxIp(sf::Vector2f(200,30));
+
   sf::Font font;
   sf::Music music;
   
+  unsigned int fieldMaxSize = 15;
   // Si le chargement des fichiers échoue
   if (!music.openFromFile("../Audio/menu.ogg"))
     exit(-1);
@@ -90,14 +94,13 @@ void GameClient::run()
 		  // Si le client clique dans la zone d'un texte
 		  if ( connectText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
-		      music.stop();
 		      _client = new Client(bufferPseudo);
-		      
-		      if ( _client->connect(bufferIP,5500) == sf::Socket::Done){
-		      	_client->send(INITIAL_NAME_DATA, bufferPseudo);  
-		      
-		        runWaitingRoom();
-		      }
+		      if ( _client->connect(bufferIP,5500) == sf::Socket::Done)
+			{
+			  music.stop();
+			  _client->send(INITIAL_NAME_DATA, bufferPseudo);  
+			  runWaitingRoom();
+			}
 		    }
 		  if ( quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
@@ -105,53 +108,66 @@ void GameClient::run()
 		      _window.close();
 		    }
 		  
-		  if (saisiePseudo.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+		  if (boxPseudo.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
-		      zonetext = "Pseudo";
+		      zoneSaisieTexte = "Pseudo";
 		    }
-		  if (saisieIP.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+		  if (boxIp.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
-		      zonetext = "IP";
+		      zoneSaisieTexte = "IP";
 		    }
 		}
 	    }
            if(event.type==sf::Event::TextEntered)
 			{
 			  char code=static_cast<char>(event.text.unicode);
-
-			   if (zonetext == "Pseudo"){ 
-			    if(code!='\b') bufferPseudo.push_back(code);
-			     else if(code=='\b'){if(bufferPseudo.size()>0) bufferPseudo.pop_back();}
-
-			   } else if (zonetext == "IP"){	 
-			      if(code!='\b') bufferIP.push_back(code);
-			      else if(code=='\b'){if(bufferIP.size()>0) bufferIP.pop_back();}
-			   }
+			  if (zoneSaisieTexte == "Pseudo")
+			    { 
+			      if( code != '\b' && bufferPseudo.size() < fieldMaxSize ) 
+				bufferPseudo.push_back(code);
+			      else if( code == '\b' )
+				{
+				  if(bufferPseudo.size() > 0) 
+				    bufferPseudo.pop_back();
+				}
+			      
+			    } else if (zoneSaisieTexte == "IP")
+			    {	 
+			      if( code != '\b' && bufferIP.size() < fieldMaxSize ) 
+				bufferIP.push_back(code);
+			      else if( code == '\b')
+				{
+				  if(bufferIP.size()>0) 
+				    bufferIP.pop_back();
+				}
+			    }
 			}
-	  
-	  // Si la souris est dans la zone du texte
-	  if ( connectText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
-	    connectText.setColor(RedWine);
-	  if ( ! connectText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
-	    connectText.setColor(Black);
-	  
-	  if ( quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
-	    quitText.setColor(RedWine);
-	  if ( ! quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
-	    quitText.setColor(Black);
+	   
+	   // Si la souris est dans la zone du texte
+	   if ( connectText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+	     connectText.setColor(RedWine);
+	   if ( ! connectText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+	     connectText.setColor(Black);
+	   
+	   if ( quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+	     quitText.setColor(RedWine);
+	   if ( ! quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+	     quitText.setColor(Black);
 	}
       
       _window.clear(White);
+      
       _window.draw(_sprBG);
-		drawSpriteBG("../Textures/general_bg.png");
-
-      _window.draw(boxIp);
-      saisieIP.setString(bufferIP);
-      _window.draw(saisieIP);
-      _window.draw(boxPseudo);
+      
       saisiePseudo.setString(bufferPseudo);
+      saisieIP.setString(bufferIP);
+      
+      _window.draw(boxIp);
+      _window.draw(boxPseudo);   
+      
+      _window.draw(saisieIP);
       _window.draw(saisiePseudo);
-
+      
       _window.draw(connectText);
       _window.draw(quitText);
       
