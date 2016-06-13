@@ -11,17 +11,21 @@
 ///
 ///
 ////////////////////////////////////////////////////////////
-int main(int argc, char **argv)
+int main()
 {
-  bool heWantsToPlay=true;
-  while( heWantsToPlay )
-    {
-      GameClient gc;
-      
-      gc.run();
-      heWantsToPlay = gc.getWantsToPlay();
-    }
-  
-  return 0;
-}
+	bool heWantsToPlay=true;
+	sf::Texture txt_BG;
 
+	if (!txt_BG.loadFromFile("../Textures/general_bg.png"))
+	  exit(-1);
+
+	while( heWantsToPlay )
+	{
+	  GameClient gc(txt_BG);
+		
+		gc.run();
+		heWantsToPlay = gc.getWantsToPlay();
+	}
+	
+	return 0;
+}

@@ -33,7 +33,7 @@ const sf::Color White (255,255,255);
 const sf::Color Black (0,0,0);
 const sf::Color Gray (240,240,240);
 const sf::Color DarkGray (150,150,150);
-const sf::Color RedWine (127,26,26);
+const sf::Color RedWine (80,28,28);
 
 
 class GameClient {
@@ -41,14 +41,15 @@ private:
   sf::RenderWindow _window;
   bool _wantsToPlay;
   Flotte* _flotte;
+  sf::Sprite _sprBG;
   Client* _client;
 
   void runWaitingRoom();
   void runBoards();
-  void drawSpriteBG(std::string);
   void drawSpritesGrid(float,float);
 public:
-  GameClient();
+  GameClient(const sf::Texture&);
+  ~GameClient();
   void run();
   bool getWantsToPlay();
 };
