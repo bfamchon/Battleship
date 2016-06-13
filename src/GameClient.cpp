@@ -27,7 +27,12 @@ GameClient::GameClient(const sf::Texture& bgPath) : _window(sf::VideoMode(800, 6
 GameClient::~GameClient() { delete _flotte; }
 void GameClient::run()
 {
-  sf::Text connectText,quitText;
+  std::string bufferIP = "127.0.0.1";
+  std::string bufferPseudo = "Pseudo";
+  std::string zonetext = "Pseudo";
+  sf::Text connectText,quitText, saisieIP, saisiePseudo;
+  sf::RectangleShape boxPseudo(sf::Vector2f(200,30));
+  sf::RectangleShape boxIp(sf::Vector2f(200,30));
   sf::Font font;
   sf::Music music;
   
@@ -49,6 +54,21 @@ void GameClient::run()
   quitText.setCharacterSize(20);
   quitText.setColor(Black);
   quitText.setPosition(50,350);
+
+  boxPseudo.setPosition(50,200);
+  saisiePseudo.setPosition(55, 205);
+  saisiePseudo.setFont(font);
+  saisiePseudo.setString(bufferPseudo);
+  saisiePseudo.setCharacterSize(20);
+  saisiePseudo.setColor(RedWine);
+  
+  boxIp.setPosition(50,250);
+  saisieIP.setPosition(55, 255);
+  saisieIP.setFont(font);
+  saisieIP.setString(bufferIP);
+  saisieIP.setCharacterSize(20);
+  saisieIP.setColor(RedWine);
+  
   
   music.setVolume(40);
   music.play();
@@ -71,15 +91,44 @@ void GameClient::run()
 		  if ( connectText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      music.stop();
-		      runWaitingRoom();
+		      _client = new Client(bufferPseudo);
+		      
+		      if ( _client->connect(bufferIP,5500) == sf::Socket::Done){
+		      	_client->send(INITIAL_NAME_DATA, bufferPseudo);  
+		      
+		        runWaitingRoom();
+		      }
 		    }
 		  if ( quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      _wantsToPlay=false;
 		      _window.close();
 		    }
+		  
+		  if (saisiePseudo.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+		    {
+		      zonetext = "Pseudo";
+		    }
+		  if (saisieIP.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+		    {
+		      zonetext = "IP";
+		    }
 		}
 	    }
+           if(event.type==sf::Event::TextEntered)
+			{
+			  char code=static_cast<char>(event.text.unicode);
+
+			   if (zonetext == "Pseudo"){ 
+			    if(code!='\b') bufferPseudo.push_back(code);
+			     else if(code=='\b'){if(bufferPseudo.size()>0) bufferPseudo.pop_back();}
+
+			   } else if (zonetext == "IP"){	 
+			      if(code!='\b') bufferIP.push_back(code);
+			      else if(code=='\b'){if(bufferIP.size()>0) bufferIP.pop_back();}
+			   }
+			}
+	  
 	  // Si la souris est dans la zone du texte
 	  if ( connectText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 	    connectText.setColor(RedWine);
@@ -94,9 +143,18 @@ void GameClient::run()
       
       _window.clear(White);
       _window.draw(_sprBG);
+		drawSpriteBG("../Textures/general_bg.png");
+
+      _window.draw(boxIp);
+      saisieIP.setString(bufferIP);
+      _window.draw(saisieIP);
+      _window.draw(boxPseudo);
+      saisiePseudo.setString(bufferPseudo);
+      _window.draw(saisiePseudo);
 
       _window.draw(connectText);
       _window.draw(quitText);
+      
       _window.display();
     }
 }

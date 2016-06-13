@@ -1,12 +1,15 @@
 #ifndef GAMECLIENT_HPP
 #define GAMECLIENT_HPP
 
+
 #include <SFML/Window.hpp>
+#include "SFML/Network.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <string>
-
+#include "PacketType.hpp"
 #include "Flotte.hpp"
+#include "Client.hpp"
 #include "Position.hpp"
 
 /*
@@ -39,7 +42,8 @@ private:
   bool _wantsToPlay;
   Flotte* _flotte;
   sf::Sprite _sprBG;
-  
+	Client* _client;
+
   void runWaitingRoom();
   void runBoards();
   void drawSpritesGrid(float,float);
