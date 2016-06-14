@@ -2,7 +2,8 @@
 #include "Serveur.hpp"
 #include "PacketType.hpp"
 #include <iostream>
-#include "Client.hpp"
+#include <sstream>
+//#include "Client.hpp"
 //#include <vector>
 
 Serveur::Serveur(unsigned short port)
@@ -11,8 +12,6 @@ Serveur::Serveur(unsigned short port)
   _listner.setBlocking(false);
   _quit =  false;
 }
-
-
 
 Serveur::~Serveur()
 {
@@ -37,20 +36,32 @@ void Serveur::handlePackets()
 	    {
 	    case INITIAL_NAME_DATA:
 	      //store the name
-	      {packet>>it->second;
+	      { 
+	 	packet>>it->second;
+                if (_jeu.getJCourant()->getPseudo() == "notInit"){
+		  _jeu.getJCourant()->setPseudo(it->second);
+		   _jeu.changeJoueur();
+		}
+	      		
 		//	std::cout<<it->second<<" has joined\n";
-		// broadCast(INITIAL_NAME_DATA, it->second+" has joined\n");
+		//	broadCast(GENERAL_MSG, it->second+" has joined\n");
+		broadCast(SEND_LISTE_ATTENTE,
+			  _jeu.getListeJoueur() );
+
+		/*if (_jeu._joueur1.getPseudo() !=
+		  _jeu._joueur1.setPseudo(it->second);
+		    */
 		// creer joueur et
 	      
 		//renvoyer la liste d'attente
-		sf::sleep(sf::milliseconds(1000));
-		std::string listeAttente = "";
+		//sf::sleep(sf::milliseconds(1000));
+		/*	std::string listeAttente = "";
 		for(Clients::iterator it2=_clients.begin(); it2!=_clients.end();)
 		  {
 		    listeAttente += it2->second;
 		    listeAttente += "\n";
 		  }
-		  broadCast(SEND_LISTE_ATTENTE, listeAttente );
+		  broadCast(SEND_LISTE_ATTENTE, listeAttente );*/
 	      }
               break;
 	      
@@ -76,6 +87,22 @@ void Serveur::handlePackets()
 
 	      }
 	      break;
+	      
+	    case  SEND_FLOTTE:
+	      {/*std::string msg;
+	       packet>>msg;
+               it->second;
+	       packet>>it->second;
+                if (_jeu.getJCourant()->getPseudo() == "notInit"){
+		  _jeu.getJCourant()->setPseudo(it->second);
+		   _jeu.changeJoueur();
+	       
+	       msg >>
+	       */
+	      }
+
+	      break;
+	     
 	      /*
 	    case  :
 
@@ -91,7 +118,9 @@ void Serveur::handlePackets()
 	case sf::Socket::Disconnected:
 	  std::cout<<it->second<<" has been disconnected\n";
 	  broadCast(GENERAL_MSG, it->second+" has been disconnected\n");
+	  _jeu.initJoueur(it->second);
 	  it=_clients.erase(it);
+	  broadCast(SEND_LISTE_ATTENTE,_jeu.getListeJoueur() );
 	  break;
 
 	default:
@@ -110,10 +139,10 @@ void Serveur::broadCast(PacketType type, const std::string & msg)
     }
  }
 
-void sendClient(Client & client ,PacketType type, const std::string & msg){
-  //sf::Packet pack;
-  //pack<<type<<msg;
-  client.send(type,msg);
+sf::Socket::Status sendClient(sf::TcpSocket & Socketclient ,PacketType type, const std::string & msg){
+  sf::Packet packet;
+  packet<<type<<msg;
+  return Socketclient.send(packet);
 }
 
 void Serveur::run()
@@ -129,21 +158,33 @@ void Serveur::run()
 		    });
   thread.launch();
 
+  //int cpt = 0;
   sf::TcpSocket * nextClient=nullptr;
   while(!_quit)
     {
       //Handle newcoming clients
-      if(nextClient==nullptr)
-	{
-	  nextClient=new sf::TcpSocket;
-	  nextClient->setBlocking(false);
-	}
-      if(_listner.accept(*nextClient) == sf::Socket::Done)
-	{
-	  _clients.insert(std::make_pair(nextClient, ""));
-	  nextClient=nullptr;
-	}
-      handlePackets();
+      /* if (cpt !=_clients.size() ){
+        std::cout << "nb client " <<_clients.size() << std::endl;
+        cpt = _clients.size() ;
+	}*/
+      // if (_clients.size()<2){
+        if(nextClient==nullptr)
+	  {
+	    nextClient=new sf::TcpSocket;
+	    nextClient->setBlocking(false);
+	  }
+	if(_listner.accept(*nextClient) == sf::Socket::Done && _clients.size()<2) //ici
+	  {
+	    _clients.insert(std::make_pair(nextClient, ""));
+	    nextClient=nullptr;
+	  }
+	handlePackets();
+	// }
+	/* else {
+	sf::Packet packet;
+	packet<< SERVEUR_FULL <<"Désolé partie complette";
+	nextClient->send(packet);
+      }*/
     }
 }
 

@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include "SFML/Network.hpp"
 #include "PacketType.hpp"
-#include "Jeu.hpp"
 #include <vector>
 
 class Serveur
@@ -13,18 +12,20 @@ class Serveur
 private:
 	typedef std::unordered_map<sf::TcpSocket *, std::string> Clients;
 	Clients _clients;
-        Jeu _jeu;
 	sf::TcpListener _listner;
         bool _quit;  
 
 	void handlePackets();
 	void broadCast(PacketType type, const std::string & msg);
-        sf::Socket::Status sendClient(sf::TcpSocket & Socketclient ,PacketType type, const std::string & msg);
+        void sendClient(const Clients & client ,PacketType type, const std::string & msg);
     
 public:
 	Serveur(unsigned short port);
 	~Serveur();
-        void run();	
+	void run();
+  int _cpt ;
+	
+	
 };
 
 

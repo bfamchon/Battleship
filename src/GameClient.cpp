@@ -1,6 +1,7 @@
 #include "GameClient.hpp"
 #include "Position.hpp"
 #include <iostream>
+#include <sstream>
 /*
  * Initialise simplement la fenetre avec une taille de 800*600,
  * un titre, et une impossibilité de resize.
@@ -103,14 +104,16 @@ void GameClient::run()
 			{
 			  _joueur.setPseudo(bufferPseudo);
 			  music.stop();
-			  _client.send(INITIAL_NAME_DATA, bufferPseudo);  
-			  runWaitingRoom();
-			}
+			  if (_client.send(INITIAL_NAME_DATA, bufferPseudo)
+			      == sf::Socket::Done ) {  
+			    runWaitingRoom();}
+			  }
+			  
 		    }
 		  if ( quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      _wantsToPlay=false;
-		      _client->send(DISCONNECT, _client->getClientName());
+		      _client.send(DISCONNECT, _joueur.getPseudo());
 		      _window.close();
 		    }
 		  
@@ -244,7 +247,14 @@ void GameClient::runWaitingRoom()
 	      if (event.mouseButton.button == sf::Mouse::Left)
 		{
 		  if ( spr_radis.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
-		    runBoards();
+		    { //eric
+		      std::ostringstream uneflotte;
+		      uneflotte << _joueur.getFlotte();
+		      if (_client.send(SEND_FLOTTE, uneflotte.str())
+			  == sf::Socket::Done ) {  
+			runBoards();}
+		    }
+		 
 		  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      _joueur.setRandFlotte();
@@ -263,9 +273,10 @@ void GameClient::runWaitingRoom()
 	}
 
       std::string msg="";
-      if (_client->receive(msg) == sf::Socket::Done){
-        wlistText.setString(msg);    
+      if (_client.receive(msg) == sf::Socket::Done){
+        wlistText.setString(_client._ListeJoueurs);    
       }
+      
       _window.clear(White);
       _window.draw(_sprBG);
       _window.draw(spr_radis);

@@ -26,28 +26,32 @@ sf::Socket::Status Client::receive(std::string & msg)
 {
   sf::Packet packet;
   sf::Socket::Status status=_mySocket.receive(packet);
-  PacketType type;
-  packet>>type;
+  // PacketType type;
+  //packet>>type;
   if(status==sf::Socket::Done)
     {
-      std::cout<<msg<<"\n";
-      packet>>msg;
+      msg = handlePackets(packet);
+      //std::cout<<msg<<"\n";
+      //packet>>msg;
     }
   return status;
 }
 
-void handlePackets(sf::Packet & packet){
+std::string Client::handlePackets(sf::Packet & packet){
   PacketType type;
+  std::string msg;
+  std::string retour="";
   packet>>type;
-
   switch(type)
     {
     case SEND_LISTE_ATTENTE:
       {
-       	
+       packet>>msg;	
+       _ListeJoueurs = msg;
       }
       break;
     }
+  return retour;
 }
 
 
