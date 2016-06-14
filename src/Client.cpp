@@ -2,13 +2,9 @@
 #include "PacketType.hpp"
 #include <iostream>
 
-Client::Client(const std::string & name):_myName(name)
-{
-}
+Client::Client() {}
 
-Client::~Client(void)
-{
-}
+Client::~Client() {}
 
 sf::Socket::Status Client::connect(const sf::IpAddress & IP, unsigned short port)
 {

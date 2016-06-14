@@ -8,10 +8,9 @@
 class Client
 {
 private:
-	std::string _myName;
 	sf::TcpSocket _mySocket;
 public:
-	Client(const std::string & name);
+	Client();
 	~Client();
 
 
