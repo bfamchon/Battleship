@@ -1,3 +1,4 @@
+#include <SFML/System.hpp>
 #include "Serveur.hpp"
 #include "PacketType.hpp"
 #include <iostream>
@@ -10,6 +11,7 @@ Serveur::Serveur(unsigned short port)
   _listner.setBlocking(false);
   _quit =  false;
 }
+
 
 
 Serveur::~Serveur()
@@ -36,18 +38,19 @@ void Serveur::handlePackets()
 	    case INITIAL_NAME_DATA:
 	      //store the name
 	      {packet>>it->second;
-		std::cout<<it->second<<" has joined\n";
+		//	std::cout<<it->second<<" has joined\n";
 		// broadCast(INITIAL_NAME_DATA, it->second+" has joined\n");
 		// creer joueur et
 	      
 		//renvoyer la liste d'attente
+		sf::sleep(sf::milliseconds(1000));
 		std::string listeAttente = "";
 		for(Clients::iterator it2=_clients.begin(); it2!=_clients.end();)
 		  {
 		    listeAttente += it2->second;
 		    listeAttente += "\n";
 		  }
-		broadCast(SEND_LISTE_ATTENTE, listeAttente );
+		  broadCast(SEND_LISTE_ATTENTE, listeAttente );
 	      }
               break;
 	      
@@ -66,11 +69,14 @@ void Serveur::handlePackets()
 	      _quit = true;
 	      }
 	      break;
-	      /*
-	    case  :
+	      
+	    case  DISCONNECT:
+	      //traiter deconnexion
+	      {
 
+	      }
 	      break;
-
+	      /*
 	    case  :
 
 	      break;

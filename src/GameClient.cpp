@@ -76,7 +76,8 @@ void GameClient::run()
   
   music.setVolume(40);
   music.play();
-  
+
+ 
   while (_window.isOpen())
     {
       sf::Event event;
@@ -105,6 +106,7 @@ void GameClient::run()
 		  if ( quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      _wantsToPlay=false;
+		      _client->send(DISCONNECT, _client->getClientName());
 		      _window.close();
 		    }
 		  
@@ -188,7 +190,7 @@ void GameClient::runWaitingRoom()
   _window.setTitle("Battle Not Cheap - Let's place your ships captain !");
   sf::Sprite spr_grid, spr_wlist,spr_radis;
   sf::Texture txt_grid, txt_wlist,txt_radis;
-  sf::Text randomPosText;
+  sf::Text randomPosText, wlistText;
   sf::Font font;
   if (!font.loadFromFile("../Fonts/DooM.ttf"))
     exit(-1);
@@ -213,6 +215,12 @@ void GameClient::runWaitingRoom()
   randomPosText.setCharacterSize(20);
   randomPosText.setColor(Black);
   randomPosText.setPosition(50,500);
+
+  wlistText.setFont(font);
+  wlistText.setString("");
+  wlistText.setCharacterSize(20);
+  wlistText.setColor(Black);
+  wlistText.setPosition(460,220);
 
   _flotte->genererFlotte();
 
@@ -245,11 +253,16 @@ void GameClient::runWaitingRoom()
 	  if ( !spr_radis.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 	    spr_radis.setColor(White);
 	}
-      
+
+      std::string msg="";
+      if (_client->receive(msg) == sf::Socket::Done){
+        wlistText.setString(msg);    
+      }
       _window.clear(White);
       _window.draw(_sprBG);
       _window.draw(spr_radis);
       _window.draw(spr_wlist);
+      _window.draw(wlistText);
       _window.draw(spr_grid);
       _window.draw(randomPosText);
       drawSpritesGrid(spr_grid.getPosition().x,spr_grid.getPosition().y);

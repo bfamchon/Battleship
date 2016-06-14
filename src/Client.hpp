@@ -13,7 +13,7 @@ private:
 public:
   Client(const std::string & name);
   ~Client();
-
+  std::string getClientName(void) const;
 
   sf::Socket::Status connect(const sf::IpAddress & IP, unsigned short port);
   sf::Socket::Status send (PacketType type, const std::string & msg);

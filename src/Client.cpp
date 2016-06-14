@@ -10,6 +10,10 @@ Client::~Client(void)
 {
 }
 
+std::string Client::getClientName(void) const{
+  return _myName;
+}
+
 sf::Socket::Status Client::connect(const sf::IpAddress & IP, unsigned short port)
 {
   //connect to server
@@ -47,7 +51,7 @@ void handlePackets(sf::Packet & packet){
     {
     case SEND_LISTE_ATTENTE:
       {
-	
+       	
       }
       break;
     }
