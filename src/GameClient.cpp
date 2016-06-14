@@ -1,5 +1,6 @@
 #include "GameClient.hpp"
 #include "Position.hpp"
+#include "RandomInRange.hpp"
 #include <iostream>
 /*
  * Initialise simplement la fenetre avec une taille de 800*600,
@@ -110,7 +111,7 @@ void GameClient::run()
 		  if ( quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      _wantsToPlay=false;
-		      _client->send(DISCONNECT, _client->getClientName());
+		      _client.send(DISCONNECT, _joueur.getPseudo());
 		      _window.close();
 		    }
 		  
@@ -122,6 +123,8 @@ void GameClient::run()
 		    }
 		  if (spr_zoneIP.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
+		      if ( bufferIP == "IP Adress" )
+			bufferIP = "";
 		      saisieIP.setColor(DarkGray);
 		      zoneSaisieTexte = "IP";
 		      saisiePseudo.setColor(Gray);
@@ -263,7 +266,7 @@ void GameClient::runWaitingRoom()
 	}
 
       std::string msg="";
-      if (_client->receive(msg) == sf::Socket::Done){
+      if (_client.receive(msg) == sf::Socket::Done){
         wlistText.setString(msg);    
       }
       _window.clear(White);
@@ -315,10 +318,11 @@ void GameClient::runBoards()
 		{
 		  if ( spr_grid2.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
-		      // Echange client serveur
-		      int xPosInGrid2 = WINDOW_WIDTH - 25 - sf::Mouse::getPosition(_window).x;
-		      int yPosInGrid2 = WINDOW_HEIGHT - 125 - sf::Mouse::getPosition(_window).y;
-		      //_joueur.setHitAt(RandomInRange(1,2),)
+		      // Echange client serveur A FAIRE ERIC //////////////////
+		      int xPosInGrid2 = (sf::Mouse::getPosition(_window).x - 425)/CELL_SIZE;
+		      int yPosInGrid2 = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
+		      RandomInRange r;
+		      _joueur.setHitAt(r(1,2),xPosInGrid2,yPosInGrid2);
 		    }
 		}
 	    }

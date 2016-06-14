@@ -1,4 +1,5 @@
 #include "Joueur.hpp"
+#include <iostream>
 
 Joueur::Joueur(std::string pseudo) : _pseudo(pseudo),_flotte()
 {
@@ -15,5 +16,5 @@ std::string Joueur::getPseudo() const { return _pseudo; }
 void Joueur::setPseudo(std::string pseudo) { _pseudo = pseudo; }
 Flotte Joueur::getFlotte() const { return _flotte; }
 void Joueur::setRandFlotte() { _flotte.genererFlotte(); }
-int Joueur::getHitAt(int x,int y) const { return _testedHits[x*10+y]; }
-void Joueur::setHitAt(int etat, int x, int y) { _testedHits[x*10+y] = etat; }
+int Joueur::getHitAt(int x,int y) const { return _testedHits[y*10+x]; }
+void Joueur::setHitAt(int etat, int x, int y) { _testedHits[y*10+x] = etat; }

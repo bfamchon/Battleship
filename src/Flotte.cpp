@@ -142,3 +142,13 @@ std::ostream& operator <<(std::ostream& os,const Flotte& f) {
     os << *iter << '\n';
   return os;
 }
+
+std::istream & operator>>(std::istream & is, Flotte & f) {
+  /*for ( unsigned int i = 0 ; i < 6 ; ++i )
+    {
+    for ( unsigned int j = 0 
+    f[i];
+    }
+  */
+  return is;
+}
