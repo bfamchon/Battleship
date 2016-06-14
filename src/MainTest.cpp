@@ -3,3 +3,4 @@
 
 #include "Bateau_test.hpp"
 #include "Flotte_test.hpp"
+#include "Joueur_test.hpp"

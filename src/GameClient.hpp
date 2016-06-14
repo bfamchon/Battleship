@@ -3,14 +3,13 @@
 
 
 #include <SFML/Window.hpp>
-#include "SFML/Network.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <string>
 #include "PacketType.hpp"
-#include "Flotte.hpp"
 #include "Client.hpp"
 #include "Position.hpp"
+#include "Joueur.hpp"
 
 /*
  * Constantes utiles pour simplifier l'écriture
@@ -31,8 +30,8 @@ const int CELL_HEIGHT = GRID_HEIGHT / CELL_SIZE;
 
 const sf::Color White (255,255,255);
 const sf::Color Black (0,0,0);
-const sf::Color Gray (240,240,240);
-const sf::Color DarkGray (150,150,150);
+const sf::Color Gray (150,150,150);
+const sf::Color DarkGray (100,100,100);
 const sf::Color RedWine (80,28,28);
 
 
@@ -40,13 +39,14 @@ class GameClient {
 private:
   sf::RenderWindow _window;
   bool _wantsToPlay;
-  Flotte* _flotte;
   sf::Sprite _sprBG;
-  Client* _client;
+  Joueur _joueur;
+  Client _client;
 
   void runWaitingRoom();
   void runBoards();
   void drawSpritesGrid(float,float);
+  void drawSpritesHits(float,float);
 public:
   GameClient(const sf::Texture&);
   ~GameClient();

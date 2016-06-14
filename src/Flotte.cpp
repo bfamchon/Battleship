@@ -45,7 +45,6 @@ void Flotte::genererFlotte()
 	} while ( directionOk == 0 );
       _bateaux[i].setDir(directionOk);
       _bateaux[i].setEtatPos(false,randPos);
-      
     }
   
 }
