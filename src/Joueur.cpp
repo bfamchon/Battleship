@@ -1,4 +1,5 @@
 #include "Joueur.hpp"
+#include <iostream>
 
 Joueur::Joueur(std::string pseudo) : _pseudo(pseudo),_flotte()
 {

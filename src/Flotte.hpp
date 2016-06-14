@@ -27,6 +27,7 @@ public:
   bool estValideDroite(Position,int,int);
   bool foundInFlotte(Position) const;
   friend std::ostream & operator<<(std::ostream & os, const Flotte &);
+  friend std::istream & operator>>(std::istream & is, Flotte &);
 };
 
 #endif
