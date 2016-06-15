@@ -81,9 +81,19 @@ void Serveur::handlePackets()
 	      {std::string msg;
 		packet>>msg; //flotte sous forme de string
                 //it->second; //Pseudo
-		//  Joueur* j = _jeu.joueurByName(it->second);
-
-		//	j->setFlotte(msg);
+		Joueur* j = _jeu.searchByName(it->second);
+		 Flotte f;
+		 std::istringstream iss(msg);
+		 iss >> f;
+		 std::cout << f << std::endl;
+		 j->setFlotte(f);
+		 //a supprimer juste our test
+                 std::ostringstream oss,oss2;
+		 oss << _jeu.getJoueur1().getFlotte();
+		 std::cout<< "Joueur 1 : \n"<< oss.str() << std::endl;		 
+		 oss2 << _jeu.getJoueur2().getFlotte();
+		 std::cout<< "Joueur 2 : \n"<< oss2.str() << std::endl;
+		 //fin a supprimer
 	      }
 
 	      break;
