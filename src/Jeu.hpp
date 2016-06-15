@@ -32,6 +32,7 @@ public:
                       _joueur2.setPseudo("notInit");
   }
   
+
 Joueur* searchByName(const std::string & nomJoueur){
    if ( _joueur1.getPseudo() == nomJoueur) return &_joueur1;
    if ( _joueur2.getPseudo() == nomJoueur) return &_joueur2;
