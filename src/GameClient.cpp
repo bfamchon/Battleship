@@ -29,11 +29,12 @@ GameClient::GameClient(const sf::Texture& bgPath) : _window(sf::VideoMode(800, 6
 GameClient::~GameClient() {}
 void GameClient::run()
 {
+  std::string msg="";
   std::string bufferIP = "IP Adress";
   std::string bufferPseudo = "Pseudo";
   std::string zoneSaisieTexte = "NothingForTheMoment";
 
-  sf::Text connectText,quitText, saisieIP, saisiePseudo;
+  sf::Text connectText,quitText, saisieIP, saisiePseudo, messageServeur;
 
   sf::Sprite spr_zoneIP,spr_zonePseudo;
   sf::Texture txt_typeZone;
@@ -80,6 +81,12 @@ void GameClient::run()
   spr_zonePseudo.setPosition(50,200);  
   spr_zoneIP.setPosition(50,250);
 
+  messageServeur.setFont(font);
+  messageServeur.setString("");
+  messageServeur.setCharacterSize(20);
+  messageServeur.setColor(Black);
+  messageServeur.setPosition(50,10);
+
   music.setVolume(40);
   music.play();
 
@@ -100,16 +107,19 @@ void GameClient::run()
 		{
 		  // Si le client clique dans la zone d'un texte
 		  if ( connectText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
-		    {
-		      if ( _client.connect(bufferIP,5500) == sf::Socket::Done)
+		    {if ( _client.connect(bufferIP,5500) == sf::Socket::Done)
 			{
 			  _joueur.setPseudo(bufferPseudo);
 			  music.stop();
 			  if (_client.send(INITIAL_NAME_DATA, bufferPseudo)
-			      == sf::Socket::Done ) {  
-			    runWaitingRoom();}
-			  }
-			  
+			      == sf::Socket::Done )
+			    {			      
+			      if (_client.receive(msg) == sf::Socket::Done)
+				{
+				  messageServeur.setString(_client._messageServeur); 
+				} else  runWaitingRoom();
+			    }
+			}		     	  
 		    }
 		  if ( quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
@@ -170,6 +180,12 @@ void GameClient::run()
 	   if ( ! quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 	     quitText.setColor(Black);
 	}
+
+      if (_client.receive(msg) == sf::Socket::Done){
+        messageServeur.setString(_client._messageServeur);
+	 std::cout << msg << std::endl;
+	}
+      
       
       _window.clear(White);
       
@@ -180,7 +196,7 @@ void GameClient::run()
       
       _window.draw(spr_zoneIP);
       _window.draw(spr_zonePseudo);   
-      
+      _window.draw(messageServeur);
       _window.draw(saisieIP);
       _window.draw(saisiePseudo);
       _window.draw(connectText);
@@ -277,8 +293,7 @@ void GameClient::runWaitingRoom()
 
       std::string msg="";
       if (_client.receive(msg) == sf::Socket::Done){
-        wlistText.setString(_client._ListeJoueurs);    
-
+        wlistText.setString(_client._listeJoueurs);    
       }
       
       _window.clear(White);

@@ -42,26 +42,8 @@ void Serveur::handlePackets()
 		  _jeu.getJCourant()->setPseudo(it->second);
 		   _jeu.changeJoueur();
 		}
-	      		
-		//	std::cout<<it->second<<" has joined\n";
-		//	broadCast(GENERAL_MSG, it->second+" has joined\n");
 		broadCast(SEND_LISTE_ATTENTE,
 			  _jeu.getListeJoueur() );
-
-		/*if (_jeu._joueur1.getPseudo() !=
-		  _jeu._joueur1.setPseudo(it->second);
-		    */
-		// creer joueur et
-	      
-		//renvoyer la liste d'attente
-		//sf::sleep(sf::milliseconds(1000));
-		/*	std::string listeAttente = "";
-		for(Clients::iterator it2=_clients.begin(); it2!=_clients.end();)
-		  {
-		    listeAttente += it2->second;
-		    listeAttente += "\n";
-		  }
-		  broadCast(SEND_LISTE_ATTENTE, listeAttente );*/
 	      }
               break;
 	      
@@ -87,18 +69,21 @@ void Serveur::handlePackets()
 
 	      }
 	      break;
+
+	    case SEND_COUP: //eric a faire
+	      //Recoit un coup du client
+	      {std::string msg;
+               	packet>>msg;
+	      }
+	      break;
 	      
-	    case  SEND_FLOTTE:
-	      {/*std::string msg;
-	       packet>>msg;
-               it->second;
-	       packet>>it->second;
-                if (_jeu.getJCourant()->getPseudo() == "notInit"){
-		  _jeu.getJCourant()->setPseudo(it->second);
-		   _jeu.changeJoueur();
-	       
-	       msg >>
-	       */
+	    case  SEND_FLOTTE: // eric a faire
+	      {std::string msg;
+		packet>>msg; //flotte sous forme de string
+                //it->second; //Pseudo
+		//  Joueur* j = _jeu.joueurByName(it->second);
+
+		//	j->setFlotte(msg);
 	      }
 
 	      break;
@@ -158,33 +143,28 @@ void Serveur::run()
 		    });
   thread.launch();
 
-  //int cpt = 0;
   sf::TcpSocket * nextClient=nullptr;
   while(!_quit)
     {
       //Handle newcoming clients
-      /* if (cpt !=_clients.size() ){
-        std::cout << "nb client " <<_clients.size() << std::endl;
-        cpt = _clients.size() ;
-	}*/
-      // if (_clients.size()<2){
-        if(nextClient==nullptr)
-	  {
-	    nextClient=new sf::TcpSocket;
-	    nextClient->setBlocking(false);
-	  }
-	if(_listner.accept(*nextClient) == sf::Socket::Done && _clients.size()<2) //ici
-	  {
-	    _clients.insert(std::make_pair(nextClient, ""));
-	    nextClient=nullptr;
-	  }
-	handlePackets();
-	// }
-	/* else {
+      if(nextClient==nullptr)
+	{
+	  nextClient=new sf::TcpSocket;
+	  nextClient->setBlocking(false);
+	}
+      if(_listner.accept(*nextClient) == sf::Socket::Done && _clients.size()<2) //ici
+	{
+	  _clients.insert(std::make_pair(nextClient, ""));
+	  nextClient=nullptr;
+	} else {
 	sf::Packet packet;
-	packet<< SERVEUR_FULL <<"Désolé partie complette";
-	nextClient->send(packet);
-      }*/
+	packet<< SERVEUR_FULL <<"Desole partie complette";
+     	nextClient->send(packet);
+      }
+	
+      //Handle messages du clien vers serveur 	
+      handlePackets();
+
     }
 }
 
