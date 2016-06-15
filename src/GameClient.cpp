@@ -320,10 +320,12 @@ void GameClient::runBoards()
 {
   _window.setTitle("Battle Not Cheap - FIRE !");
   
-  sf::Sprite spr_grid, spr_grid2;
-  sf::Texture txt_grid;
+  sf::Sprite spr_grid, spr_grid2,spr_infosZone;
+  sf::Texture txt_grid,txt_infosZone;
   
   if (!txt_grid.loadFromFile("../Textures/grid_bg.png"))
+    exit(-1);
+  if (!txt_infosZone.loadFromFile("../Textures/infoszone.png"))
     exit(-1);
   
   spr_grid.setTexture(txt_grid);
@@ -331,7 +333,10 @@ void GameClient::runBoards()
   
   spr_grid2.setTexture(txt_grid);
   spr_grid2.setPosition(425,125);
-  
+
+  spr_infosZone.setTexture(txt_infosZone);
+  spr_infosZone.setPosition(100,50);  
+
   while (_window.isOpen())
     {
       sf::Event event;
@@ -359,6 +364,7 @@ void GameClient::runBoards()
       _window.draw(_sprBG);
       _window.draw(spr_grid);
       _window.draw(spr_grid2);
+      _window.draw(spr_infosZone);
       drawSpritesGrid(spr_grid.getPosition().x,spr_grid.getPosition().y);
       drawSpritesHits(spr_grid2.getPosition().x,spr_grid2.getPosition().y);
       _window.display();

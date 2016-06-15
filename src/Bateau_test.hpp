@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE(TestBateau_2) {
 
   BOOST_CHECK_EQUAL(b.getNom(), "Sous-marin");
   BOOST_CHECK_EQUAL(b.getTaille(), 3);
-  BOOST_CHECK_EQUAL(oss.str(),"3;1;0;0_9_9;0_9_8;0_9_7;");
+  BOOST_CHECK_EQUAL(oss.str(),"1;0;0_9_9;0_9_8;0_9_7;");
 }
 
 BOOST_AUTO_TEST_CASE(TestBateau_3) {
@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE(TestBateau_3) {
   b.setEtatPos(false,pos);
   
   oss << b;
-  BOOST_CHECK_EQUAL(oss.str(),"1;1;0;0_9_9;");
+  BOOST_CHECK_EQUAL(oss.str(),"1;0;0_9_9;");
 }
 
 BOOST_AUTO_TEST_CASE(TestBateau_4) {
@@ -54,5 +54,5 @@ BOOST_AUTO_TEST_CASE(TestBateau_4) {
   b.changeBoatPosition(3);
 
   oss << b;
-  BOOST_CHECK_EQUAL(oss.str(),"3;3;0;0_9_9;0_8_9;0_7_9;");
+  BOOST_CHECK_EQUAL(oss.str(),"3;0;0_9_9;0_8_9;0_7_9;");
 }

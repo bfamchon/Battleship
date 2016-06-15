@@ -10,8 +10,8 @@ const int MISS_CELL = 1;
 const int HIT_CELL = 2;
 
 /*
- * @param: _testedHits : 0 sea / 1 miss / 2 hit
- *
+ * @param: _testedHits 100 cases en 1 ligne : 0 sea / 1 miss / 2 hit
+ * 
  */
 
 class Joueur {
@@ -25,6 +25,7 @@ public:
   std::string getPseudo() const;
   void setPseudo(std::string);
   Flotte getFlotte() const;
+  void setFlotte(const Flotte &);
   void setRandFlotte();
   int getHitAt(int,int) const;
   void setHitAt(int,int,int);

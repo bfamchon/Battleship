@@ -1,6 +1,6 @@
 #include "Joueur.hpp"
+#include "Flotte.hpp"
 #include "Position.hpp"
-#include <sstream>
 #include <iostream>
 
 BOOST_AUTO_TEST_CASE(TestJoueur_1) {
@@ -20,4 +20,15 @@ BOOST_AUTO_TEST_CASE(TestJoueur_3) {
   std::cout << j.getFlotte();
 
   BOOST_CHECK_EQUAL(true,true);
+}
+
+BOOST_AUTO_TEST_CASE(TestJoueur_4) {
+  Joueur j("Pseudo");
+  Flotte f;
+  f.genererFlotte();
+  j.setRandFlotte();
+  
+  j.setFlotte(f);
+
+  BOOST_CHECK_EQUAL(f==j.getFlotte(),true);
 }

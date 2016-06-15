@@ -1,6 +1,7 @@
 #include "Flotte.hpp"
 #include "Position.hpp"
 #include "RandomInRange.hpp"
+#include <sstream>
 
 // Les 6 bateaux sont initialisés
 Flotte::Flotte() : _nbBateaux(6) 
@@ -10,6 +11,8 @@ Flotte::Flotte() : _nbBateaux(6)
 
 void Flotte::initFlotte()
 {
+  // Effacer l'ancienne flotte
+  _bateaux.erase(_bateaux.begin(),_bateaux.end());
   for ( int taille=1 ; taille <= 3 ; ++taille )
     _bateaux.push_back(Bateau(taille));
   _bateaux.push_back(3);
@@ -26,9 +29,7 @@ void Flotte::genererFlotte()
   RandomInRange randomIn;
   int directionOk;
   Position randPos;
-  // Effacer l'ancienne flotte
-  _bateaux.erase(_bateaux.begin(),_bateaux.end());
-  // L'initialiser à nouveau
+  // Réinitialiser la flotte
   initFlotte();
   
   for ( int i=0 ; i < 6 ; ++i )
@@ -144,11 +145,35 @@ std::ostream& operator <<(std::ostream& os,const Flotte& f) {
 }
 
 std::istream & operator>>(std::istream & is, Flotte & f) {
-  /*for ( unsigned int i = 0 ; i < 6 ; ++i )
+  std::string buffer;
+  
+  for ( unsigned int i = 0 ; i < 6 ; ++i )
     {
-    for ( unsigned int j = 0 
-    f[i];
+      int etat;
+      Position p;
+      if ( std::getline(is, buffer, ';') )
+	f._bateaux[i].setDir(std::stoi(buffer));
+
+      if ( std::getline(is,buffer, ';') )
+	f._bateaux[i].setCoule(std::stoi(buffer));
+      
+      if ( std::getline(is,buffer, '_') )
+	etat = std::stoi(buffer);
+      if ( std::getline(is,buffer, '_') )
+	p._x = std::stoi(buffer);
+      if ( std::getline(is,buffer, ';') )
+	p._y = std::stoi(buffer);
+      if ( std::getline(is, buffer, '\n') ) { /* pass */ }
+      f._bateaux[i].setEtatPos(etat,p);
     }
-  */
   return is;
+}
+
+
+bool operator==(const Flotte & f1,const Flotte & f2)
+{
+  std::ostringstream oss1,oss2;
+  oss1 << f1;
+  oss2 << f2;
+  return oss1.str() == oss2.str(); 
 }

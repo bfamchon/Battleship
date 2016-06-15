@@ -39,7 +39,7 @@ public:
   void setCoule(bool);
   void changeBoatPosition(int);
   
-  // Flux de sortie au format "<taille>;<direction>;<coule>;<etatPos>\n".
+  // Flux de sortie au format "<direction>;<coule>;<etatPos>\n".
   friend std::ostream & operator<<(std::ostream & os, const Bateau & b );
 };
 

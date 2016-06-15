@@ -30,4 +30,6 @@ public:
   friend std::istream & operator>>(std::istream & is, Flotte &);
 };
 
+bool operator==(const Flotte & f1,const Flotte & f2);
+
 #endif
