@@ -79,7 +79,7 @@ void Bateau::changeBoatPosition(int dir)
 }
 
 std::ostream& operator <<(std::ostream& os, const Bateau& b) {
-  os << b._taille << ';' << b._direction << ';' << b._coule << ';';
+  os << b._direction << ';' << b._coule << ';';
 
   for ( unsigned int i=0 ; i < b._etatPos.size() ; ++i )
     os << b._etatPos[i].first 

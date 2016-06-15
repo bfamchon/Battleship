@@ -1,5 +1,6 @@
 #include "Joueur.hpp"
 #include <iostream>
+#include <sstream>
 
 Joueur::Joueur(std::string pseudo) : _pseudo(pseudo),_flotte()
 {
@@ -18,3 +19,13 @@ Flotte Joueur::getFlotte() const { return _flotte; }
 void Joueur::setRandFlotte() { _flotte.genererFlotte(); }
 int Joueur::getHitAt(int x,int y) const { return _testedHits[y*10+x]; }
 void Joueur::setHitAt(int etat, int x, int y) { _testedHits[y*10+x] = etat; }
+
+void Joueur::setFlotte(const Flotte & f)
+{
+  // Au cas où elle contenait déjà des valeurs...
+  _flotte.initFlotte();
+  std::ostringstream oss;
+  oss << f;
+  std::istringstream iss(oss.str());
+  iss >> _flotte;
+}
