@@ -9,6 +9,7 @@ class Client
 {
 private:
 	sf::TcpSocket _mySocket;
+        int numJoueur;
         bool _bloquant;
 public:
 	Client();

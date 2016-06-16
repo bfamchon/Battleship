@@ -85,7 +85,7 @@ void GameClient::run()
   messageServeur.setFont(font);
   messageServeur.setString("");
   messageServeur.setCharacterSize(20);
-  messageServeur.setColor(Black);
+  messageServeur.setColor(White);
   messageServeur.setPosition(50,10);
 
   music.setVolume(40);
@@ -216,6 +216,7 @@ void GameClient::run()
 
 void GameClient::runWaitingRoom()
 {
+  std::string msg="";
   _window.setTitle("Battle Not Cheap - Let's place your ships captain !");
   sf::Sprite spr_grid, spr_wlist,spr_radis;
   sf::Texture txt_grid, txt_wlist,txt_radis;
@@ -270,7 +271,7 @@ void GameClient::runWaitingRoom()
 		      std::ostringstream uneflotte;
 		      uneflotte << _joueur.getFlotte();
 		      if (_client.send(SEND_FLOTTE, uneflotte.str())
-			  == sf::Socket::Done ) {  
+			  == sf::Socket::Done ) {
 			runBoards();}
 		    }
 		 
@@ -302,7 +303,6 @@ void GameClient::runWaitingRoom()
 	    spr_radis.setColor(White);
 	}
 
-      std::string msg="";
       if (_client.receive(msg) == sf::Socket::Done){
         wlistText.setString(_client._listeJoueurs);    
       }
@@ -329,6 +329,8 @@ void GameClient::runWaitingRoom()
 
 void GameClient::runBoards()
 {
+   std::string msg="";
+
   _window.setTitle("Battle Not Cheap - FIRE !");
   
   sf::Sprite spr_grid, spr_grid2,spr_infosZone;

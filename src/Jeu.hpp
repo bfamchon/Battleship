@@ -18,6 +18,9 @@ public:
       _jCourant = &_joueur2;
     }else _jCourant = &_joueur1;
   }
+
+  Joueur getJoueur1() const {return _joueur1; }
+  Joueur getJoueur2() const {return _joueur2; }
   Joueur* getJCourant() const {return _jCourant; }
   std::string getListeJoueur() const{
     return _joueur1.getPseudo()+"\n"+_joueur2.getPseudo()+"\n";
@@ -29,10 +32,14 @@ public:
                       _joueur2.setPseudo("notInit");
   }
   
- Joueur* searchByName(const std::string & nomJoueur){
+
+Joueur* searchByName(const std::string & nomJoueur){
+   if ( _joueur1.getPseudo() == nomJoueur) return &_joueur1;
+   if ( _joueur2.getPseudo() == nomJoueur) return &_joueur2;
    return nullptr;
-   if ( _joueur1.getPseudo() == nomJoueur) return & _joueur1;
-   if ( _joueur2.getPseudo() == nomJoueur) return & _joueur2;
   }
+  
 };
+
+
 #endif
