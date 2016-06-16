@@ -17,6 +17,7 @@ BOOST_AUTO_TEST_CASE(TestJoueur_2) {
 BOOST_AUTO_TEST_CASE(TestJoueur_3) {
   Joueur j("Pseudo");
   j.setRandFlotte();
+  std::cout << "Run TestJoueur_3: " << std::endl;
   std::cout << j.getFlotte();
 
   BOOST_CHECK_EQUAL(true,true);

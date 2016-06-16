@@ -1,4 +1,5 @@
 #include "Bateau.hpp"
+#include <iostream>
 
 Bateau::Bateau(int taille) : _taille(taille),
 			     _coule(false)
@@ -42,7 +43,7 @@ bool Bateau::foundInBateau(Position p) const
 }
 
 void Bateau::setDir(int dir) { _direction=dir; }
-
+int Bateau::getDir() const { return _direction; }
 /*
  * Affecter un état et position en fonction
  * de la direction et de la taille.
@@ -73,10 +74,12 @@ void Bateau::changeBoatPosition(int dir)
   // attribuer la nouvelle direction
   setDir(dir);
   // effacer le vecteur etatPos existant
-  _etatPos.erase(_etatPos.begin(),_etatPos.end());
+  reinitEtatPos();
   // le recréer avec la nouvelle direction affecté
   setEtatPos(0,basePos);
 }
+
+Position Bateau::getPositionAt(int indice) const { return _etatPos[indice].second;  }
 
 std::ostream& operator <<(std::ostream& os, const Bateau& b) {
   os << b._direction << ';' << b._coule << ';';
@@ -87,3 +90,5 @@ std::ostream& operator <<(std::ostream& os, const Bateau& b) {
        << '_' << b._etatPos[i].second._y << ';';
   return os;
 }
+
+void Bateau::reinitEtatPos() { _etatPos.erase(_etatPos.begin(),_etatPos.end()); }

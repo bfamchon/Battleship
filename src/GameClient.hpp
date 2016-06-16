@@ -28,6 +28,11 @@ const int CELL_SIZE = 35;
 const int CELL_WIDTH = GRID_WIDTH / CELL_SIZE;
 const int CELL_HEIGHT = GRID_HEIGHT / CELL_SIZE;
 
+const int DIR_HAUT = 1;
+const int DIR_BAS = 2;
+const int DIR_GAUCHE = 3;
+const int DIR_DROITE = 4;
+
 const sf::Color White (255,255,255);
 const sf::Color Black (0,0,0);
 const sf::Color Gray (150,150,150);

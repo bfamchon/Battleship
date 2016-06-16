@@ -36,6 +36,8 @@ public:
 
   //eric
   bool foundInFlotte(Position) const;
+  void turnBoat(int);
+
 };
 
 #endif

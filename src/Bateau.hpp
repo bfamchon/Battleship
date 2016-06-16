@@ -35,10 +35,13 @@ public:
   std::string getNom() const;
   bool foundInBateau(Position) const;
   void setDir(int);
+  int getDir() const;
   void setEtatPos(bool,Position);
   void setCoule(bool);
   void changeBoatPosition(int);
-  
+  Position getPositionAt(int) const;
+  void reinitEtatPos();
+
   // Flux de sortie au format "<direction>;<coule>;<etatPos>\n".
   friend std::ostream & operator<<(std::ostream & os, const Bateau & b );
 };

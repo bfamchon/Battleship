@@ -29,6 +29,7 @@ void Joueur::setFlotte(const Flotte & f)
   std::istringstream iss(oss.str());
   iss >> _flotte;
 }
+
 sf::TcpSocket * Joueur::getSocketJoueur(){
   return _socketJoueur;
 }
@@ -42,3 +43,8 @@ void Joueur::setSocketJoueur(sf::TcpSocket * socketJoueur){
 bool Joueur::foundInFlotte(Position position) const{
   return _flotte.foundInFlotte(position);
 }
+
+
+// Tourner le bateau boatNum dans une direction valide
+void Joueur::turnBoat(int boatNum) { _flotte.turnBoatVPos(boatNum); }
+

@@ -1,6 +1,7 @@
 #include "GameClient.hpp"
 #include "Position.hpp"
 #include "RandomInRange.hpp"
+#include "Flotte.hpp"
 #include <iostream>
 #include <sstream>
 /*
@@ -278,6 +279,17 @@ void GameClient::runWaitingRoom()
 		    {
 		      _joueur.setRandFlotte();
 		      drawSpritesGrid(spr_grid.getPosition().x,spr_grid.getPosition().y);
+		    }
+		  if ( spr_grid.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+		    {
+		      int xPosInGrid = (sf::Mouse::getPosition(_window).x - 50)/CELL_SIZE;
+		      int yPosInGrid = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
+		      if ( _joueur.getFlotte().foundInFlotte(Position{xPosInGrid,yPosInGrid}) )
+			{
+			  // Search the boat's number at (x,y)
+			  int boatNum = _joueur.getFlotte().searchBoatAt(Position{xPosInGrid,yPosInGrid});
+			  _joueur.turnBoat(boatNum);
+			}		   
 		    }
 		}
 	    } 
