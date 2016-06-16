@@ -29,3 +29,6 @@ void Joueur::setFlotte(const Flotte & f)
   std::istringstream iss(oss.str());
   iss >> _flotte;
 }
+
+// Tourner le bateau boatNum dans une direction valide
+void Joueur::turnBoat(int boatNum) { _flotte.turnBoatVPos(boatNum); }

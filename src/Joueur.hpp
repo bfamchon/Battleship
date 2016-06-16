@@ -29,6 +29,7 @@ public:
   void setRandFlotte();
   int getHitAt(int,int) const;
   void setHitAt(int,int,int);
+  void turnBoat(int);
 };
 
 #endif

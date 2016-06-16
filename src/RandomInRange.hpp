@@ -3,6 +3,13 @@
 
 #include <random>
 
+/*
+ * Classe pour générer un nombre aléatoire entre low et high
+ * ( question de simplicité ... )
+ * 
+ * ASKME: Baptiste FAMCHON
+ */
+
 class RandomInRange { 
     std::mt19937 rng;
 public:

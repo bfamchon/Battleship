@@ -4,6 +4,7 @@
 #include "Bateau.hpp"
 #include <vector>
 #include <iostream>
+#include <sstream>
 /*
  * Représente l'ensemble des bateaux
  *
@@ -20,16 +21,18 @@ public:
   Flotte();
   void initFlotte();
   void genererFlotte();
-  int estValide(Position,int);
+  int estValide(Position,int,int);
   bool estValideHaut(Position,int);
   bool estValideBas(Position,int,int);
   bool estValideGauche(Position,int);
   bool estValideDroite(Position,int,int);
   bool foundInFlotte(Position) const;
+  int searchBoatAt(Position) const;
+  void turnBoatVPos(int);
+
   friend std::ostream & operator<<(std::ostream & os, const Flotte &);
   friend std::istream & operator>>(std::istream & is, Flotte &);
 };
 
 bool operator==(const Flotte & f1,const Flotte & f2);
-
 #endif
