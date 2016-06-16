@@ -23,7 +23,7 @@ void Serveur::handlePackets()
 {
   
   //handle incoming data
-  for(Clients::iterator it=_clients.begin(); it!=_clients.end();)
+  for(Clients::iterator it=_clients.begin(); it!=_clients.end();)                        
     {
       sf::Packet packet;
       sf::Socket::Status status=it->first->receive(packet);
@@ -43,6 +43,8 @@ void Serveur::handlePackets()
 		std::cout << "passe1 "<<it->second<< std::endl;
 
 		//if(_jeu.searchByName(it->second) == nullptr) {
+		if (_jeu.getJoueur1().getPseudo() != it->second
+		    && _jeu.getJoueur2().getPseudo() != it->second){
 		  //le Pseudo n'existe pas
 		  std::cout << "passe2"<< std::endl;
 		  Joueur* j = _jeu.searchByName("notInit");
@@ -52,8 +54,10 @@ void Serveur::handlePackets()
 	
 		  broadCast(SEND_LISTE_ATTENTE,
 			    _jeu.getListeJoueur() );
-		  /*} else {
-		  sf::Packet retPacket;
+		} else {
+		  _sameName=true;
+		  sendMsgClient(it->first,DISCONNECT,"Pseudo deja utilise !");
+		  /*sf::Packet retPacket;
 		  retPacket<<DISCONNECT
 			   <<"Pseudo deja utilise !";
 		  if (it->first->send(retPacket) == sf::Socket::Done) {
@@ -62,8 +66,8 @@ void Serveur::handlePackets()
 		    std::cout << "passe3"<< std::endl;
 		    // _clients.erase(it);
 		    std::cout << "passe4"<< std::endl;
-		  }
 		  }*/
+		}
 	      }
               break;
 	      
@@ -91,85 +95,51 @@ void Serveur::handlePackets()
 
 	    case SEND_COUP: //eric a faire
 	      //Recoit un coup du client
-	      {std::string msg;
+	      { sf::Packet sendPacket;
+		//std::string msg;
                 Position p;
 		packet>> p._x >>p._y;
 		std::cout <<p._x << " " << p._y << std::endl;
 		bool res = _jeu.foundInFlotte(p,_jeu.getJInactif());
 		std::cout <<res<<std::endl;
-                sf::Packet retPacket;
-		retPacket<<SEND_RESPONSE_COUP<<res<<p._x << " " << p._y;
-		if (_jeu.getJCourant()->getSocketJoueur()->send(retPacket)
-			 == sf::Socket::Done){
-		       //nothing to do
-		     }
-
 		
-		
+		sendPacket.clear();
+		sendPacket<<SEND_RESPONSE_COUP<< res<< p._x << p._y;
+                sendPacketClient(_jeu.getJCourant()->getSocketJoueur(),sendPacket);
 	      }
 	      break;
 	      
-	    case  SEND_FLOTTE: // eric a faire
+	    case  SEND_FLOTTE: 
 	      {std::string msg;
 		packet>>msg; //flotte sous forme de string
                 //it->second; //Pseudo
-		 Joueur* j = _jeu.searchByName(it->second);
-		 Flotte f;
-		 std::istringstream iss(msg);
-		 iss >> f;
-		 std::cout << f << std::endl;
-		 j->setFlotte(f);
-		 _jeu.setNbPret(_jeu.getNbPret()+1);
-		 std::cout << _jeu.getNbPret() << std::endl;
-		 
-		 sf::Packet retPacket;
-		 if (_jeu.getNbPret()<2){
-		   //premier joueur connecté
-		   retPacket<<SEND_USER_WAIT
-			    <<"Bienvenue attente deuxieme joueur !";
-                   if (it->first->send(retPacket) == sf::Socket::Done){
-		     //nothing to do
-		   }
-		 } else {
+		Joueur* j = _jeu.searchByName(it->second);
+		Flotte f;
+		std::istringstream iss(msg);
+		iss >> f;
+		j->setFlotte(f);
+		_jeu.setNbPret(_jeu.getNbPret()+1);
+		if (_jeu.getNbPret()<2){
+		  sendMsgClient(it->first,
+				SEND_USER_WAIT,
+				"Bienvenue attente deuxieme joueur !");     
+		} else {
      
-		   //déja un joueur pret à jouer
-		   retPacket.clear();
-		   retPacket<<SEND_USER_WAIT
-			    <<"Bienvenue !";
-     
-		   if (it->first->send(retPacket) == sf::Socket::Done){
-		     //on cherche le joueur inactif
-		     // envoie de stop_play
-		     retPacket.clear();
-		     retPacket<<STOP_PLAY
-			      <<"Attente autre joueur !";
+		  //déja un joueur pret à jouer
+		  if (sendMsgClientRet(it->first,
+				       SEND_USER_WAIT,
+				       "Bienvenue !") ==sf::Socket::Done){      
+		    sendMsgClient(_jeu.getJInactif()->getSocketJoueur(),
+				  STOP_PLAY,
+				  "Attente autre joueur !"); 
 		     
-		     if (_jeu.getJInactif()->getSocketJoueur()->send(retPacket)
-			 == sf::Socket::Done){
-		       //nothing to do
-		     }
-		     //on cherche le joureur actif
-		     //envoi de start play
-		     retPacket.clear();
-		     retPacket<< START_PLAY<<"A vous de jouer !";
-		     
-		     if (_jeu.getJCourant()->getSocketJoueur()->send(retPacket)
-			 == sf::Socket::Done){
-		       //nothing to do
-		     }
-		   }
-		 }
-
-		 //a supprimer juste pour test
-		 std::ostringstream oss,oss2;
-		 oss << _jeu.getJoueur1().getFlotte();
-		 std::cout<< "Joueur 1 : \n" << _jeu.getJoueur1().getPseudo()
-			  << "\n" << oss.str() << std::endl;		 
-		 oss2 << _jeu.getJoueur2().getFlotte();
-		 std::cout<< "Joueur 2 : \n" << _jeu.getJoueur2().getPseudo()
-			  << "\n"<< oss2.str() << std::endl;
-		 
-		 //fin a supprimer
+		    //on cherche le joureur actif
+		    //envoi de start play
+		    sendMsgClient(_jeu.getJCourant()->getSocketJoueur(),
+				  START_PLAY,
+				  "A vous de jouer !"); 
+		  }
+		}
 	      }
 
 	      break;
@@ -187,9 +157,11 @@ void Serveur::handlePackets()
 	  break;
 
 	case sf::Socket::Disconnected:
-	  std::cout<<it->second<<" has been disconnected\n";
-	  broadCast(GENERAL_MSG, it->second+" has been disconnected\n");
-	  _jeu.initJoueur(it->second);
+	  std::cout<<it->second<<" s'est déconnecté\n";
+	  broadCast(GENERAL_MSG, it->second+" s'est déconnecté\n");
+	  if (!_sameName ){
+	    _jeu.initJoueur(it->second);
+	  }else _sameName = false;
 	  it=_clients.erase(it);
 	  broadCast(SEND_LISTE_ATTENTE,_jeu.getListeJoueur() );
 	  break;
@@ -210,12 +182,31 @@ void Serveur::broadCast(PacketType type, const std::string & msg)
     }
  }
 
-sf::Socket::Status sendClient(sf::TcpSocket & Socketclient ,PacketType type, const std::string & msg){
+sf::Socket::Status Serveur::sendMsgClientRet(sf::TcpSocket * Socketclient,
+					  PacketType type, const std::string & msg){
   sf::Packet packet;
   packet<<type<<msg;
-  return Socketclient.send(packet);
+  return Socketclient->send(packet);
 }
 
+void Serveur::sendMsgClient(sf::TcpSocket * Socketclient,
+			    PacketType type, const std::string & msg){
+  sf::Packet packet;
+  packet<<type<<msg;
+  sf::Socket::Status st = Socketclient->send(packet);
+  if (st == sf::Socket::Done){/*nothing to do*/}
+}
+
+sf::Socket::Status Serveur::sendPacketClientRet(sf::TcpSocket * Socketclient,
+					      sf::Packet & packet){
+  return Socketclient->send(packet);
+}
+
+void Serveur::sendPacketClient(sf::TcpSocket * Socketclient,
+			       sf::Packet & packet){
+  sf::Socket::Status st = Socketclient->send(packet);
+  if (st == sf::Socket::Done){/*nothing to do*/}
+}
 
 void Serveur::run()
 {

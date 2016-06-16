@@ -2,10 +2,12 @@
 #include "PacketType.hpp"
 #include <iostream>
 
-Client::Client():posx(-1),posy(-1),res(false) {}
+Client::Client():posx(-1),posy(-1),res(false),_messageServeur("") {}
 
 Client::~Client() {}
 
+bool Client::getCloseRunWait() const{ return _closeRunWait;}
+void Client::setCloseRunWait(bool etat) { _closeRunWait = etat;}
 void Client::setBloquant(bool bloquant){
   _bloquant= bloquant;
 }
@@ -74,8 +76,11 @@ std::string Client::handlePackets(sf::Packet & packet){
       
     case DISCONNECT:
       {
+	//_closeRunWait=true; 	
        packet >> _messageServeur;
        retour = _messageServeur;
+       //ErrorMsg("Pseudo déjà utilisé !", "Erreur pseudo");
+       _closeRunWait=true;
       }
       break;
         

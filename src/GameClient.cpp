@@ -28,6 +28,46 @@ GameClient::GameClient(const sf::Texture& bgPath) : _window(sf::VideoMode(800, 6
  *
  */
 GameClient::~GameClient() {}
+
+void GameClient::runError()
+{
+   sf::RenderWindow windowErr(sf::VideoMode(400, 100),
+	    "Message erreur !",
+	    sf::Style::Titlebar | sf::Style::Close);
+
+  windowErr.setPosition(sf::Vector2i(
+			 (sf::VideoMode::getDesktopMode().width-400)/2,
+			 (sf::VideoMode::getDesktopMode().height-100)/2 ));
+  
+  sf::Text  messageServeur;
+  sf::Font font;
+  if (!font.loadFromFile("../Fonts/DooM.ttf"))
+    exit(-1);
+  
+  messageServeur.setFont(font);
+  messageServeur.setString("Pseudo deja pris !");
+  messageServeur.setCharacterSize(20);
+  messageServeur.setColor(Black);
+  messageServeur.setPosition(10,10);
+  
+  while (windowErr.isOpen())
+    {
+      sf::Event event;
+      while (windowErr.pollEvent(event))
+	{
+	  if (event.type == sf::Event::Closed)
+	    {
+	      windowErr.close();
+	    }	  
+	}
+
+      windowErr.clear(White);
+      
+      windowErr.draw(messageServeur); 
+      windowErr.display();
+    }
+}
+
 void GameClient::run()
 {
   std::string msg="";
@@ -83,7 +123,7 @@ void GameClient::run()
   spr_zoneIP.setPosition(50,250);
 
   messageServeur.setFont(font);
-  messageServeur.setString("");
+  messageServeur.setString(_client._messageServeur);
   messageServeur.setCharacterSize(20);
   messageServeur.setColor(White);
   messageServeur.setPosition(50,10);
@@ -182,7 +222,7 @@ void GameClient::run()
 	     quitText.setColor(Black);
 	}
 
-      if (_client.receive(msg) == sf::Socket::Done)
+      // if (_client.receive(msg) == sf::Socket::Done)
         messageServeur.setString(_client._messageServeur);
 	
       
@@ -306,6 +346,11 @@ void GameClient::runWaitingRoom()
       if (_client.receive(msg) == sf::Socket::Done){
         wlistText.setString(_client._listeJoueurs);    
       }
+      if( _client.getCloseRunWait()) {
+	   runError();
+	  _client.setCloseRunWait(false);
+	  _window.close();
+	}
       
       _window.clear(White);
       _window.draw(_sprBG);

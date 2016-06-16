@@ -10,18 +10,23 @@
 class Client
 {
 private:
-	sf::TcpSocket _mySocket;
-        bool _bloquant;
-        bool _joueurIsActif;
+  sf::TcpSocket _mySocket;
+  bool _bloquant;
+  bool _joueurIsActif;
+  bool _closeRunWait;
+  
          
 public:
 int posx, posy; //temporaire
 bool res;      //temporaire
+  
 	Client();
 	~Client();
   void setBloquant(bool bloquant);
   bool getJoueurIsActif() const;
   void setJoueurIsActif(bool joueurIsActif);
+  bool getCloseRunWait() const;
+  void setCloseRunWait(bool etat);
   std::string _listeJoueurs; // conteneur pour affichage WaitingRoom
   std::string _messageServeur; // conteneur pour affichage WaitingRoom
 
