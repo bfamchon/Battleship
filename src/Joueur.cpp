@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 
-Joueur::Joueur(std::string pseudo) : _pseudo(pseudo),_flotte()
+Joueur::Joueur(std::string pseudo) : _pseudo(pseudo),_flotte(),_socketJoueur(nullptr)
 {
   initTestedHits(SEA_CELL);
 }
@@ -28,4 +28,17 @@ void Joueur::setFlotte(const Flotte & f)
   oss << f;
   std::istringstream iss(oss.str());
   iss >> _flotte;
+}
+sf::TcpSocket * Joueur::getSocketJoueur(){
+  return _socketJoueur;
+}
+void Joueur::setSocketJoueur(sf::TcpSocket * socketJoueur){
+  _socketJoueur = socketJoueur;
+}
+
+/////////////////
+//jouer coup eric
+
+bool Joueur::foundInFlotte(Position position) const{
+  return _flotte.foundInFlotte(position);
 }

@@ -1,6 +1,7 @@
 #ifndef JOUEUR_HPP
 #define JOUEUR_HPP
 
+#include "SFML/Network.hpp"
 #include <string>
 #include <vector>
 #include "Flotte.hpp"
@@ -19,6 +20,7 @@ private:
   std::string _pseudo;
   Flotte _flotte;
   std::vector <int> _testedHits;
+  sf::TcpSocket * _socketJoueur;
 public:
   Joueur(std::string);
   void initTestedHits(int);
@@ -29,6 +31,11 @@ public:
   void setRandFlotte();
   int getHitAt(int,int) const;
   void setHitAt(int,int,int);
+  sf::TcpSocket * getSocketJoueur();
+  void setSocketJoueur(sf::TcpSocket * socketJoueur);
+
+  //eric
+  bool foundInFlotte(Position) const;
 };
 
 #endif

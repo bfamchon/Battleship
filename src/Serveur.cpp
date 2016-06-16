@@ -3,6 +3,7 @@
 #include "PacketType.hpp"
 #include <iostream>
 #include <sstream>
+#include "Position.hpp"
 //#include "Client.hpp"
 //#include <vector>
 
@@ -16,6 +17,7 @@ Serveur::Serveur(unsigned short port)
 Serveur::~Serveur()
 {
 }
+
 
 void Serveur::handlePackets()
 {
@@ -38,12 +40,30 @@ void Serveur::handlePackets()
 	      //store the name
 	      { 
 	 	packet>>it->second;
-                if (_jeu.getJCourant()->getPseudo() == "notInit"){
-		  _jeu.getJCourant()->setPseudo(it->second);
-		   _jeu.changeJoueur();
-		}
-		broadCast(SEND_LISTE_ATTENTE,
-			  _jeu.getListeJoueur() );
+		std::cout << "passe1 "<<it->second<< std::endl;
+
+		//if(_jeu.searchByName(it->second) == nullptr) {
+		  //le Pseudo n'existe pas
+		  std::cout << "passe2"<< std::endl;
+		  Joueur* j = _jeu.searchByName("notInit");
+		  j->setPseudo(it->second);
+		  j->setSocketJoueur(it->first);
+		  //	std::cout << it->second << it->first<< std::endl; 
+	
+		  broadCast(SEND_LISTE_ATTENTE,
+			    _jeu.getListeJoueur() );
+		  /*} else {
+		  sf::Packet retPacket;
+		  retPacket<<DISCONNECT
+			   <<"Pseudo deja utilise !";
+		  if (it->first->send(retPacket) == sf::Socket::Done) {
+		    //nothing to do
+		    //enlever la connexion
+		    std::cout << "passe3"<< std::endl;
+		    // _clients.erase(it);
+		    std::cout << "passe4"<< std::endl;
+		  }
+		  }*/
 	      }
               break;
 	      
@@ -66,14 +86,26 @@ void Serveur::handlePackets()
 	    case  DISCONNECT:
 	      //traiter deconnexion
 	      {
-
 	      }
 	      break;
 
 	    case SEND_COUP: //eric a faire
 	      //Recoit un coup du client
 	      {std::string msg;
-               	packet>>msg;
+                Position p;
+		packet>> p._x >>p._y;
+		std::cout <<p._x << " " << p._y << std::endl;
+		bool res = _jeu.foundInFlotte(p,_jeu.getJInactif());
+		std::cout <<res<<std::endl;
+                sf::Packet retPacket;
+		retPacket<<SEND_RESPONSE_COUP<<res<<p._x << " " << p._y;
+		if (_jeu.getJCourant()->getSocketJoueur()->send(retPacket)
+			 == sf::Socket::Done){
+		       //nothing to do
+		     }
+
+		
+		
 	      }
 	      break;
 	      
@@ -81,18 +113,62 @@ void Serveur::handlePackets()
 	      {std::string msg;
 		packet>>msg; //flotte sous forme de string
                 //it->second; //Pseudo
-		Joueur* j = _jeu.searchByName(it->second);
+		 Joueur* j = _jeu.searchByName(it->second);
 		 Flotte f;
 		 std::istringstream iss(msg);
 		 iss >> f;
 		 std::cout << f << std::endl;
 		 j->setFlotte(f);
-		 //a supprimer juste our test
-                 std::ostringstream oss,oss2;
+		 _jeu.setNbPret(_jeu.getNbPret()+1);
+		 std::cout << _jeu.getNbPret() << std::endl;
+		 
+		 sf::Packet retPacket;
+		 if (_jeu.getNbPret()<2){
+		   //premier joueur connecté
+		   retPacket<<SEND_USER_WAIT
+			    <<"Bienvenue attente deuxieme joueur !";
+                   if (it->first->send(retPacket) == sf::Socket::Done){
+		     //nothing to do
+		   }
+		 } else {
+     
+		   //déja un joueur pret à jouer
+		   retPacket.clear();
+		   retPacket<<SEND_USER_WAIT
+			    <<"Bienvenue !";
+     
+		   if (it->first->send(retPacket) == sf::Socket::Done){
+		     //on cherche le joueur inactif
+		     // envoie de stop_play
+		     retPacket.clear();
+		     retPacket<<STOP_PLAY
+			      <<"Attente autre joueur !";
+		     
+		     if (_jeu.getJInactif()->getSocketJoueur()->send(retPacket)
+			 == sf::Socket::Done){
+		       //nothing to do
+		     }
+		     //on cherche le joureur actif
+		     //envoi de start play
+		     retPacket.clear();
+		     retPacket<< START_PLAY<<"A vous de jouer !";
+		     
+		     if (_jeu.getJCourant()->getSocketJoueur()->send(retPacket)
+			 == sf::Socket::Done){
+		       //nothing to do
+		     }
+		   }
+		 }
+
+		 //a supprimer juste pour test
+		 std::ostringstream oss,oss2;
 		 oss << _jeu.getJoueur1().getFlotte();
-		 std::cout<< "Joueur 1 : \n"<< oss.str() << std::endl;		 
+		 std::cout<< "Joueur 1 : \n" << _jeu.getJoueur1().getPseudo()
+			  << "\n" << oss.str() << std::endl;		 
 		 oss2 << _jeu.getJoueur2().getFlotte();
-		 std::cout<< "Joueur 2 : \n"<< oss2.str() << std::endl;
+		 std::cout<< "Joueur 2 : \n" << _jeu.getJoueur2().getPseudo()
+			  << "\n"<< oss2.str() << std::endl;
+		 
 		 //fin a supprimer
 	      }
 
@@ -140,6 +216,7 @@ sf::Socket::Status sendClient(sf::TcpSocket & Socketclient ,PacketType type, con
   return Socketclient.send(packet);
 }
 
+
 void Serveur::run()
 {
   sf::Thread thread([&]()
@@ -149,6 +226,7 @@ void Serveur::run()
 			  std::string s;
 			  std::getline(std::cin, s);
 			  broadCast(SERVEUR_MSG, "SERVEUR: "+s);
+			  std::cout << "SERVEUR_: " << s <<std::endl;
 			}
 		    });
   thread.launch();

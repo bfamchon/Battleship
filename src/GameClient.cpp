@@ -318,11 +318,16 @@ void GameClient::runWaitingRoom()
 void GameClient::runBoards()
 {
    std::string msg="";
-
+  
   _window.setTitle("Battle Not Cheap - FIRE !");
   
   sf::Sprite spr_grid, spr_grid2,spr_infosZone;
   sf::Texture txt_grid,txt_infosZone;
+  sf::Text  messageServeur;
+
+  sf::Font font;
+  if (!font.loadFromFile("../Fonts/DooM.ttf"))
+    exit(-1);
   
   if (!txt_grid.loadFromFile("../Textures/grid_bg.png"))
     exit(-1);
@@ -336,7 +341,14 @@ void GameClient::runBoards()
   spr_grid2.setPosition(425,125);
 
   spr_infosZone.setTexture(txt_infosZone);
-  spr_infosZone.setPosition(100,50);  
+  spr_infosZone.setPosition(100,50);
+
+  //ajout messages du serveur
+  messageServeur.setFont(font);
+  messageServeur.setString("");
+  messageServeur.setCharacterSize(20);
+  messageServeur.setColor(Black);
+  messageServeur.setPosition(105,55);
 
   while (_window.isOpen())
     {
@@ -352,20 +364,45 @@ void GameClient::runBoards()
 		  if ( spr_grid2.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      // Echange client serveur A FAIRE ERIC //////////////////
-		      int xPosInGrid2 = (sf::Mouse::getPosition(_window).x - 425)/CELL_SIZE;
-		      int yPosInGrid2 = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
-		      RandomInRange r;
-		      _joueur.setHitAt(r(1,2),xPosInGrid2,yPosInGrid2);
+		      if (_client.getJoueurIsActif())
+			{
+			  int xPosInGrid2 = (sf::Mouse::getPosition(_window).x - 425)/CELL_SIZE;
+			  int yPosInGrid2 = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
+			  // RandomInRange r;
+			  // _joueur.setHitAt(r(1,2),xPosInGrid2,yPosInGrid2);
+			  std::cout << xPosInGrid2 << " " << yPosInGrid2 << std::endl;
+
+			  sf::Packet packet;
+			  packet<<SEND_COUP<<xPosInGrid2<<yPosInGrid2;
+			  //Position p =  {xPosInGrid2,yPosInGrid2};
+			  if (_client.send(packet)
+			      == sf::Socket::Done ){
+
+			  }
+
+			  
+			}
 		    }
 		}
 	    }
 	}
+      
+      if (_client.receive(msg) == sf::Socket::Done){
+        if (_client.posx != -1) {
+          _joueur.setHitAt(_client.res,_client.posx,_client.posy);
+	  _client.posx = -1;
+	  _client.posy = -1;
+	}
+	messageServeur.setString(_client._messageServeur);
+      }
+	
       
       _window.clear(White);
       _window.draw(_sprBG);
       _window.draw(spr_grid);
       _window.draw(spr_grid2);
       _window.draw(spr_infosZone);
+      _window.draw(messageServeur);
       drawSpritesGrid(spr_grid.getPosition().x,spr_grid.getPosition().y);
       drawSpritesHits(spr_grid2.getPosition().x,spr_grid2.getPosition().y);
       _window.display();

@@ -9,35 +9,25 @@ private:
   Joueur _joueur1;
   Joueur _joueur2;
   Joueur* _jCourant;
-  
+  Joueur* _jInactif;
+  int _nbPret;
 public:
-  Jeu(): _joueur1("notInit"),_joueur2("notInit"){ _jCourant = &_joueur1; };
-  ~Jeu(){};
-  void changeJoueur() {
-    if (_jCourant == &_joueur1){
-      _jCourant = &_joueur2;
-    }else _jCourant = &_joueur1;
-  }
+  Jeu();
+  ~Jeu();
+  void changeJoueur();
 
-  Joueur getJoueur1() const {return _joueur1; }
-  Joueur getJoueur2() const {return _joueur2; }
-  Joueur* getJCourant() const {return _jCourant; }
-  std::string getListeJoueur() const{
-    return _joueur1.getPseudo()+"\n"+_joueur2.getPseudo()+"\n";
-  }
- void initJoueur(std::string nomJoueur) {
-   if (_joueur1.getPseudo() == nomJoueur){
-     _joueur1.setPseudo("notInit");
-       } else if (_joueur2.getPseudo() == nomJoueur)
-                      _joueur2.setPseudo("notInit");
-  }
-  
+  void setNbPret(int nb);
+  int getNbPret() const;
 
-Joueur* searchByName(const std::string & nomJoueur){
-   if ( _joueur1.getPseudo() == nomJoueur) return &_joueur1;
-   if ( _joueur2.getPseudo() == nomJoueur) return &_joueur2;
-   return nullptr;
-  }
+  Joueur getJoueur1() const;
+  Joueur getJoueur2() const;
+  Joueur* getJCourant() const;
+  Joueur* getJInactif() const;
+  std::string getListeJoueur() const;
+  void initJoueur(std::string nomJoueur);
+  Joueur* searchByName(const std::string & nomJoueur);
+  void setSocketJoueur(sf::TcpSocket * socketJoueur,Joueur * joueur);
+  bool foundInFlotte(Position position, Joueur * joueur ) const;
   
 };
 

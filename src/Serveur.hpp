@@ -15,12 +15,15 @@ private:
 	Clients _clients;
         Jeu _jeu;
 	sf::TcpListener _listner;
-        bool _quit;  
+        bool _quit;
+        bool _bloquant;
 
 	void handlePackets();
 	void broadCast(PacketType type, const std::string & msg);
         sf::Socket::Status sendClient(sf::TcpSocket & Socketclient ,PacketType type, const std::string & msg);
-    
+        void setBloquant(bool bloquant);
+        
+  
 public:
 	Serveur(unsigned short port);
 	~Serveur();
