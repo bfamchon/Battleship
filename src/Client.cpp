@@ -111,15 +111,14 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	packet>> _messageServeur;
 	setJoueurIsActif(false);
-	std::cout << "msg : stopPlay"<< _messageServeur << std::endl;
       }
       break;
 
       case SEND_RESPONSE_COUP:
       {
 	packet >> res >>posx >> posy;
-	//_JoueurClt->setHitAt(r,x,y);
-	//	setJoueurIsActif(false);
+	//_JoueurClt->setHitAt(res,xpox,posy);
+	setJoueurIsActif(false);
       }
       break;
       
