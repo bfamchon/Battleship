@@ -19,6 +19,7 @@ private:
   bool _bloquant;
   bool _sameName = false;
 
+  void declancheChangementJoueur();
   void handlePackets();
   void broadCast(PacketType type, const std::string & msg);
   

@@ -386,7 +386,7 @@ void GameClient::runBoards()
   
   sf::Sprite spr_grid, spr_grid2,spr_infosZone;
   sf::Texture txt_grid,txt_infosZone;
-  sf::Text  messageServeur;
+  sf::Text  messageServeur,Txt_Actif,Txt_Non_Actif;
 
   sf::Font font;
   if (!font.loadFromFile("../Fonts/DooM.ttf"))
@@ -412,6 +412,18 @@ void GameClient::runBoards()
   messageServeur.setCharacterSize(20);
   messageServeur.setColor(Black);
   messageServeur.setPosition(105,55);
+
+  Txt_Actif.setFont(font);
+  Txt_Actif.setString("A vous de jouer !");
+  Txt_Actif.setCharacterSize(20);
+  Txt_Actif.setColor(White);  
+  Txt_Actif.setPosition(105,20);
+
+  Txt_Non_Actif.setFont(font);
+  Txt_Non_Actif.setString("Attente autre joueur !");
+  Txt_Non_Actif.setCharacterSize(20);
+  Txt_Non_Actif.setColor(White);
+  Txt_Non_Actif.setPosition(105,20);
 
   while (_window.isOpen())
     {
@@ -449,22 +461,28 @@ void GameClient::runBoards()
 	    _client.posx = -1;
 	    _client.posy = -1;
 	  }
-	 if (_client.repx != -1) 
+	if (_client.repx != -1) 
 	  {
-	    // _joueur.setFlotteAt(_client.repres,_client.repx,_client.repy);
+	    _joueur.setFlotteAt(_client.repres,_client.repx,_client.repy);
 	    _client.repx = -1;
 	    _client.repy = -1;
 	  }
-	
-	messageServeur.setString(_client._messageServeur);
+
+       	messageServeur.setString(_client._messageServeur);
       }
-	
+      
+      if (_client.getJoueurIsActif()){
+	_window.draw(Txt_Actif); 
+      }else _window.draw(Txt_Non_Actif);	
       
       _window.clear(White);
       _window.draw(_sprBG);
       _window.draw(spr_grid);
       _window.draw(spr_grid2);
       _window.draw(spr_infosZone);
+      if (_client.getJoueurIsActif()){
+	_window.draw(Txt_Actif); 
+      }else _window.draw(Txt_Non_Actif);
       _window.draw(messageServeur);
       drawSpritesGrid(spr_grid.getPosition().x,spr_grid.getPosition().y);
       drawSpritesHits(spr_grid2.getPosition().x,spr_grid2.getPosition().y);

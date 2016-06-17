@@ -35,6 +35,7 @@ public:
   void setHitAt(int,int,int);
   sf::TcpSocket * getSocketJoueur();
   void setSocketJoueur(sf::TcpSocket * socketJoueur);
+  void setFlotteAt(int,int,int);
 
   //eric
   int searchInFlotte(Position);
