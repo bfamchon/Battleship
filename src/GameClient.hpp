@@ -58,6 +58,7 @@ public:
   ~GameClient();
   void run();
   bool getWantsToPlay();
+  void setWindowPosition(int nb); // eric pour debug
 };
 
 #endif
