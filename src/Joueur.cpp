@@ -18,17 +18,22 @@ void Joueur::setPseudo(std::string pseudo) { _pseudo = pseudo; }
 Flotte Joueur::getFlotte() const { return _flotte; }
 void Joueur::setRandFlotte() { _flotte.genererFlotte(); }
 int Joueur::getHitAt(int x,int y) const { return _testedHits[y*10+x]; }
-void Joueur::setHitAt(int etat, int x, int y) 
-{ 
-  if ( etat == BOAT_SINK )
+void Joueur::setHitAt(int etat, int x, int y) { _testedHits[y*10+x] = etat;}
+
+void Joueur::setFlotteAt(int etat,int x,int y)
+{
+  int boatNum = _flotte.searchBoatAt(Position{x,y});
+  // Le bateau est touché
+  if ( etat == 2 )
     {
-      // Mettre tout le bateau à jour dans tested hits
-      // ATTENTE ERIC
-      _testedHits[y*10+x] = etat;
+      _flotte.setBoatHitAt(Position{x,y},boatNum);
+      return;
     }
-  else
-    _testedHits[y*10+x] = etat; 
+  // Le serveur envoie 2 ( touché )  ou 3 ( coulé )...
+  _flotte.setBoatSink(boatNum);
+  
 }
+
 
 void Joueur::setFlotte(const Flotte & f)
 {
@@ -61,7 +66,6 @@ int Joueur::searchInFlotte(Position p)
       if ( _flotte.allTouched(boatNum) )
 	{
 	  _flotte.setBoatSink(boatNum);
-	  std::cout << _flotte << std::endl;
 	  if ( _flotte.allBoatSink() )
 	    return ALL_BOAT_SINK;
 	  return BOAT_SINK;

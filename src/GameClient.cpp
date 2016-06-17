@@ -227,7 +227,7 @@ void GameClient::run()
 	     quitText.setColor(Black);
 	}
 
-       if (_client.receive(msg) == sf::Socket::Done)
+      // if (_client.receive(msg) == sf::Socket::Done)
         messageServeur.setString(_client._messageServeur);
 	
       
@@ -267,6 +267,8 @@ void GameClient::runWaitingRoom()
   sf::Texture txt_grid, txt_wlist,txt_radis;
   sf::Text randomPosText, wlistText;
   sf::Font font;
+  sf::Clock my_Clock;
+
   if (!font.loadFromFile("../Fonts/DooM.ttf"))
     exit(-1);
   if (!txt_grid.loadFromFile("../Textures/grid_bg.png"))
@@ -318,7 +320,7 @@ void GameClient::runWaitingRoom()
 			  == sf::Socket::Done ) {
 			runBoards();}
 		    }
-		 
+		  
 		  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      _joueur.setRandFlotte();
@@ -335,6 +337,7 @@ void GameClient::runWaitingRoom()
 			}		   
 		    }
 		}
+	      
 	    } 
 	  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 	    randomPosText.setColor(RedWine);
@@ -349,7 +352,6 @@ void GameClient::runWaitingRoom()
       if (_client.receive(msg) == sf::Socket::Done){
         wlistText.setString(_client._listeJoueurs);    
       }
-      
       if( _client.getCloseRunWait()) {
 	   runError();
 	  _client.setCloseRunWait(false);
@@ -384,7 +386,7 @@ void GameClient::runBoards()
   
   sf::Sprite spr_grid, spr_grid2,spr_infosZone;
   sf::Texture txt_grid,txt_infosZone;
-  sf::Text  messageServeur,Txt_Actif,Txt_Non_Actif;
+  sf::Text  messageServeur;
 
   sf::Font font;
   if (!font.loadFromFile("../Fonts/DooM.ttf"))
@@ -410,19 +412,6 @@ void GameClient::runBoards()
   messageServeur.setCharacterSize(20);
   messageServeur.setColor(Black);
   messageServeur.setPosition(105,55);
-
-  Txt_Actif.setFont(font);
-  Txt_Actif.setString("A vous de jouer !");
-  Txt_Actif.setCharacterSize(20);
-  Txt_Actif.setColor(White);  
-  Txt_Actif.setPosition(105,20);
-
-  Txt_Non_Actif.setFont(font);
-  Txt_Non_Actif.setString("Attente autre joueur !");
-  Txt_Non_Actif.setCharacterSize(20);
-  Txt_Non_Actif.setColor(White);
-  Txt_Non_Actif.setPosition(105,20);
-  
 
   while (_window.isOpen())
     {
@@ -462,7 +451,7 @@ void GameClient::runBoards()
 	  }
 	messageServeur.setString(_client._messageServeur);
       }
-      
+	
       
       _window.clear(White);
       _window.draw(_sprBG);
@@ -470,9 +459,6 @@ void GameClient::runBoards()
       _window.draw(spr_grid2);
       _window.draw(spr_infosZone);
       _window.draw(messageServeur);
-      if (_client.getJoueurIsActif()){
-        _window.draw(Txt_Actif); 
-      }else _window.draw(Txt_Non_Actif);
       drawSpritesGrid(spr_grid.getPosition().x,spr_grid.getPosition().y);
       drawSpritesHits(spr_grid2.getPosition().x,spr_grid2.getPosition().y);
       _window.display();
@@ -556,6 +542,4 @@ void GameClient::drawSpritesHits(float posGridX, float posGridY)
     }
 }
 
-
 bool GameClient::getWantsToPlay() { return _wantsToPlay; }
-

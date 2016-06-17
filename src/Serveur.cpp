@@ -18,22 +18,6 @@ Serveur::~Serveur()
 {
 }
 
-void Serveur::declancheChangementJoueur(){
-
-  _jeu.changeJoueur();
-  //on met à jour les clients 
-  
-  //envoi de stop play
-  sendMsgClient(_jeu.getJInactif()->getSocketJoueur(),
-		STOP_PLAY,
-		"");
-  
-  //envoi de start play
-  sendMsgClient(_jeu.getJCourant()->getSocketJoueur(),
-		START_PLAY,
-		""); 
-  
-}
 
 void Serveur::handlePackets()
 {
@@ -56,18 +40,33 @@ void Serveur::handlePackets()
 	      //store the name
 	      { 
 	 	packet>>it->second;
+		std::cout << "passe1 "<<it->second<< std::endl;
+
+		//if(_jeu.searchByName(it->second) == nullptr) {
 		if (_jeu.getJoueur1().getPseudo() != it->second
 		    && _jeu.getJoueur2().getPseudo() != it->second){
 		  //le Pseudo n'existe pas
+		  std::cout << "passe2"<< std::endl;
 		  Joueur* j = _jeu.searchByName("notInit");
 		  j->setPseudo(it->second);
 		  j->setSocketJoueur(it->first);
-
+		  //	std::cout << it->second << it->first<< std::endl; 
+	
 		  broadCast(SEND_LISTE_ATTENTE,
 			    _jeu.getListeJoueur() );
 		} else {
 		  _sameName=true;
 		  sendMsgClient(it->first,DISCONNECT,"Pseudo deja utilise !");
+		  /*sf::Packet retPacket;
+		  retPacket<<DISCONNECT
+			   <<"Pseudo deja utilise !";
+		  if (it->first->send(retPacket) == sf::Socket::Done) {
+		    //nothing to do
+		    //enlever la connexion
+		    std::cout << "passe3"<< std::endl;
+		    // _clients.erase(it);
+		    std::cout << "passe4"<< std::endl;
+		  }*/
 		}
 	      }
               break;
@@ -95,9 +94,6 @@ void Serveur::handlePackets()
 	      break;
 
 	    case SEND_COUP: //eric a faire
-              //voir ajout d'une verification du joueur : a t il le droit de jouer !
-
-	      
 	      //Recoit un coup du client
 	      { sf::Packet sendPacket;
 		//std::string msg;
@@ -112,12 +108,10 @@ void Serveur::handlePackets()
 		      std::cout << boatState[i] << " ";
 		    std::cout << std::endl;
 		  }
-		sendPacket.clear();
-		sendPacket<<SEND_RESPONSE_COUP<< res << p._x << p._y;
-                sendPacketClient(_jeu.getJCourant()->getSocketJoueur(),sendPacket);
 
-                declancheChangementJoueur();
-		
+		sendPacket.clear();
+		sendPacket<<SEND_RESPONSE_COUP<< res<< p._x << p._y;
+                sendPacketClient(_jeu.getJCourant()->getSocketJoueur(),sendPacket);
 	      }
 	      break;
 	      
@@ -143,13 +137,13 @@ void Serveur::handlePackets()
 				       "Bienvenue !") ==sf::Socket::Done){      
 		    sendMsgClient(_jeu.getJInactif()->getSocketJoueur(),
 				  STOP_PLAY,
-				  ""); 
+				  "Attente autre joueur !"); 
 		     
 		    //on cherche le joureur actif
 		    //envoi de start play
 		    sendMsgClient(_jeu.getJCourant()->getSocketJoueur(),
 				  START_PLAY,
-				  ""); 
+				  "A vous de jouer !"); 
 		  }
 		}
 	      }
