@@ -2,7 +2,8 @@
 #include "PacketType.hpp"
 #include <iostream>
 
-Client::Client():posx(-1),posy(-1),res(false),_messageServeur("") {}
+Client::Client():_closeRunWait(false),posx(-1),posy(-1),res(false),
+		 _messageServeur("") {}
 
 Client::~Client() {}
 
@@ -95,7 +96,7 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	packet >> _messageServeur;
 	setJoueurIsActif(false);
-	//	std::cout << "msg : user Wait"<< _messageServeur << std::endl;
+	std::cout << "msg : user Wait"<< _messageServeur << std::endl;
       }
       break;
       
@@ -103,7 +104,7 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	packet>> _messageServeur;
 	setJoueurIsActif(true);
-	//	std::cout << "msg : starPlay"<< _messageServeur << std::endl;
+	std::cout << "msg : starPlay"<< _messageServeur << std::endl;
       }
       break;
 
@@ -111,15 +112,15 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	packet>> _messageServeur;
 	setJoueurIsActif(false);
-	//	std::cout << "msg : stopPlay"<< _messageServeur << std::endl;
+	//std::cout << "msg : stopPlay"<< _messageServeur << std::endl;
       }
       break;
 
       case SEND_RESPONSE_COUP:
       {
 	packet >> res >>posx >> posy;
-	//_JoueurClt->setHitAt(r,x,y);
-	//	setJoueurIsActif(false);
+	//_JoueurClt->setHitAt(res,xpox,posy);
+	setJoueurIsActif(false);
       }
       break;
       
