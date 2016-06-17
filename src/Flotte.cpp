@@ -165,6 +165,7 @@ bool Flotte::estValideDroite(Position p,int taille,int brdSize)
 
 bool Flotte::foundInFlotte(Position p) const
 {
+  std::cout << "Flotte.foundInFlotte("<<p._x<<","<<p._y<<")" << std::endl;
   // Pour chaque bateau de la flotte, regarder si une position correspond
   for ( unsigned int i=0 ; i < _bateaux.size() ; ++i )
     {
@@ -179,7 +180,8 @@ bool Flotte::foundInFlotte(Position p) const
 
 int Flotte::searchBoatAt(Position p) const
 {
-    for ( unsigned int i=0 ; i < _bateaux.size() ; ++i )
+  std::cout << "Flotte.searchBoatAt("<<p._x<<","<<p._y<<")" << std::endl;
+   for ( unsigned int i=0 ; i < _bateaux.size() ; ++i )
     {
       for ( int j=0 ; j < _bateaux[i].getTaille() ; j++ )
 	{
@@ -213,9 +215,32 @@ void Flotte::turnBoatVPos(int boatNum)
 
 }
 
+void Flotte::setBoatHitAt(Position p,int boatNum) { _bateaux[boatNum].setHited(p); }
 
+bool Flotte::allTouched(int boatNum) const
+{
+  for ( int i = 0 ; i < _bateaux[boatNum].getTaille() ; ++i )
+    {
+      if ( !_bateaux[boatNum].getEtatAt(i) )
+	return false;
+    }
+  return true;
+}
 
+void Flotte::setBoatSink(int boatNum) { _bateaux[boatNum].setCoule(true); }
 
+bool Flotte::allBoatSink() const
+{
+for ( unsigned int i = 0 ; i < _bateaux.size() ; ++i )
+  {
+if ( !_bateaux[i].getCoule() )
+  return false;
+}
+return true;
+  
+}
+
+int Flotte::getBoatSizeAt(int boatNum) const { return _bateaux[boatNum].getTaille(); }
 
 std::ostream& operator <<(std::ostream& os,const Flotte& f) {
   for ( std::vector<Bateau>::const_iterator iter = f._bateaux.begin(); 

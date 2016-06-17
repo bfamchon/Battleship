@@ -16,7 +16,7 @@ private:
          
 public:
 int posx, posy; //temporaire
-bool res;      //temporaire
+int res;      //temporaire
 	Client();
 	~Client();
   void setBloquant(bool bloquant);

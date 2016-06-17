@@ -40,11 +40,28 @@ void Joueur::setSocketJoueur(sf::TcpSocket * socketJoueur){
 /////////////////
 //jouer coup eric
 
-bool Joueur::foundInFlotte(Position position) const{
-  return _flotte.foundInFlotte(position);
+int Joueur::searchInFlotte(Position p)
+{
+  std::cout << "Joueur.searchInFlotte("<<p._x<<","<<p._y<<")" << std::endl;
+  if (_flotte.foundInFlotte(p))
+    {
+      int boatNum = _flotte.searchBoatAt(p);
+      
+      // Le bateau est touché à la case p
+      _flotte.setBoatHitAt(p,boatNum);
+      if ( _flotte.allTouched(boatNum) )
+	{
+	  _flotte.setBoatSink(boatNum);
+	  std::cout << _flotte << std::endl;
+	  if ( _flotte.allBoatSink() )
+	    return ALL_BOAT_SINK;
+	  return BOAT_SINK;
+	}
+      return HIT_CELL;
+    }
+  return MISS_CELL;
 }
 
 
 // Tourner le bateau boatNum dans une direction valide
 void Joueur::turnBoat(int boatNum) { _flotte.turnBoatVPos(boatNum); }
-

@@ -29,7 +29,11 @@ public:
   bool foundInFlotte(Position) const;
   int searchBoatAt(Position) const;
   void turnBoatVPos(int);
-
+  void setBoatHitAt(Position,int);
+  bool allTouched(int) const;
+  void setBoatSink(int);
+  bool allBoatSink() const;
+  int getBoatSizeAt(int)const;
   friend std::ostream & operator<<(std::ostream & os, const Flotte &);
   friend std::istream & operator>>(std::istream & is, Flotte &);
 };

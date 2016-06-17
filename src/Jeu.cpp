@@ -60,6 +60,8 @@ void Jeu::setSocketJoueur(sf::TcpSocket * socketJoueur, Joueur * joueur){
   joueur->setSocketJoueur(socketJoueur);
 }
 
-bool Jeu::foundInFlotte(Position position, Joueur * joueur ) const{
-  return joueur->foundInFlotte(position);
+int Jeu::searchInPlayerFlotte(Position position, Joueur * joueur ) const{
+  int test = joueur->searchInFlotte(position);
+  std::cout << "Jeu.searchInPlayerFlotte: " << test << std::endl;
+  return test;
 }

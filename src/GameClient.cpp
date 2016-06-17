@@ -254,7 +254,6 @@ void GameClient::runWaitingRoom()
   wlistText.setPosition(460,220);
 
   _joueur.setRandFlotte();
-
   while (_window.isOpen())
     {
       sf::Event event;
@@ -278,7 +277,6 @@ void GameClient::runWaitingRoom()
 		  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      _joueur.setRandFlotte();
-		      drawSpritesGrid(spr_grid.getPosition().x,spr_grid.getPosition().y);
 		    }
 		  if ( spr_grid.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
@@ -375,22 +373,14 @@ void GameClient::runBoards()
 		{
 		  if ( spr_grid2.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
-		      // Echange client serveur A FAIRE ERIC //////////////////
 		      if (_client.getJoueurIsActif())
 			{
 			  int xPosInGrid2 = (sf::Mouse::getPosition(_window).x - 425)/CELL_SIZE;
 			  int yPosInGrid2 = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
-			  // RandomInRange r;
-			  // _joueur.setHitAt(r(1,2),xPosInGrid2,yPosInGrid2);
-			  std::cout << xPosInGrid2 << " " << yPosInGrid2 << std::endl;
-
 			  sf::Packet packet;
 			  packet<<SEND_COUP<<xPosInGrid2<<yPosInGrid2;
-			  //Position p =  {xPosInGrid2,yPosInGrid2};
-			  if (_client.send(packet)
-			      == sf::Socket::Done ){
 
-			  }
+			  if (_client.send(packet) == sf::Socket::Done ) {/* Nothing to do  */}
 
 			  
 			}
@@ -428,15 +418,16 @@ void GameClient::drawSpritesGrid(float posGridX, float posGridY)
     exit(-1);
   if (!txt_seaCell.loadFromFile("../Textures/sea_cell.png"))
     exit(-1);
+
   sf::Sprite spr_intactCell,spr_seaCell;
   spr_intactCell.setTexture(txt_intactCell);
   spr_seaCell.setTexture(txt_seaCell);
-  
+
   for ( int x=0 ; x < 10 ; x++ )
     {
       for ( int y=0 ; y < 10 ; y++)
 	{
-	  if ( _joueur.getFlotte().foundInFlotte(Position{x,y}) )
+	  if ( _joueur.getFlotte().foundInFlotte(Position{x,y}))
 	    {
 	      spr_intactCell.setPosition((CELL_SIZE*x)+posGridX+2,(CELL_SIZE*y)+posGridY+2);
 	      _window.draw(spr_intactCell);
@@ -448,23 +439,31 @@ void GameClient::drawSpritesGrid(float posGridX, float posGridY)
 	    }
 	}
     }
+    /*for ( int i=0; i < 6 ; i ++ )
+    for ( int j=0; j < _joueur.getFlotte().getBoatSizeAt(i) ; j++ )
+      {
+	spr_intactCell.setPosition((CELL_SIZE*i)+posGridX+2,(CELL_SIZE*j)+posGridY+2);
+	_window.draw(spr_intactCell);
+	}*/
 }
 
 void GameClient::drawSpritesHits(float posGridX, float posGridY)
 {
-  sf::Texture txt_missCell,txt_hitCell,txt_seaCell;
+  sf::Texture txt_missCell,txt_hitCell,txt_seaCell,txt_sinkCell;
   if (!txt_missCell.loadFromFile("../Textures/ship_miss.png"))
     exit(-1);
   if (!txt_seaCell.loadFromFile("../Textures/sea_cell.png"))
     exit(-1);
   if (!txt_hitCell.loadFromFile("../Textures/ship_hit.png"))
     exit(-1);
+  if (!txt_sinkCell.loadFromFile("../Textures/sink_boat.png"))
+    exit(-1);
 
-  sf::Sprite spr_missCell,spr_seaCell,spr_hitCell;
+  sf::Sprite spr_missCell,spr_seaCell,spr_hitCell,spr_sinkCell;
   spr_missCell.setTexture(txt_missCell);
   spr_seaCell.setTexture(txt_seaCell);
   spr_hitCell.setTexture(txt_hitCell);
-
+  spr_sinkCell.setTexture(txt_sinkCell);
   for ( int x=0 ; x < 10 ; x++ )
     {
       for ( int y=0 ; y < 10 ; y++)
@@ -479,10 +478,16 @@ void GameClient::drawSpritesHits(float posGridX, float posGridY)
 	      spr_missCell.setPosition((CELL_SIZE*x)+posGridX+2,(CELL_SIZE*y)+posGridY+2);
 	      _window.draw(spr_missCell);
 	    }
-	  else
+	  else if ( _joueur.getHitAt(x,y) == HIT_CELL )
 	    {
 	      spr_hitCell.setPosition((CELL_SIZE*x)+posGridX+2,(CELL_SIZE*y)+posGridY+2);
 	      _window.draw(spr_hitCell);
+	    }
+	  else
+	    {
+	      // Bateau coulé !
+	      spr_sinkCell.setPosition((CELL_SIZE*x)+posGridX+2,(CELL_SIZE*y)+posGridY+2);
+	      _window.draw(spr_sinkCell);
 	    }
 	}
     }

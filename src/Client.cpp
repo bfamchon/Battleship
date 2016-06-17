@@ -112,9 +112,7 @@ std::string Client::handlePackets(sf::Packet & packet){
 
       case SEND_RESPONSE_COUP:
       {
-
 	packet >> res >>posx >> posy;
-	
 	//_JoueurClt->setHitAt(r,x,y);
 	//	setJoueurIsActif(false);
       }

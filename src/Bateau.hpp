@@ -38,9 +38,12 @@ public:
   int getDir() const;
   void setEtatPos(bool,Position);
   void setCoule(bool);
+  bool getCoule() const;
   void changeBoatPosition(int);
   Position getPositionAt(int) const;
   void reinitEtatPos();
+  void setHited(Position);
+  bool getEtatAt(int)const;
 
   // Flux de sortie au format "<direction>;<coule>;<etatPos>\n".
   friend std::ostream & operator<<(std::ostream & os, const Bateau & b );

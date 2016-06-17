@@ -94,15 +94,12 @@ void Serveur::handlePackets()
 	      {std::string msg;
                 Position p;
 		packet>> p._x >>p._y;
-		std::cout <<p._x << " " << p._y << std::endl;
-		bool res = _jeu.foundInFlotte(p,_jeu.getJInactif());
-		std::cout <<res<<std::endl;
+	        int res = _jeu.searchInPlayerFlotte(p,_jeu.getJInactif());
+		std::cout << "Server: res: " << res << " posX " << p._x << " posY "<< p._y << std::endl;
                 sf::Packet retPacket;
-		retPacket<<SEND_RESPONSE_COUP<<res<<p._x << " " << p._y;
+		retPacket<<SEND_RESPONSE_COUP<<res<<p._x<< p._y;
 		if (_jeu.getJCourant()->getSocketJoueur()->send(retPacket)
-			 == sf::Socket::Done){
-		       //nothing to do
-		     }
+		    == sf::Socket::Done){ /* nothing to do */  }
 
 		
 		

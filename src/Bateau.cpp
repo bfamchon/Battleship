@@ -61,7 +61,7 @@ void Bateau::setEtatPos(bool etat,Position pos)
 }
 
 void Bateau::setCoule(bool etatBateau) { _coule = etatBateau; }
-
+bool Bateau::getCoule() const { return _coule; }
 /*
  * Cette fonction change un bateau existant de position
  * dans une direction souhaitée.
@@ -92,3 +92,15 @@ std::ostream& operator <<(std::ostream& os, const Bateau& b) {
 }
 
 void Bateau::reinitEtatPos() { _etatPos.erase(_etatPos.begin(),_etatPos.end()); }
+
+void Bateau::setHited(Position p)
+{
+  // Chercher la bonne case et la mettre à touché
+  for ( unsigned int i = 0 ; i < _etatPos.size() ; ++i )
+    {
+      if ( (_etatPos[i].second._x == p._x) && (_etatPos[i].second._y == p._y)  )
+	_etatPos[i].first=true;
+    }
+}
+
+bool Bateau::getEtatAt(int indice) const { return _etatPos[indice].first; }

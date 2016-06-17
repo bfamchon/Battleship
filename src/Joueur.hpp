@@ -9,6 +9,8 @@
 const int SEA_CELL = 0;
 const int MISS_CELL = 1;
 const int HIT_CELL = 2;
+const int BOAT_SINK = 3;
+const int ALL_BOAT_SINK = 4;
 
 /*
  * @param: _testedHits 100 cases en 1 ligne : 0 sea / 1 miss / 2 hit
@@ -35,9 +37,8 @@ public:
   void setSocketJoueur(sf::TcpSocket * socketJoueur);
 
   //eric
-  bool foundInFlotte(Position) const;
+  int searchInFlotte(Position);
   void turnBoat(int);
-
 };
 
 #endif
