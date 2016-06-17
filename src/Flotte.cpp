@@ -250,6 +250,8 @@ std::ostream& operator <<(std::ostream& os,const Flotte& f) {
   return os;
 }
 
+Bateau Flotte::getBoatAt(int boatNum) const { return _bateaux[boatNum]; }
+
 std::istream & operator>>(std::istream & is, Flotte & f) {
   std::string buffer;
   
