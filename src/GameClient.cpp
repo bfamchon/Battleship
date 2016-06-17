@@ -460,6 +460,13 @@ void GameClient::runBoards()
 	    _client.posx = -1;
 	    _client.posy = -1;
 	  }
+	 if (_client.repx != -1) 
+	  {
+	    // _joueur.setFlotteAt(_client.repres,_client.repx,_client.repy);
+	    _client.repx = -1;
+	    _client.repy = -1;
+	  }
+	
 	messageServeur.setString(_client._messageServeur);
       }
       

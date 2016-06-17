@@ -31,7 +31,7 @@ private:
   
          
 public:
-int posx, posy; //temporaire
+  int repx,repy,repres,posx, posy; //temporaire
 
 int res;      //temporaire
 

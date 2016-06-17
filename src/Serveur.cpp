@@ -95,27 +95,44 @@ void Serveur::handlePackets()
 	      break;
 
 	    case SEND_COUP: //eric a faire
-              //voir ajout d'une verification du joueur : a t il le droit de jouer !
-
-	      
+              //voir ajout d'une verification du joueur : a t il le droit de jouer !      
 	      //Recoit un coup du client
 	      { sf::Packet sendPacket;
-		//std::string msg;
                 Position p;
 		packet>> p._x >>p._y;
 		std::vector <int> boatState;
 	        int res = _jeu.searchInPlayerFlotte(p,_jeu.getJInactif(),&boatState);
+                //traiter ici si res == 4 gagné 
+		
 		// Vérifier les coordonées
-		if ( res == 3 )
-		  {
-		    for (unsigned int i = 0 ; i < boatState.size() ; ++i )
-		      std::cout << boatState[i] << " ";
-		    std::cout << std::endl;
-		  }
-		sendPacket.clear();
-		sendPacket<<SEND_RESPONSE_COUP<< res << p._x << p._y;
-                sendPacketClient(_jeu.getJCourant()->getSocketJoueur(),sendPacket);
+		if (res == 1) {
+		  sendPacket.clear();
+		  sendPacket<<SEND_RESPONSE_COUP<< res << p._x << p._y;
+		  sendPacketClient(_jeu.getJCourant()->getSocketJoueur(),sendPacket);
 
+		} else if (res == 2) {
+		  sendPacket.clear();
+		  sendPacket<<SEND_RESPONSE_COUP<< res << p._x << p._y;
+		  sendPacketClient(_jeu.getJCourant()->getSocketJoueur(),sendPacket);
+
+		  sendPacket.clear();
+		  sendPacket<<MAJ_FLOTTE<< res << p._x << p._y;
+		  sendPacketClient(_jeu.getJInactif()->getSocketJoueur(),sendPacket);
+
+		} else if (res == 3) {
+		  for (unsigned int i = 0 ; i < boatState.size() ; i+=2 ) {
+		    sendPacket.clear();
+		    sendPacket<<SEND_RESPONSE_COUP<< 3 << boatState[i] << boatState[i+1];
+		    sendPacketClient(_jeu.getJCourant()->getSocketJoueur(),sendPacket);
+		    if (i==0){
+		      sendPacket.clear();
+		      // a voir celon Baptiste pour etat envoyé
+		      sendPacket<<MAJ_FLOTTE<< 3 << boatState[0] << boatState[1];
+		      sendPacketClient(_jeu.getJInactif()->getSocketJoueur(),sendPacket);
+		    }
+		  }
+		}
+ 
                 declancheChangementJoueur();
 		
 	      }

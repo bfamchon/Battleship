@@ -121,6 +121,18 @@ std::string Client::handlePackets(sf::Packet & packet){
 	setJoueurIsActif(false);
       }
       break;
+
+      case MAJ_FLOTTE:
+      {
+	//int repres,x,y;
+	packet >> repres >> repx >> repy;
+	if( repres == 3) {_messageServeur = "Touché et Coulé !!!!!!!";}
+	if( repres == 2) {_messageServeur = "Touché !";}
+	
+	
+	//	_JoueurClt->setFlotteAt(r,x,y);
+      }
+      break;
       
     }
   return retour;

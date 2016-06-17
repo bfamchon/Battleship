@@ -20,14 +20,7 @@ void Joueur::setRandFlotte() { _flotte.genererFlotte(); }
 int Joueur::getHitAt(int x,int y) const { return _testedHits[y*10+x]; }
 void Joueur::setHitAt(int etat, int x, int y) 
 { 
-  if ( etat == BOAT_SINK )
-    {
-      // Mettre tout le bateau à jour dans tested hits
-      // ATTENTE ERIC
-      _testedHits[y*10+x] = etat;
-    }
-  else
-    _testedHits[y*10+x] = etat; 
+  _testedHits[y*10+x] = etat; 
 }
 
 void Joueur::setFlotte(const Flotte & f)
