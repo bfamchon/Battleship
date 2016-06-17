@@ -48,6 +48,7 @@ private:
   Joueur _joueur;
   Client _client;
 
+  void runError();
   void runWaitingRoom();
   void runBoards();
   void drawSpritesGrid(float,float);
