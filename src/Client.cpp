@@ -95,7 +95,7 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	packet >> _messageServeur;
 	setJoueurIsActif(false);
-	std::cout << "msg : user Wait"<< _messageServeur << std::endl;
+	//	std::cout << "msg : user Wait"<< _messageServeur << std::endl;
       }
       break;
       
@@ -103,7 +103,7 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	packet>> _messageServeur;
 	setJoueurIsActif(true);
-	std::cout << "msg : starPlay"<< _messageServeur << std::endl;
+	//	std::cout << "msg : starPlay"<< _messageServeur << std::endl;
       }
       break;
 
@@ -111,7 +111,7 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	packet>> _messageServeur;
 	setJoueurIsActif(false);
-	std::cout << "msg : stopPlay"<< _messageServeur << std::endl;
+	//	std::cout << "msg : stopPlay"<< _messageServeur << std::endl;
       }
       break;
 

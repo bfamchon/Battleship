@@ -101,7 +101,7 @@ void Serveur::handlePackets()
 		packet>> p._x >>p._y;
 
 	        int res = _jeu.searchInPlayerFlotte(p,_jeu.getJInactif());
-		std::cout << "Server: res: " << res << " posX " << p._x << " posY "<< p._y << std::endl;
+		//	std::cout << "Server: res: " << res << " posX " << p._x << " posY "<< p._y << std::endl;
                 sf::Packet retPacket;
 		retPacket<<SEND_RESPONSE_COUP<<res<<p._x<< p._y;
 		if (_jeu.getJCourant()->getSocketJoueur()->send(retPacket)

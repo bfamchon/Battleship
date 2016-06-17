@@ -165,7 +165,7 @@ bool Flotte::estValideDroite(Position p,int taille,int brdSize)
 
 bool Flotte::foundInFlotte(Position p) const
 {
-  std::cout << "Flotte.foundInFlotte("<<p._x<<","<<p._y<<")" << std::endl;
+  //std::cout << "Flotte.foundInFlotte("<<p._x<<","<<p._y<<")" << std::endl;
   // Pour chaque bateau de la flotte, regarder si une position correspond
   for ( unsigned int i=0 ; i < _bateaux.size() ; ++i )
     {
@@ -180,7 +180,7 @@ bool Flotte::foundInFlotte(Position p) const
 
 int Flotte::searchBoatAt(Position p) const
 {
-  std::cout << "Flotte.searchBoatAt("<<p._x<<","<<p._y<<")" << std::endl;
+  //std::cout << "Flotte.searchBoatAt("<<p._x<<","<<p._y<<")" << std::endl;
    for ( unsigned int i=0 ; i < _bateaux.size() ; ++i )
     {
       for ( int j=0 ; j < _bateaux[i].getTaille() ; j++ )
