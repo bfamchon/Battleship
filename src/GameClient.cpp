@@ -19,6 +19,7 @@ GameClient::GameClient(const sf::Texture& bgPath) : _window(sf::VideoMode(800, 6
 {
 	_window.setPosition(sf::Vector2i((sf::VideoMode::getDesktopMode().width-WINDOW_WIDTH)/2,
 					 (sf::VideoMode::getDesktopMode().height-WINDOW_HEIGHT)/2 ));
+	_window.setFramerateLimit(10);
 }
 
 /*
@@ -267,7 +268,6 @@ void GameClient::runWaitingRoom()
   sf::Texture txt_grid, txt_wlist,txt_radis;
   sf::Text randomPosText, wlistText;
   sf::Font font;
-  sf::Clock my_Clock;
 
   if (!font.loadFromFile("../Fonts/DooM.ttf"))
     exit(-1);
@@ -470,18 +470,14 @@ void GameClient::runBoards()
 
        	messageServeur.setString(_client._messageServeur);
       }
-      
-      if (_client.getJoueurIsActif()){
-	_window.draw(Txt_Actif); 
-      }else _window.draw(Txt_Non_Actif);	
-      
+
       _window.clear(White);
       _window.draw(_sprBG);
       _window.draw(spr_grid);
       _window.draw(spr_grid2);
       _window.draw(spr_infosZone);
       if (_client.getJoueurIsActif()){
-	_window.draw(Txt_Actif); 
+	_window.draw(Txt_Actif);
       }else _window.draw(Txt_Non_Actif);
       _window.draw(messageServeur);
       drawSpritesGrid(spr_grid.getPosition().x,spr_grid.getPosition().y);
@@ -503,7 +499,7 @@ void GameClient::drawSpritesGrid(float posGridX, float posGridY)
   sf::Sprite spr_intactCell,spr_sinkCell,spr_hitCell;
   spr_intactCell.setTexture(txt_intactCell);
   spr_sinkCell.setTexture(txt_sinkCell);
-  spr_sinkCell.setTexture(txt_hitCell);
+  spr_hitCell.setTexture(txt_hitCell);
   for ( int i=0; i < 6 ; i ++ )
     {
       int sizeBoat=_joueur.getFlotte().getBoatSizeAt(i);
@@ -511,20 +507,24 @@ void GameClient::drawSpritesGrid(float posGridX, float posGridY)
 	{
 	  int boatPosX=_joueur.getFlotte().getBoatAt(i).getPositionAt(j)._x;
 	  int boatPosY=_joueur.getFlotte().getBoatAt(i).getPositionAt(j)._y;
+
 	  if ( _joueur.getFlotte().getBoatAt(i).getCoule())
 	    {
 	      spr_sinkCell.setPosition((CELL_SIZE*boatPosX)+posGridX+2,(CELL_SIZE*boatPosY)+posGridY+2);
 	      _window.draw(spr_sinkCell);
 	    }
-	  else if  ( _joueur.getFlotte().getBoatAt(i).getEtatAt(j))
+	  else 
 	    {
-	      spr_hitCell.setPosition((CELL_SIZE*boatPosX)+posGridX+2,(CELL_SIZE*boatPosY)+posGridY+2);
-	      _window.draw(spr_hitCell);
-	    }
-	  else
-	    {
-	      spr_intactCell.setPosition((CELL_SIZE*boatPosX)+posGridX+2,(CELL_SIZE*boatPosY)+posGridY+2);
-	      _window.draw(spr_intactCell);
+	      if  ( _joueur.getFlotte().getBoatAt(i).getEtatAt(j))
+		{
+		  spr_hitCell.setPosition((CELL_SIZE*boatPosX)+posGridX+2,(CELL_SIZE*boatPosY)+posGridY+2);
+		  _window.draw(spr_hitCell);
+		}
+	      else
+		{
+		  spr_intactCell.setPosition((CELL_SIZE*boatPosX)+posGridX+2,(CELL_SIZE*boatPosY)+posGridY+2);
+		  _window.draw(spr_intactCell);
+		}
 	    }
 	}
     }

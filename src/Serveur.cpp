@@ -121,16 +121,15 @@ void Serveur::handlePackets()
 		  sendPacketClient(_jeu.getJInactif()->getSocketJoueur(),sendPacket);
 
 		} else if (res == 3) {
+		  sendPacket.clear();
+		  // a voir celon Baptiste pour etat envoyé
+		  sendPacket<<MAJ_FLOTTE<< 3 << p._x << p._y;
+		  sendPacketClient(_jeu.getJInactif()->getSocketJoueur(),sendPacket);
+		  // Je t'ai adapté la boucle( Baptiste )
 		  for (unsigned int i = 0 ; i < boatState.size() ; i+=2 ) {
 		    sendPacket.clear();
 		    sendPacket<<SEND_RESPONSE_COUP<< 3 << boatState[i] << boatState[i+1];
 		    sendPacketClient(_jeu.getJCourant()->getSocketJoueur(),sendPacket);
-		    if (i==0){
-		      sendPacket.clear();
-		      // a voir celon Baptiste pour etat envoyé
-		      sendPacket<<MAJ_FLOTTE<< 3 << boatState[0] << boatState[1];
-		      sendPacketClient(_jeu.getJInactif()->getSocketJoueur(),sendPacket);
-		    }
 		  }
 		}
  
