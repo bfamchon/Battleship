@@ -99,14 +99,16 @@ void Serveur::handlePackets()
 		//std::string msg;
                 Position p;
 		packet>> p._x >>p._y;
+		std::vector <int> boatState;
+	        int res = _jeu.searchInPlayerFlotte(p,_jeu.getJInactif(),&boatState);
+		// Vérifier les coordonées
+		if ( res == 3 )
+		  {
+		    for (unsigned int i = 0 ; i < boatState.size() ; ++i )
+		      std::cout << boatState[i] << " ";
+		    std::cout << std::endl;
+		  }
 
-	        int res = _jeu.searchInPlayerFlotte(p,_jeu.getJInactif());
-		std::cout << "Server: res: " << res << " posX " << p._x << " posY "<< p._y << std::endl;
-                sf::Packet retPacket;
-		retPacket<<SEND_RESPONSE_COUP<<res<<p._x<< p._y;
-		if (_jeu.getJCourant()->getSocketJoueur()->send(retPacket)
-		    == sf::Socket::Done){ /* nothing to do */  }
-		
 		sendPacket.clear();
 		sendPacket<<SEND_RESPONSE_COUP<< res<< p._x << p._y;
                 sendPacketClient(_jeu.getJCourant()->getSocketJoueur(),sendPacket);

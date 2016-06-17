@@ -60,8 +60,17 @@ void Jeu::setSocketJoueur(sf::TcpSocket * socketJoueur, Joueur * joueur){
   joueur->setSocketJoueur(socketJoueur);
 }
 
-int Jeu::searchInPlayerFlotte(Position position, Joueur * joueur ) const{
-  int test = joueur->searchInFlotte(position);
-  std::cout << "Jeu.searchInPlayerFlotte: " << test << std::endl;
-  return test;
+int Jeu::searchInPlayerFlotte(Position position, Joueur * joueur,std::vector<int>* posNavire ){
+  int stateHit = joueur->searchInFlotte(position);
+  if ( stateHit == 3 )
+    {
+      int boatNum = joueur->getFlotte().searchBoatAt(position);
+      int boatSize = joueur->getFlotte().getBoatAt(boatNum).getTaille();
+	for ( int i = 0; i < boatSize; ++i )
+	  {
+	    posNavire->push_back(joueur->getFlotte().getBoatAt(boatNum).getPositionAt(i)._x);
+	    posNavire->push_back(joueur->getFlotte().getBoatAt(boatNum).getPositionAt(i)._y);
+	  }
+    }
+  return stateHit;
 }

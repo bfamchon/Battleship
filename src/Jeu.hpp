@@ -27,7 +27,7 @@ public:
   void initJoueur(std::string nomJoueur);
   Joueur* searchByName(const std::string & nomJoueur);
   void setSocketJoueur(sf::TcpSocket * socketJoueur,Joueur * joueur);
-  int searchInPlayerFlotte(Position position, Joueur * joueur ) const;
+  int searchInPlayerFlotte(Position position, Joueur * joueur,std::vector<int>* posNavire );
   
 };
 

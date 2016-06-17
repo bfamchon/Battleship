@@ -440,11 +440,12 @@ void GameClient::runBoards()
 	}
       
       if (_client.receive(msg) == sf::Socket::Done){
-        if (_client.posx != -1) {
-          _joueur.setHitAt(_client.res,_client.posx,_client.posy);
-	  _client.posx = -1;
-	  _client.posy = -1;
-	}
+        if (_client.posx != -1) 
+	  {
+	    _joueur.setHitAt(_client.res,_client.posx,_client.posy);
+	    _client.posx = -1;
+	    _client.posy = -1;
+	  }
 	messageServeur.setString(_client._messageServeur);
       }
 	
@@ -477,7 +478,8 @@ void GameClient::drawSpritesGrid(float posGridX, float posGridY)
   spr_sinkCell.setTexture(txt_hitCell);
   for ( int i=0; i < 6 ; i ++ )
     {
-      for ( int j=0; j < _joueur.getFlotte().getBoatSizeAt(i) ; j++ )
+      int sizeBoat=_joueur.getFlotte().getBoatSizeAt(i);
+      for ( int j=0; j < sizeBoat ; j++ )
 	{
 	  int boatPosX=_joueur.getFlotte().getBoatAt(i).getPositionAt(j)._x;
 	  int boatPosY=_joueur.getFlotte().getBoatAt(i).getPositionAt(j)._y;
@@ -530,7 +532,6 @@ void GameClient::drawSpritesHits(float posGridX, float posGridY)
 	    }
 	  else if ( _joueur.getHitAt(x,y) == BOAT_SINK )
 	    {
-	      // Bateau coulé !
 	      spr_sinkCell.setPosition((CELL_SIZE*x)+posGridX+2,(CELL_SIZE*y)+posGridY+2);
 	      _window.draw(spr_sinkCell);
 	    }

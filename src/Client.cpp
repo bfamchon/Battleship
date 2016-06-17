@@ -2,7 +2,7 @@
 #include "PacketType.hpp"
 #include <iostream>
 
-Client::Client():posx(-1),posy(-1),res(false),_messageServeur("") {}
+Client::Client():_closeRunWait(false),posx(-1),posy(-1),res(false),_messageServeur("") {}
 
 Client::~Client() {}
 

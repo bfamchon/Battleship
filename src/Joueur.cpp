@@ -18,7 +18,17 @@ void Joueur::setPseudo(std::string pseudo) { _pseudo = pseudo; }
 Flotte Joueur::getFlotte() const { return _flotte; }
 void Joueur::setRandFlotte() { _flotte.genererFlotte(); }
 int Joueur::getHitAt(int x,int y) const { return _testedHits[y*10+x]; }
-void Joueur::setHitAt(int etat, int x, int y) { _testedHits[y*10+x] = etat; }
+void Joueur::setHitAt(int etat, int x, int y) 
+{ 
+  if ( etat == BOAT_SINK )
+    {
+      // Mettre tout le bateau à jour dans tested hits
+      // ATTENTE ERIC
+      _testedHits[y*10+x] = etat;
+    }
+  else
+    _testedHits[y*10+x] = etat; 
+}
 
 void Joueur::setFlotte(const Flotte & f)
 {
@@ -42,7 +52,6 @@ void Joueur::setSocketJoueur(sf::TcpSocket * socketJoueur){
 
 int Joueur::searchInFlotte(Position p)
 {
-  std::cout << "Joueur.searchInFlotte("<<p._x<<","<<p._y<<")" << std::endl;
   if (_flotte.foundInFlotte(p))
     {
       int boatNum = _flotte.searchBoatAt(p);

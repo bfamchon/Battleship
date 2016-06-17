@@ -13,7 +13,7 @@ const int BOAT_SINK = 3;
 const int ALL_BOAT_SINK = 4;
 
 /*
- * @param: _testedHits 100 cases en 1 ligne : 0 sea / 1 miss / 2 hit
+ * @param: _testedHits 100 cases en 1 ligne : 0 sea / 1 miss / 2 hit / 3 sink
  * 
  */
 
