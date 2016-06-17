@@ -29,6 +29,11 @@ GameClient::GameClient(const sf::Texture& bgPath) : _window(sf::VideoMode(800, 6
  */
 GameClient::~GameClient() {}
 
+void GameClient::setWindowPosition(int nb){ // eric pour debug
+  if (nb == 1) _window.setPosition(sf::Vector2i(1,1));
+  if (nb == 2) _window.setPosition(sf::Vector2i(820,1));
+}
+
 void GameClient::runError()
 {
    sf::RenderWindow windowErr(sf::VideoMode(400, 100),
