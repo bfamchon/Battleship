@@ -49,6 +49,7 @@ private:
   Client _client;
 
   void runError();
+  void runWinner();
   void runWaitingRoom();
   void runBoards();
   void drawSpritesGrid(float,float);

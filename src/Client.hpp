@@ -16,6 +16,7 @@
 #include "PacketType.hpp"
 #include "Joueur.hpp"
 
+
 /*! \class CLient
    * \brief classe client reseau
    *
@@ -28,7 +29,7 @@ private:
   bool _bloquant;          /*!<Flag pour rendre le socket bloquant>*/
   bool _joueurIsActif;     /*!<Flag pour signifier au programme principal de désactiver la zone de saisie>*/
   bool _closeRunWait;      /*!<Flag pour demander au programme principal de fermer la fenetre>*/ 
-  
+  bool _Winner = false;  /*!<Flag pour demander au programme principal d'afficher la fenetre Winner>*/
          
 public:
   int repx,repy,repres,posx, posy; //temporaire
@@ -55,6 +56,8 @@ int res;      //temporaire
   void setJoueurIsActif(bool joueurIsActif);
   bool getCloseRunWait() const;
   void setCloseRunWait(bool etat);
+  bool getWinner() const;
+  void setWinner(bool etat);
   std::string _listeJoueurs; // conteneur pour affichage WaitingRoom
   std::string _messageServeur; // conteneur pour affichage WaitingRoom
 

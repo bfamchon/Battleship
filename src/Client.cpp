@@ -8,6 +8,8 @@ Client::~Client() {}
 
 bool Client::getCloseRunWait() const{ return _closeRunWait;}
 void Client::setCloseRunWait(bool etat) { _closeRunWait = etat;}
+bool Client::getWinner() const{ return _Winner;}
+void Client::setWinner(bool etat) { _Winner = etat;}
 void Client::setBloquant(bool bloquant){
   _bloquant= bloquant;
 }
@@ -76,10 +78,8 @@ std::string Client::handlePackets(sf::Packet & packet){
       
     case DISCONNECT:
       {
-	//_closeRunWait=true; 	
        packet >> _messageServeur;
        retour = _messageServeur;
-       //ErrorMsg("Pseudo déjà utilisé !", "Erreur pseudo");
        _closeRunWait=true;
       }
       break;
@@ -118,20 +118,22 @@ std::string Client::handlePackets(sf::Packet & packet){
       case SEND_RESPONSE_COUP:
       {
 	packet >> res >>posx >> posy;
-	//_JoueurClt->setHitAt(r,x,y);
-	//	setJoueurIsActif(false);
       }
       break;
 
       case MAJ_FLOTTE:
       {
-	//int repres,x,y;
 	packet >> repres >> repx >> repy;
-	if( repres == 3) {_messageServeur = "Touché et Coulé !!!!!!!";}
-	if( repres == 2) {_messageServeur = "Touché !";}
-	
-	
-	//	_JoueurClt->setFlotteAt(r,x,y);
+	if( repres == 3) {_messageServeur = "Touche et Coule !!!!!!!";}
+	if( repres == 2) {_messageServeur = "Touche !";}
+      }
+      break;
+      
+      case SEND_WINNER:
+      {
+	//packet >> res >>posx >> posy;
+	_Winner = true;
+	std::cout<<"winner " << std::endl;
       }
       break;
       

@@ -18,14 +18,19 @@ using namespace sf;
 ////////////////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
-  Serveur Srv(5500);
+  int lePort = 5500;
 
-  std::cout<< "attente adresses " <<std::endl;
-  std::cout<<"Local host:"<<sf::IpAddress::LocalHost<<"\n"
-	   <<"Local: "<<sf::IpAddress::getLocalAddress()<<"\n"
-	   <<"Public: "<<sf::IpAddress::getPublicAddress()<<"\n";
+  if  (argc == 2) {lePort = std::stoi(argv[1]);} 
+
+  std::cout<<"attente adresses " <<std::endl;
+  std::cout<<"Local host               :"<<sf::IpAddress::LocalHost<<"\n"
+	   <<"Local                    : "<<sf::IpAddress::getLocalAddress()<<"\n"
+	   <<"Public                   : "<<sf::IpAddress::getPublicAddress()<<"\n"
+           <<"Le port de connexion est : "<< lePort <<"\n";
+
+  Serveur Srv(lePort);
   
-  std::cout<< "serveur lance" <<std::endl;
+  std::cout<< "serveur lance sur port : "<< lePort  <<std::endl;
   Srv.run();
   
     return 0;

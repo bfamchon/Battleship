@@ -96,7 +96,7 @@ void Serveur::handlePackets()
 
 	    case SEND_COUP: //eric a faire
 
-              //voir ajout d'une verification du joueur : a t il le droit de jouer !      
+              //voir ajout d'une verification du joueur : a t il le droit de jouer !   
 
 	      //Recoit un coup du client
 	      { sf::Packet sendPacket;
@@ -153,7 +153,7 @@ void Serveur::handlePackets()
 				SEND_USER_WAIT,
 				"Bienvenue attente deuxieme joueur !");     
 		} else {
-     
+                  _partieEncours = true;
 		  //déja un joueur pret à jouer
 		  if (sendMsgClientRet(it->first,
 				       SEND_USER_WAIT,
@@ -186,13 +186,45 @@ void Serveur::handlePackets()
 	  break;
 
 	case sf::Socket::Disconnected:
-	  std::cout<<it->second<<" s'est déconnecté\n";
-	  broadCast(GENERAL_MSG, it->second+" s'est déconnecté\n");
-	  if (!_sameName ){
-	    _jeu.initJoueur(it->second);
-	  }else _sameName = false;
-	  it=_clients.erase(it);
-	  broadCast(SEND_LISTE_ATTENTE,_jeu.getListeJoueur() );
+	  
+	  std::cout<<it->second<<" s'est deconnecte\n";
+	  broadCast(GENERAL_MSG, it->second+" s'est déconnecte\n");
+
+	  std::cout<<"deconexion " << _partieEncours << std::endl;
+	  if (_partieEncours){
+	    //kill joueur déconnécté
+	    
+	    _partieEncours=false;
+
+	    /*  _jeu.initJoueur(it->second);
+		it=_clients.erase(it); // a voir si prob segmentation
+	    */
+
+            std::cout<<"deconexion 2 "<< _partieEncours << std::endl;
+	    // send Win à l'autre
+	      if (it->second == _jeu.getJoueur1().getPseudo()) {
+		std::cout<<"sendwinner 2 " << std::endl;
+		sendMsgClient(_jeu.getJoueur2().getSocketJoueur(),
+			    SEND_WINNER,
+			    "Vous etes le gagnant par forfait !"); 
+	    } else {
+		std::cout<<"sendwinner 1 " << std::endl;
+		sendMsgClient(_jeu.getJoueur1().getSocketJoueur(),
+			    SEND_WINNER,
+			    "Vous etes le gagnant par forfait !");
+	    }
+	      
+              // SEND_WINNER
+	    //deconnecte l'autre
+	      
+
+	  }else{ //la partie n'est pas démarée
+	    if (!_sameName ){
+	      _jeu.initJoueur(it->second);
+	    }else _sameName = false;
+	    it=_clients.erase(it);
+	    broadCast(SEND_LISTE_ATTENTE,_jeu.getListeJoueur() );
+	  }
 	  break;
 
 	default:

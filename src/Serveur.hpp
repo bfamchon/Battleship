@@ -18,6 +18,7 @@ private:
   bool _quit;
   bool _bloquant;
   bool _sameName = false;
+  bool _partieEncours = false;
 
   void declancheChangementJoueur();
   void handlePackets();

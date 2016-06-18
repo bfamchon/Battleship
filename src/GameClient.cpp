@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
+#include <locale>
 
 /*
  * Initialise simplement la fenetre avec une taille de 800*600,
@@ -76,16 +77,60 @@ void GameClient::runError()
     }
 }
 
+void GameClient::runWinner()
+{
+   sf::RenderWindow windowWin(sf::VideoMode(400, 400),
+	    "Message Winner !",
+	    sf::Style::Titlebar | sf::Style::Close);
+
+  windowWin.setPosition(sf::Vector2i(
+			 (sf::VideoMode::getDesktopMode().width-400)/2,
+			 (sf::VideoMode::getDesktopMode().height-400)/2 ));
+  
+  sf::Text  messageServeur;
+  sf::Font  font;
+ 
+    
+  if (!font.loadFromFile("../Fonts/DooM.ttf"))
+    exit(-1);
+
+    
+  messageServeur.setFont(font);
+  messageServeur.setString("Vous etes le gagnant !");
+  messageServeur.setCharacterSize(20);
+  messageServeur.setColor(Black);
+  messageServeur.setPosition(10,10);
+  
+  while (windowWin.isOpen())
+    {
+      sf::Event event;
+      while (windowWin.pollEvent(event))
+	{
+	  if (event.type == sf::Event::Closed)
+	    {
+	      windowWin.close();
+	    }	  
+	}
+
+      windowWin.clear(White);
+      
+      windowWin.draw(messageServeur); 
+      windowWin.display();
+    }
+}
+
 void GameClient::run()
 {
   std::string msg="";
   std::string bufferIP = "IP Adress";
   std::string bufferPseudo = "Pseudo";
+  std::string bufferPort = "5500";
   std::string zoneSaisieTexte = "NothingForTheMoment";
+  int lePort = 5500;
 
-  sf::Text connectText,quitText, serverText, saisieIP, saisiePseudo, messageServeur;
+  sf::Text connectText,quitText, saisieIP, saisiePseudo,saisiePort, messageServeur, serverText;
 
-  sf::Sprite spr_zoneIP,spr_zonePseudo;
+  sf::Sprite spr_zoneIP,spr_zonePseudo,spr_zonePort;
   sf::Texture txt_typeZone;
 
   sf::Font font;
@@ -105,19 +150,19 @@ void GameClient::run()
   connectText.setString("Connect now !");
   connectText.setCharacterSize(20);
   connectText.setColor(Black);
-  connectText.setPosition(50,300);
+  connectText.setPosition(50,350);
   
   quitText.setFont(font);
   quitText.setString("Quit the game");
   quitText.setCharacterSize(20);
   quitText.setColor(Black);
-  quitText.setPosition(50,400);
+  quitText.setPosition(50,450);
 
   serverText.setFont(font);
   serverText.setString("Start server");
   serverText.setCharacterSize(20);
   serverText.setColor(Black);
-  serverText.setPosition(50,350);
+  serverText.setPosition(50,400);
 
   saisiePseudo.setPosition(55, 205);
   saisiePseudo.setFont(font);
@@ -131,10 +176,18 @@ void GameClient::run()
   saisieIP.setCharacterSize(20);
   saisieIP.setColor(Gray);
 
+  saisiePort.setPosition(55, 305);
+  saisiePort.setFont(font);
+  saisiePort.setString(bufferIP);
+  saisiePort.setCharacterSize(20);
+  saisiePort.setColor(Gray);
+
   spr_zonePseudo.setTexture(txt_typeZone);
   spr_zoneIP.setTexture(txt_typeZone);
+  spr_zonePort.setTexture(txt_typeZone);
   spr_zonePseudo.setPosition(50,200);  
   spr_zoneIP.setPosition(50,250);
+  spr_zonePort.setPosition(50,300);
 
   messageServeur.setFont(font);
   messageServeur.setString(_client._messageServeur);
@@ -162,7 +215,8 @@ void GameClient::run()
 		{
 		  // Si le client clique dans la zone d'un texte
 		  if ( connectText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
-		    {if ( _client.connect(bufferIP,5500) == sf::Socket::Done)
+		    {
+		      if ( _client.connect(bufferIP,lePort) == sf::Socket::Done)
 			{
 			  _joueur.setPseudo(bufferPseudo);
 			  music.stop();
@@ -202,32 +256,54 @@ void GameClient::run()
 		      zoneSaisieTexte = "IP";
 		      saisiePseudo.setColor(Gray);
 		    }
+		  if (spr_zonePort.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+		    {
+		      saisiePort.setColor(DarkGray);
+		      zoneSaisieTexte = "5500";
+		      saisiePort.setColor(Gray);
+		    }
 		}
 	    }
-           if(event.type==sf::Event::TextEntered)
-	     {
-	       char code=static_cast<char>(event.text.unicode);
-	       if (zoneSaisieTexte == "Pseudo")
-		 { 
-		   if( code != '\b' && bufferPseudo.size() < fieldMaxSize ) 
-		     bufferPseudo.push_back(code);
-		   else if( code == '\b' )
-		     {
-		       if(bufferPseudo.size() > 0) 
-			 bufferPseudo.pop_back();
-		     }
+	  if(event.type==sf::Event::TextEntered)
+	    {
+	      char code=static_cast<char>(event.text.unicode);
+	      if (zoneSaisieTexte == "Pseudo")
+		{ 
+		  if( code != '\b' && bufferPseudo.size() < fieldMaxSize ) 
+		    bufferPseudo.push_back(code);
+		  else if( code == '\b' )
+		    {
+		      if(bufferPseudo.size() > 0) 
+			bufferPseudo.pop_back();
+		    }
 		   
-		 } else if (zoneSaisieTexte == "IP")
-		 {	 
-		   if( code != '\b' && bufferIP.size() < fieldMaxSize ) 
-		     bufferIP.push_back(code);
-		   else if( code == '\b')
-		     {
-		       if(bufferIP.size()>0) 
-			 bufferIP.pop_back();
-		     }
-		 }
-	     }
+		} else if (zoneSaisieTexte == "IP")
+		{if (isdigit(code) || code == '\b' || code == '.' ){	 
+		    if( code != '\b' && bufferIP.size() < fieldMaxSize ) 
+		      bufferIP.push_back(code);
+		    else if( code == '\b')
+		      {
+			if(bufferIP.size()>0) 
+			  bufferIP.pop_back();
+		      }
+		  }
+		}  else if (zoneSaisieTexte == "5500")
+		{
+		  if (isdigit(code) || code == '\b' ){
+		    if( code != '\b' && bufferPort.size() < fieldMaxSize ) { 
+		      bufferPort.push_back(code);
+		      lePort = std::stoi(bufferPort);
+		    }
+		    else if( code == '\b')// || !isdigit(code))
+		      {
+			if(bufferPort.size()>0) { 
+			  bufferPort.pop_back();
+			  lePort = std::stoi(bufferPort);
+			}
+		      }
+		  }
+		}
+	    }
 	   
 	   // Si la souris est dans la zone du texte
 	   if ( connectText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
@@ -257,12 +333,16 @@ void GameClient::run()
       
       saisiePseudo.setString(bufferPseudo);
       saisieIP.setString(bufferIP);
+      saisiePort.setString(bufferPort);
       
       _window.draw(spr_zoneIP);
-      _window.draw(spr_zonePseudo);   
+      _window.draw(spr_zonePseudo);
+      _window.draw(spr_zonePort);
       _window.draw(messageServeur);
       _window.draw(saisieIP);
       _window.draw(saisiePseudo);
+      _window.draw(saisiePort);
+      
       _window.draw(connectText);
       _window.draw(quitText);
       _window.draw(serverText);
@@ -389,7 +469,6 @@ void GameClient::runWaitingRoom()
 		{
 		  int xPosReleased = (sf::Mouse::getPosition(_window).x - 50)/CELL_SIZE;
 		  int yPosReleased = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
-		  std::cout << "GC boatNumber: " << boatNumber << std::endl;
 		  // Moove boat at xPosReleased,yPosReleased if valid
 		  _joueur.mooveBoat(boatNumber,Position{xPosReleased,yPosReleased}); 
 		}
@@ -486,6 +565,7 @@ void GameClient::runBoards()
       while (_window.pollEvent(event))
 	{
 	  if (event.type == sf::Event::Closed)
+	    //ERIC ici
 	    _window.close();
 	  if (event.type == sf::Event::MouseButtonPressed)
 	    {
@@ -522,10 +602,16 @@ void GameClient::runBoards()
 	    _client.repx = -1;
 	    _client.repy = -1;
 	  }
-
        	messageServeur.setString(_client._messageServeur);
       }
 
+      if (_client.getWinner()){
+	  //afficher gagnant et tout fermer
+	  std::cout<<"winner gc" << std::endl;
+	  runWinner();
+	  _window.close();
+	}
+      
       _window.clear(White);
       _window.draw(_sprBG);
       _window.draw(spr_grid);
