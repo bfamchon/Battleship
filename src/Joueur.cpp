@@ -79,3 +79,6 @@ int Joueur::searchInFlotte(Position p)
 
 // Tourner le bateau boatNum dans une direction valide
 void Joueur::turnBoat(int boatNum) { _flotte.turnBoatVPos(boatNum); }
+
+// Déplacer le bateau boatNum à la position p
+void Joueur::mooveBoat(int boatNum,Position p) { _flotte.mooveBoatVPos(boatNum,p); }

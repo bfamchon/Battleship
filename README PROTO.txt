@@ -14,7 +14,7 @@ I- DEMARRER LE JEU
 
 Ouvrir  un terminal 
 
-Lancer le serveur par la commande  ./bin/Battleshipsvr.out
+Lancer le serveur par la commande  ./bin/BattleshipSrv.out
 
 Sur 2 autre machines (ou le tout sur la même) lancer les clients BattleShip.out
 

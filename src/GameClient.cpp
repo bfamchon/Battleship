@@ -4,6 +4,8 @@
 #include "Flotte.hpp"
 #include <iostream>
 #include <sstream>
+#include <cstdlib>
+
 /*
  * Initialise simplement la fenetre avec une taille de 800*600,
  * un titre, et une impossibilité de resize.
@@ -19,7 +21,7 @@ GameClient::GameClient(const sf::Texture& bgPath) : _window(sf::VideoMode(800, 6
 {
 	_window.setPosition(sf::Vector2i((sf::VideoMode::getDesktopMode().width-WINDOW_WIDTH)/2,
 					 (sf::VideoMode::getDesktopMode().height-WINDOW_HEIGHT)/2 ));
-	_window.setFramerateLimit(10);
+	_window.setFramerateLimit(60);
 }
 
 /*
@@ -81,7 +83,7 @@ void GameClient::run()
   std::string bufferPseudo = "Pseudo";
   std::string zoneSaisieTexte = "NothingForTheMoment";
 
-  sf::Text connectText,quitText, saisieIP, saisiePseudo, messageServeur;
+  sf::Text connectText,quitText, serverText, saisieIP, saisiePseudo, messageServeur;
 
   sf::Sprite spr_zoneIP,spr_zonePseudo;
   sf::Texture txt_typeZone;
@@ -109,7 +111,13 @@ void GameClient::run()
   quitText.setString("Quit the game");
   quitText.setCharacterSize(20);
   quitText.setColor(Black);
-  quitText.setPosition(50,350);
+  quitText.setPosition(50,400);
+
+  serverText.setFont(font);
+  serverText.setString("Start server");
+  serverText.setCharacterSize(20);
+  serverText.setColor(Black);
+  serverText.setPosition(50,350);
 
   saisiePseudo.setPosition(55, 205);
   saisiePseudo.setFont(font);
@@ -174,6 +182,11 @@ void GameClient::run()
 		      _client.send(DISCONNECT, _joueur.getPseudo());
 		      _window.close();
 		    }
+		  // Start server by clicking here
+		  if ( serverText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+		    {
+		      system("xterm ./BattleShipSrv.out &");
+		    }
 		  
 		  if (spr_zonePseudo.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
@@ -226,6 +239,11 @@ void GameClient::run()
 	     quitText.setColor(RedWine);
 	   if ( ! quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 	     quitText.setColor(Black);
+
+	   if ( serverText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+	     serverText.setColor(RedWine);
+	   if ( ! serverText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+	     serverText.setColor(Black);
 	}
 
       // if (_client.receive(msg) == sf::Socket::Done)
@@ -247,7 +265,7 @@ void GameClient::run()
       _window.draw(saisiePseudo);
       _window.draw(connectText);
       _window.draw(quitText);
-      
+      _window.draw(serverText);
       _window.display();
     }
 }
@@ -268,7 +286,13 @@ void GameClient::runWaitingRoom()
   sf::Texture txt_grid, txt_wlist,txt_radis;
   sf::Text randomPosText, wlistText;
   sf::Font font;
+  sf::Clock clock;
+  sf::Time dCLickTime = sf::milliseconds(350);
 
+  // Récupération du numéro de bateau dans click
+  // Utilisation dans released
+  int boatNumber=-1;
+  
   if (!font.loadFromFile("../Fonts/DooM.ttf"))
     exit(-1);
   if (!txt_grid.loadFromFile("../Textures/grid_bg.png"))
@@ -312,33 +336,64 @@ void GameClient::runWaitingRoom()
 	    {
 	      if (event.mouseButton.button == sf::Mouse::Left)
 		{
-		  if ( spr_radis.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
-		    { //eric
-		      std::ostringstream uneflotte;
-		      uneflotte << _joueur.getFlotte();
-		      if (_client.send(SEND_FLOTTE, uneflotte.str())
-			  == sf::Socket::Done ) {
-			runBoards();}
-		    }
-		  
-		  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+		  // Gestion du double click souris
+		  if ( clock.getElapsedTime() <= dCLickTime )
 		    {
-		      _joueur.setRandFlotte();
-		    }
-		  if ( spr_grid.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
-		    {
-		      int xPosInGrid = (sf::Mouse::getPosition(_window).x - 50)/CELL_SIZE;
-		      int yPosInGrid = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
-		      if ( _joueur.getFlotte().foundInFlotte(Position{xPosInGrid,yPosInGrid}) )
+		      if ( spr_grid.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 			{
-			  // Search the boat's number at (x,y)
-			  int boatNum = _joueur.getFlotte().searchBoatAt(Position{xPosInGrid,yPosInGrid});
-			  _joueur.turnBoat(boatNum);
-			}		   
+			  int xPosInGrid = (sf::Mouse::getPosition(_window).x - 50)/CELL_SIZE;
+			  int yPosInGrid = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
+			  if ( _joueur.getFlotte().foundInFlotte(Position{xPosInGrid,yPosInGrid}) )
+			    {
+			      // Search the boat's number at (x,y)
+			      int boatNum = _joueur.getFlotte().searchBoatAt(Position{xPosInGrid,yPosInGrid});
+			      _joueur.turnBoat(boatNum);
+			    }		   
+			}
+		    }
+		  else
+		    {
+		      clock.restart();
+
+		      if ( spr_grid.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+			{
+			  int xPosInGrid = (sf::Mouse::getPosition(_window).x - 50)/CELL_SIZE;
+			  int yPosInGrid = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
+   
+			  if ( _joueur.getFlotte().foundInFlotte(Position{xPosInGrid,yPosInGrid}) )
+			    {
+			      boatNumber = _joueur.getFlotte().searchBoatAt(Position{xPosInGrid,yPosInGrid});
+			      
+			      }	   
+			}
+		      if ( spr_radis.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+			{ //eric
+			  std::ostringstream uneflotte;
+			  uneflotte << _joueur.getFlotte();
+			  if (_client.send(SEND_FLOTTE, uneflotte.str())
+			      == sf::Socket::Done ) {
+			    runBoards();}
+			}
+		      
+		      if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
+			{
+			  _joueur.setRandFlotte();
+			}
 		    }
 		}
-	      
-	    } 
+	    }
+	  // Utilisation du numéro de bateau ici
+	  if ( event.type == sf::Event::MouseButtonReleased )
+	    {
+	      if ( boatNumber != -1 )
+		{
+		  int xPosReleased = (sf::Mouse::getPosition(_window).x - 50)/CELL_SIZE;
+		  int yPosReleased = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
+		  std::cout << "GC boatNumber: " << boatNumber << std::endl;
+		  // Moove boat at xPosReleased,yPosReleased if valid
+		  _joueur.mooveBoat(boatNumber,Position{xPosReleased,yPosReleased}); 
+		}
+	    }
 	  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 	    randomPosText.setColor(RedWine);
 	  if ( ! randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )

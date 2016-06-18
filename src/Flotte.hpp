@@ -35,6 +35,7 @@ public:
   bool allBoatSink() const;
   int getBoatSizeAt(int)const;
   Bateau getBoatAt(int)const;
+  void mooveBoatVPos(int,Position);
 
   friend std::ostream & operator<<(std::ostream & os, const Flotte &);
   friend std::istream & operator>>(std::istream & is, Flotte &);

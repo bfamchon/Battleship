@@ -229,12 +229,12 @@ void Flotte::setBoatSink(int boatNum) { _bateaux[boatNum].setCoule(true); }
 
 bool Flotte::allBoatSink() const
 {
-for ( unsigned int i = 0 ; i < _bateaux.size() ; ++i )
-  {
-if ( !_bateaux[i].getCoule() )
-  return false;
-}
-return true;
+  for ( unsigned int i = 0 ; i < _bateaux.size() ; ++i )
+    {
+      if ( !_bateaux[i].getCoule() )
+	return false;
+    }
+  return true;
   
 }
 
@@ -249,6 +249,56 @@ std::ostream& operator <<(std::ostream& os,const Flotte& f) {
 }
 
 Bateau Flotte::getBoatAt(int boatNum) const { return _bateaux[boatNum]; }
+
+void Flotte::mooveBoatVPos(int boatNum,Position p)
+{
+  Position pStock=_bateaux[boatNum].getPositionAt(0);
+  int taille=_bateaux[boatNum].getTaille();
+  _bateaux[boatNum].reinitEtatPos();
+
+  if ( ( p._x < 0 || p._y < 0 ) || ( p._x > 9 || p._y > 9 ) )
+    {
+      _bateaux[boatNum].setEtatPos(false,pStock);
+      return;
+    }
+    
+  if ( _bateaux[boatNum].getDir() == 1 )
+    {
+      if ( ! estValideHaut(p,taille) )
+	{
+	  _bateaux[boatNum].setEtatPos(false,pStock);
+	  return;
+	}
+    }
+  if ( _bateaux[boatNum].getDir() == 2 )
+    {
+      if ( ! estValideBas(p,taille,10) )
+	{
+	  _bateaux[boatNum].setEtatPos(false,pStock);
+	  return;
+	}
+    }
+  if ( _bateaux[boatNum].getDir() == 3 )
+    {
+      if ( ! estValideGauche(p,taille) )
+	{
+	  _bateaux[boatNum].setEtatPos(false,pStock);
+	  return;
+	}
+    }
+  if ( _bateaux[boatNum].getDir() == 4 )
+    {
+      if ( ! estValideDroite(p,taille,10) )
+	{
+	  _bateaux[boatNum].setEtatPos(false,pStock);
+	  return;
+	}
+    }
+
+  _bateaux[boatNum].setEtatPos(false,p);
+}
+
+
 
 std::istream & operator>>(std::istream & is, Flotte & f) {
   std::string buffer;
