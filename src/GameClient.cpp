@@ -79,28 +79,24 @@ void GameClient::runError()
 
 void GameClient::runWinner()
 {
-   sf::RenderWindow windowWin(sf::VideoMode(400, 400),
-	    "Message Winner !",
-	    sf::Style::Titlebar | sf::Style::Close);
-
-  windowWin.setPosition(sf::Vector2i(
-			 (sf::VideoMode::getDesktopMode().width-400)/2,
-			 (sf::VideoMode::getDesktopMode().height-400)/2 ));
+  sf::RenderWindow windowWin(sf::VideoMode(200, 200),
+			     "YOU WIN",
+			     sf::Style::Titlebar | sf::Style::Close);
   
-  sf::Text  messageServeur;
-  sf::Font  font;
- 
-    
-  if (!font.loadFromFile("../Fonts/DooM.ttf"))
+  windowWin.setPosition(sf::Vector2i(
+				     (sf::VideoMode::getDesktopMode().width-400)/2,
+				     (sf::VideoMode::getDesktopMode().height-400)/2 ));
+  
+  sf::Sprite spr_winner;
+  sf::Texture txt_winner;
+
+  if (!txt_winner.loadFromFile("../Textures/winner.png"))
     exit(-1);
 
-    
-  messageServeur.setFont(font);
-  messageServeur.setString("Vous etes le gagnant !");
-  messageServeur.setCharacterSize(20);
-  messageServeur.setColor(Black);
-  messageServeur.setPosition(10,10);
   
+  spr_winner.setTexture(txt_winner);
+  spr_winner.setPosition(0,0);
+
   while (windowWin.isOpen())
     {
       sf::Event event;
@@ -113,8 +109,7 @@ void GameClient::runWinner()
 	}
 
       windowWin.clear(White);
-      
-      windowWin.draw(messageServeur); 
+      windowWin.draw(spr_winner);
       windowWin.display();
     }
 }

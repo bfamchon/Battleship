@@ -19,7 +19,7 @@ Flotte Joueur::getFlotte() const { return _flotte; }
 void Joueur::setRandFlotte() { _flotte.genererFlotte(); }
 int Joueur::getHitAt(int x,int y) const { return _testedHits[y*10+x]; }
 
-void Joueur::setHitAt(int etat, int x, int y) { _testedHits[y*10+x] = etat;}
+void Joueur::setHitAt(int etat, int x, int y) { _testedHits[y*10+x] = etat; }
 
 /* 
  * Le serveur envoie 2 ( touché )  ou 3 ( coulé )...
@@ -29,7 +29,7 @@ void Joueur::setFlotteAt(int etat,int x,int y)
 {
   int boatNum = _flotte.searchBoatAt(Position{x,y});
   // Le bateau est touché
-  if ( etat == 3 )
+  if ( etat == 3 || etat == 4 )
     _flotte.setBoatSink(boatNum);
   
   _flotte.setBoatHitAt(Position{x,y},boatNum);
