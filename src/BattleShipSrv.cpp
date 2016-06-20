@@ -25,7 +25,6 @@ int main(int argc, char **argv)
   std::cout<<"attente adresses " <<std::endl;
   std::cout<<"Local host               :"<<sf::IpAddress::LocalHost<<"\n"
 	   <<"Local                    : "<<sf::IpAddress::getLocalAddress()<<"\n"
-	   <<"Public                   : "<<sf::IpAddress::getPublicAddress()<<"\n"
            <<"Le port de connexion est : "<< lePort <<"\n";
 
   Serveur Srv(lePort);
