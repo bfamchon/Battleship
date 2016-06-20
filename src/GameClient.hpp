@@ -45,7 +45,7 @@ private:
   sf::RenderWindow _window;
   bool _wantsToPlay;
   sf::Sprite _sprBG;
-  Joueur _joueur;
+  // Joueur _joueur;
   Client _client;
 
   void runError();

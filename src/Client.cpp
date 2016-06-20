@@ -2,16 +2,30 @@
 #include "PacketType.hpp"
 #include <iostream>
 
-Client::Client():_closeRunWait(false),repx(-1),repy(-1),repres(-1),posx(-1),posy(-1),res(-1),_messageServeur("") {}
+Client::Client():_joueur(""),_closeRunWait(false),_messageServeur("") {}
 
 Client::~Client() {}
 
+Joueur Client::getJoueur(){
+  return _joueur;
+}
 bool Client::getCloseRunWait() const{ return _closeRunWait;}
 void Client::setCloseRunWait(bool etat) { _closeRunWait = etat;}
 bool Client::getWinner() const{ return _Winner;}
 void Client::setWinner(bool etat) { _Winner = etat;}
 void Client::setBloquant(bool bloquant){
   _bloquant= bloquant;
+}
+
+void Client::setJRandFlotte(){
+  _joueur.setRandFlotte();
+}
+void Client::turnJBoat(int boatNum){
+  _joueur.turnBoat(boatNum);
+}
+
+void Client::mooveJBoat(int boatNum,Position p){
+  _joueur.mooveBoat(boatNum,p);
 }
 
 bool Client::getJoueurIsActif() const{
@@ -24,7 +38,9 @@ void Client::setJoueurIsActif(bool joueurIsActif){
 sf::Socket::Status Client::connect(const sf::IpAddress & IP, unsigned short port)
 {
   //connect to server
-  sf::Socket::Status stat= _mySocket.connect(IP, port);
+  
+
+  sf::Socket::Status stat= _mySocket.connect(IP,port);
   _mySocket.setBlocking(false);//_bloquant);
   return stat;
 }
@@ -45,13 +61,10 @@ sf::Socket::Status Client::receive(std::string & msg)
 {
   sf::Packet packet;
   sf::Socket::Status status=_mySocket.receive(packet);
-  // PacketType type;
-  //packet>>type;
   if(status==sf::Socket::Done)
     {
       msg = handlePackets(packet);
-      std::cout<<msg<<"\n"; //messages en console si retour positionÃ© dans handlePacket
-      //packet>>msg;
+      std::cout<<msg<<"\n"; //messages en console si retour positionÃ© dans handlePacke
     }
   return status;
 }
@@ -95,7 +108,6 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	packet >> _messageServeur;
 	setJoueurIsActif(false);
-	std::cout << "msg : user Wait"<< _messageServeur << std::endl;
       }
       break;
       
@@ -103,7 +115,6 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	packet>> _messageServeur;
 	setJoueurIsActif(true);
-	std::cout << "msg : starPlay"<< _messageServeur << std::endl;
       }
       break;
 
@@ -111,29 +122,32 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	packet>> _messageServeur;
 	setJoueurIsActif(false);
-	std::cout << "msg : stopPlay"<< _messageServeur << std::endl;
       }
       break;
 
       case SEND_RESPONSE_COUP:
       {
-	packet >> res >>posx >> posy;
+	int res,x,y; 
+	packet >> res >> x >> y;
+	_joueur.setHitAt(res,x,y);
       }
       break;
 
       case MAJ_FLOTTE:
       {
-	packet >> repres >> repx >> repy;
-	if( repres == 3) {_messageServeur = "Touche et Coule !!!!!!!";}
-	if( repres == 2) {_messageServeur = "Touche !";}
+	int res,x,y;
+	packet >> res >> x >> y;
+	_joueur.setFlotteAt(res,x,y);
+	
+	if( res == 3) {_messageServeur = "Touche et Coule !!!!!!!";}
+	if( res == 2) {_messageServeur = "Touche !";}
       }
       break;
       
       case SEND_WINNER:
       {
-	//packet >> res >>posx >> posy;
+	//une fois positionné le client a gagné
 	_Winner = true;
-	std::cout<<"winner " << std::endl;
       }
       break;
       
