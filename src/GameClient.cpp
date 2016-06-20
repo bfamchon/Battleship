@@ -17,8 +17,7 @@ GameClient::GameClient(const sf::Texture& bgPath) : _window(sf::VideoMode(800, 6
 				   "Battle Not Cheap - Ready to battle ? Let's connect !",
 				   sf::Style::Titlebar | sf::Style::Close),
 						    _wantsToPlay(true),
-						    _sprBG(bgPath),
-						    _joueur("")
+						    _sprBG(bgPath)
 {
 	_window.setPosition(sf::Vector2i((sf::VideoMode::getDesktopMode().width-WINDOW_WIDTH)/2,
 					 (sf::VideoMode::getDesktopMode().height-WINDOW_HEIGHT)/2 ));
@@ -193,7 +192,6 @@ void GameClient::run()
   music.setVolume(40);
   music.play();
 
- 
   while (_window.isOpen())
     {
       sf::Event event;
@@ -207,28 +205,29 @@ void GameClient::run()
 	  if (event.type == sf::Event::MouseButtonPressed)
 	    {
 	      if (event.mouseButton.button == sf::Mouse::Left)
-		{
+		{ 
 		  // Si le client clique dans la zone d'un texte
 		  if ( connectText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      if ( _client.connect(bufferIP,lePort) == sf::Socket::Done)
 			{
-			  _joueur.setPseudo(bufferPseudo);
 			  music.stop();
 			  if (_client.send(INITIAL_NAME_DATA, bufferPseudo)
 			      == sf::Socket::Done )
 			    {			      
-			      if (_client.receive(msg) == sf::Socket::Done)
-				{
-				  messageServeur.setString(_client._messageServeur); 
-				} else  runWaitingRoom();
+			    if (_client.receive(msg) == sf::Socket::Done)
+			      {
+				messageServeur.setString(_client._messageServeur); 
+			      } else {
+			      runWaitingRoom();
 			    }
+			    
+			  }
 			}		     	  
 		    }
 		  if ( quitText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      _wantsToPlay=false;
-		      _client.send(DISCONNECT, _joueur.getPseudo());
 		      _window.close();
 		    }
 		  // Start server by clicking here
@@ -292,7 +291,7 @@ void GameClient::run()
 		      bufferPort.push_back(code);
 		      lePort = std::stoi(bufferPort);
 		    }
-		    else if( code == '\b')// || !isdigit(code))
+		    else if( code == '\b')
 		      {
 			if(bufferPort.size()>0) { 
 			  bufferPort.pop_back();
@@ -402,7 +401,9 @@ void GameClient::runWaitingRoom()
   wlistText.setColor(Black);
   wlistText.setPosition(460,220);
 
-  _joueur.setRandFlotte();
+
+  _client.setJRandFlotte();
+  
   while (_window.isOpen())
     {
       sf::Event event;
@@ -421,11 +422,11 @@ void GameClient::runWaitingRoom()
 			{
 			  int xPosInGrid = (sf::Mouse::getPosition(_window).x - 50)/CELL_SIZE;
 			  int yPosInGrid = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
-			  if ( _joueur.getFlotte().foundInFlotte(Position{xPosInGrid,yPosInGrid}) )
+			  if ( _client.getJoueur().getFlotte().foundInFlotte(Position{xPosInGrid,yPosInGrid}) )
 			    {
 			      // Search the boat's number at (x,y)
-			      int boatNum = _joueur.getFlotte().searchBoatAt(Position{xPosInGrid,yPosInGrid});
-			      _joueur.turnBoat(boatNum);
+			      int boatNum = _client.getJoueur().getFlotte().searchBoatAt(Position{xPosInGrid,yPosInGrid});
+			      _client.turnJBoat(boatNum);
 			    }		   
 			}
 		    }
@@ -438,16 +439,16 @@ void GameClient::runWaitingRoom()
 			  int xPosInGrid = (sf::Mouse::getPosition(_window).x - 50)/CELL_SIZE;
 			  int yPosInGrid = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
    
-			  if ( _joueur.getFlotte().foundInFlotte(Position{xPosInGrid,yPosInGrid}) )
+			  if ( _client.getJoueur().getFlotte().foundInFlotte(Position{xPosInGrid,yPosInGrid}) )
 			    {
-			      boatNumber = _joueur.getFlotte().searchBoatAt(Position{xPosInGrid,yPosInGrid});
+			      boatNumber = _client.getJoueur().getFlotte().searchBoatAt(Position{xPosInGrid,yPosInGrid});
 			      
 			      }	   
 			}
 		      if ( spr_radis.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
-			{ //eric
+			{ 
 			  std::ostringstream uneflotte;
-			  uneflotte << _joueur.getFlotte();
+			  uneflotte << _client.getJoueur().getFlotte();
 			  if (_client.send(SEND_FLOTTE, uneflotte.str())
 			      == sf::Socket::Done ) {
 			    runBoards();}
@@ -455,7 +456,7 @@ void GameClient::runWaitingRoom()
 		      
 		      if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 			{
-			  _joueur.setRandFlotte();
+			  _client.setJRandFlotte();
 			}
 		    }
 		}
@@ -468,7 +469,7 @@ void GameClient::runWaitingRoom()
 		  int xPosReleased = (sf::Mouse::getPosition(_window).x - 50)/CELL_SIZE;
 		  int yPosReleased = (sf::Mouse::getPosition(_window).y - 125)/CELL_SIZE;
 		  // Moove boat at xPosReleased,yPosReleased if valid
-		  _joueur.mooveBoat(boatNumber,Position{xPosReleased,yPosReleased}); 
+		  _client.mooveJBoat(boatNumber,Position{xPosReleased,yPosReleased}); 
 		}
 	    }
 	  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
@@ -480,10 +481,10 @@ void GameClient::runWaitingRoom()
 	  if ( !spr_radis.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 	    spr_radis.setColor(White);
 	}
-
       if (_client.receive(msg) == sf::Socket::Done){
         wlistText.setString(_client._listeJoueurs);    
       }
+      
       if( _client.getCloseRunWait()) {
 	   runError();
 	  _client.setCloseRunWait(false);
@@ -588,24 +589,11 @@ void GameClient::runBoards()
 	}
       
       if (_client.receive(msg) == sf::Socket::Done){
-        if (_client.posx != -1) 
-	  {
-	    _joueur.setHitAt(_client.res,_client.posx,_client.posy);
-	    _client.posx = -1;
-	    _client.posy = -1;
-	  }
-	if (_client.repx != -1) 
-	  {
-	    _joueur.setFlotteAt(_client.repres,_client.repx,_client.repy);
-	    _client.repx = -1;
-	    _client.repy = -1;
-	  }
        	messageServeur.setString(_client._messageServeur);
       }
 
       if (_client.getWinner()){
 	  //afficher gagnant et tout fermer
-	  std::cout<<"winner gc" << std::endl;
 	  runWinner();
 	  _window.close();
 	}
@@ -641,20 +629,19 @@ void GameClient::drawSpritesGrid(float posGridX, float posGridY)
   spr_hitCell.setTexture(txt_hitCell);
   for ( int i=0; i < 6 ; i ++ )
     {
-      int sizeBoat=_joueur.getFlotte().getBoatSizeAt(i);
+      int sizeBoat=_client.getJoueur().getFlotte().getBoatSizeAt(i);
       for ( int j=0; j < sizeBoat ; j++ )
 	{
-	  int boatPosX=_joueur.getFlotte().getBoatAt(i).getPositionAt(j)._x;
-	  int boatPosY=_joueur.getFlotte().getBoatAt(i).getPositionAt(j)._y;
-
-	  if ( _joueur.getFlotte().getBoatAt(i).getCoule())
+	  int boatPosX=_client.getJoueur().getFlotte().getBoatAt(i).getPositionAt(j)._x;
+	  int boatPosY=_client.getJoueur().getFlotte().getBoatAt(i).getPositionAt(j)._y;
+	  if ( _client.getJoueur().getFlotte().getBoatAt(i).getCoule())
 	    {
 	      spr_sinkCell.setPosition((CELL_SIZE*boatPosX)+posGridX+2,(CELL_SIZE*boatPosY)+posGridY+2);
 	      _window.draw(spr_sinkCell);
 	    }
 	  else 
 	    {
-	      if  ( _joueur.getFlotte().getBoatAt(i).getEtatAt(j))
+	      if  ( _client.getJoueur().getFlotte().getBoatAt(i).getEtatAt(j))
 		{
 		  spr_hitCell.setPosition((CELL_SIZE*boatPosX)+posGridX+2,(CELL_SIZE*boatPosY)+posGridY+2);
 		  _window.draw(spr_hitCell);
@@ -687,17 +674,17 @@ void GameClient::drawSpritesHits(float posGridX, float posGridY)
     {
       for ( int y=0 ; y < 10 ; y++)
 	{
-	  if ( _joueur.getHitAt(x,y) == MISS_CELL )
+	  if ( _client.getJoueur().getHitAt(x,y) == MISS_CELL )
 	    {
 	      spr_missCell.setPosition((CELL_SIZE*x)+posGridX+2,(CELL_SIZE*y)+posGridY+2);
 	      _window.draw(spr_missCell);
 	    }
-	  else if ( _joueur.getHitAt(x,y) == HIT_CELL )
+	  else if ( _client.getJoueur().getHitAt(x,y) == HIT_CELL )
 	    {
 	      spr_hitCell.setPosition((CELL_SIZE*x)+posGridX+2,(CELL_SIZE*y)+posGridY+2);
 	      _window.draw(spr_hitCell);
 	    }
-	  else if ( _joueur.getHitAt(x,y) == BOAT_SINK )
+	  else if ( _client.getJoueur().getHitAt(x,y) == BOAT_SINK )
 	    {
 	      spr_sinkCell.setPosition((CELL_SIZE*x)+posGridX+2,(CELL_SIZE*y)+posGridY+2);
 	      _window.draw(spr_sinkCell);

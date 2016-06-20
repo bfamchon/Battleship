@@ -26,17 +26,13 @@ class Client
 {
 private:
   sf::TcpSocket _mySocket; /*!<Socket de connection au serveur>*/ 
+  Joueur _joueur; /*! <C'est le joueur du client > */
   bool _bloquant;          /*!<Flag pour rendre le socket bloquant>*/
   bool _joueurIsActif;     /*!<Flag pour signifier au programme principal de désactiver la zone de saisie>*/
   bool _closeRunWait;      /*!<Flag pour demander au programme principal de fermer la fenetre>*/ 
   bool _Winner = false;  /*!<Flag pour demander au programme principal d'afficher la fenetre Winner>*/
          
 public:
-  int repx,repy,repres,posx, posy; //temporaire
-
-int res;      //temporaire
-
-
   /*!
      *  \brief Constructeur
      *  Constructeur de la classe Client
@@ -49,11 +45,22 @@ int res;      //temporaire
      */
 	~Client();
 
+
   
+  /*!
+     *  \brief Constructeur
+     *  Sert a passer le socket en bloquant 
+     *  \param bloquant de type boolean
+     */
   void setBloquant(bool bloquant);
+  void setJRandFlotte();
+  void turnJBoat(int);
+  Joueur getJoueur();
+  void mooveJBoat(int,Position);
   
   bool getJoueurIsActif() const;
   void setJoueurIsActif(bool joueurIsActif);
+  
   bool getCloseRunWait() const;
   void setCloseRunWait(bool etat);
   bool getWinner() const;
@@ -66,7 +73,8 @@ int res;      //temporaire
   sf::Socket::Status send (sf::Packet & packet);
   sf::Socket::Status receive(std::string & msg);
   std::string  handlePackets(sf::Packet & packet);
-  
+
+
 	
 };
 
