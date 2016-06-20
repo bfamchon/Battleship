@@ -1,5 +1,4 @@
 #include "Joueur.hpp"
-#include <iostream>
 #include <sstream>
 
 Joueur::Joueur(std::string pseudo) : _pseudo(pseudo),_flotte(),_socketJoueur(nullptr)
@@ -29,7 +28,7 @@ void Joueur::setFlotteAt(int etat,int x,int y)
 {
   int boatNum = _flotte.searchBoatAt(Position{x,y});
   // Le bateau est touché
-  if ( etat == 3 || etat == 4 )
+  if ( etat == BOAT_SINK || etat == ALL_BOAT_SINK )
     _flotte.setBoatSink(boatNum);
   
   _flotte.setBoatHitAt(Position{x,y},boatNum);
@@ -53,9 +52,11 @@ void Joueur::setSocketJoueur(sf::TcpSocket * socketJoueur){
   _socketJoueur = socketJoueur;
 }
 
-/////////////////
-//jouer coup eric
-
+/* 
+ * Le serveur questionne la flotte du joueur pour le retour.
+ * Le joueur attaqué met à jour sa flotte.
+ *
+ */
 int Joueur::searchInFlotte(Position p)
 {
   if (_flotte.foundInFlotte(p))

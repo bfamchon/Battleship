@@ -242,6 +242,7 @@ void GameClient::run()
 		      saisiePseudo.setColor(DarkGray);
 		      zoneSaisieTexte = "Pseudo";
 		      saisieIP.setColor(Gray);
+		      saisiePort.setColor(Gray);
 		    }
 		  if (spr_zoneIP.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
@@ -250,12 +251,14 @@ void GameClient::run()
 		      saisieIP.setColor(DarkGray);
 		      zoneSaisieTexte = "IP";
 		      saisiePseudo.setColor(Gray);
+		      saisiePort.setColor(Gray);
 		    }
 		  if (spr_zonePort.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      saisiePort.setColor(DarkGray);
 		      zoneSaisieTexte = "5500";
-		      saisiePort.setColor(Gray);
+		      saisieIP.setColor(Gray);
+		      saisiePseudo.setColor(Gray);
 		    }
 		}
 	    }

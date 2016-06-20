@@ -37,7 +37,6 @@ public:
   void setSocketJoueur(sf::TcpSocket * socketJoueur);
   void setFlotteAt(int,int,int);
   void mooveBoat(int,Position);
-  //eric
   int searchInFlotte(Position);
   void turnBoat(int);
 };
