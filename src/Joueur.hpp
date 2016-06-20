@@ -24,7 +24,7 @@ private:
   std::vector <int> _testedHits;
   sf::TcpSocket * _socketJoueur;
 public:
-  Joueur(std::string);
+  Joueur(std::string pseudo);
   void initTestedHits(int);
   std::string getPseudo() const;
   void setPseudo(std::string);
