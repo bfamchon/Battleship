@@ -78,38 +78,44 @@ void GameClient::runError()
 
 void GameClient::runResult()
 {
-  sf::RenderWindow windowWin(sf::VideoMode(200, 200),
-			     "YOU WIN",
-			     sf::Style::Titlebar | sf::Style::Close);
+  sf::RenderWindow windowResult(sf::VideoMode(200, 200),"",sf::Style::Titlebar | sf::Style::Close);
+  sf::Sprite spr_result;
+  sf::Texture txt_result; 
+  windowResult.setPosition(sf::Vector2i(
+			 _window.getPosition().x+300,
+			 _window.getPosition().y+200)
+			   );
   
-  windowWin.setPosition(sf::Vector2i(
-				     (sf::VideoMode::getDesktopMode().width-400)/2,
-				     (sf::VideoMode::getDesktopMode().height-400)/2 ));
+  if ( _client.getWinner() == 1 )
+    {
+      windowResult.setTitle("YOU WIN !");
+      if (!txt_result.loadFromFile("../Textures/winner.png"))
+	exit(-1);
+    }
+  else
+    {
+      windowResult.setTitle("YOU LOSE !");      
+      if (!txt_result.loadFromFile("../Textures/loser.png"))
+	exit(-1);
+    }
+
+  spr_result.setTexture(txt_result);
+  spr_result.setPosition(0,0);
   
-  sf::Sprite spr_winner;
-  sf::Texture txt_winner;
-
-  if (!txt_winner.loadFromFile("../Textures/winner.png"))
-    exit(-1);
-
-  
-  spr_winner.setTexture(txt_winner);
-  spr_winner.setPosition(0,0);
-
-  while (windowWin.isOpen())
+  while (windowResult.isOpen())
     {
       sf::Event event;
-      while (windowWin.pollEvent(event))
+      while (windowResult.pollEvent(event))
 	{
 	  if (event.type == sf::Event::Closed)
 	    {
-	      windowWin.close();
+	      windowResult.close();
 	    }	  
 	}
 
-      windowWin.clear(White);
-      windowWin.draw(spr_winner);
-      windowWin.display();
+      windowResult.clear(White);
+      windowResult.draw(spr_result);
+      windowResult.display();
     }
 }
 
@@ -241,6 +247,7 @@ void GameClient::run()
 		      saisiePseudo.setColor(DarkGray);
 		      zoneSaisieTexte = "Pseudo";
 		      saisieIP.setColor(Gray);
+		      saisiePort.setColor(Gray);
 		    }
 		  if (spr_zoneIP.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
@@ -249,12 +256,14 @@ void GameClient::run()
 		      saisieIP.setColor(DarkGray);
 		      zoneSaisieTexte = "IP";
 		      saisiePseudo.setColor(Gray);
+		      saisiePort.setColor(Gray);
 		    }
 		  if (spr_zonePort.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
 		      saisiePort.setColor(DarkGray);
 		      zoneSaisieTexte = "5500";
-		      saisiePort.setColor(Gray);
+		      saisieIP.setColor(Gray);
+		      saisiePseudo.setColor(Gray);
 		    }
 		}
 	    }
@@ -589,7 +598,8 @@ void GameClient::runBoards()
        	messageServeur.setString(_client._messageServeur);
       }
 
-      if (_client.getWinner() !=0){
+      if (_client.getWinner() != 0)
+	{
 	  //afficher gagnant et tout fermer
 	  runResult();
 	  _window.close();

@@ -29,21 +29,21 @@ private:
   bool _coule;
 
 public:
-  Bateau(int);
-  void determinerNom(int);
+  Bateau(int taille);
+  void determinerNom(int taille);
   int getTaille() const;
   std::string getNom() const;
-  bool foundInBateau(Position) const;
-  void setDir(int);
+  bool foundInBateau(Position p) const;
+  void setDir(int dir);
   int getDir() const;
-  void setEtatPos(bool,Position);
-  void setCoule(bool);
+  void setEtatPos(bool etat,Position p);
+  void setCoule(bool etatBateau);
   bool getCoule() const;
-  void changeBoatPosition(int);
-  Position getPositionAt(int) const;
+  void changeBoatPosition(int dir);
+  Position getPositionAt(int indice) const;
   void reinitEtatPos();
-  void setHited(Position);
-  bool getEtatAt(int)const;
+  void setHited(Position p);
+  bool getEtatAt(int indice) const;
 
   // Flux de sortie au format "<direction>;<coule>;<etatPos>\n".
   friend std::ostream & operator<<(std::ostream & os, const Bateau & b );

@@ -51,10 +51,10 @@ private:
   void runResult();
   void runWaitingRoom();
   void runBoards();
-  void drawSpritesGrid(float,float);
-  void drawSpritesHits(float,float);
+  void drawSpritesGrid(float posx,float posy);
+  void drawSpritesHits(float posx,float posy);
 public:
-  GameClient(const sf::Texture&);
+  GameClient(const sf::Texture& bg);
   ~GameClient();
   void run();
   bool getWantsToPlay();

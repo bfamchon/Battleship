@@ -54,9 +54,9 @@ public:
      */
   void setBloquant(bool bloquant);
   void setJRandFlotte();
-  void turnJBoat(int);
+  void turnJBoat(int boatNum);
   Joueur getJoueur();
-  void mooveJBoat(int,Position);
+  void mooveJBoat(int boatNum,Position p);
   
   bool getJoueurIsActif() const;
   void setJoueurIsActif(bool joueurIsActif);
@@ -64,7 +64,7 @@ public:
   bool getCloseRunWait() const;
   void setCloseRunWait(bool etat);
   int getWinner() const;
-  void setWinner(int);
+  void setWinner(int etat);
   std::string _listeJoueurs; // conteneur pour affichage WaitingRoom
   std::string _messageServeur; // conteneur pour affichage WaitingRoom
 

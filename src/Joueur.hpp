@@ -25,21 +25,21 @@ private:
   sf::TcpSocket * _socketJoueur;
 public:
   Joueur(std::string pseudo);
-  void initTestedHits(int);
+  void initTestedHits(int etatCoup);
+
   std::string getPseudo() const;
-  void setPseudo(std::string);
+  void setPseudo(std::string pseudo);
   Flotte getFlotte() const;
-  void setFlotte(const Flotte &);
+  void setFlotte(const Flotte & f);
   void setRandFlotte();
-  int getHitAt(int,int) const;
-  void setHitAt(int,int,int);
+  int getHitAt(int x,int y) const;
+  void setHitAt(int etat,int x,int y);
   sf::TcpSocket * getSocketJoueur();
   void setSocketJoueur(sf::TcpSocket * socketJoueur);
-  void setFlotteAt(int,int,int);
-  void mooveBoat(int,Position);
-  //eric
-  int searchInFlotte(Position);
-  void turnBoat(int);
+  void setFlotteAt(int etat,int x,int y);
+  void mooveBoat(int boatNum,Position p);
+  int searchInFlotte(Position p);
+  void turnBoat(int boatNum);
 };
 
 #endif
