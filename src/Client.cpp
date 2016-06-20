@@ -147,7 +147,14 @@ std::string Client::handlePackets(sf::Packet & packet){
       case SEND_WINNER:
       {
 	//une fois positionné le client a gagné
-	_winner = true;
+	_winner = 1;
+      }
+      break;
+
+      case SEND_LOOSER:
+      {
+	//une fois positionné le client a perdu
+	_winner = -1;
       }
       break;
       

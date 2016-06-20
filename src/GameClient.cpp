@@ -82,8 +82,9 @@ void GameClient::runResult()
   sf::Sprite spr_result;
   sf::Texture txt_result; 
   windowResult.setPosition(sf::Vector2i(
-			 (_window.getPosition().x-200)/2,
-			 (_window.getPosition().y-200)/2 ));
+			 _window.getPosition().x+300,
+			 _window.getPosition().y+200)
+			   );
   
   if ( _client.getWinner() == 1 )
     {
@@ -597,7 +598,8 @@ void GameClient::runBoards()
        	messageServeur.setString(_client._messageServeur);
       }
 
-      if (_client.getWinner() != 0){
+      if (_client.getWinner() != 0)
+	{
 	  //afficher gagnant et tout fermer
 	  runResult();
 	  _window.close();
