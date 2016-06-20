@@ -45,11 +45,10 @@ private:
   sf::RenderWindow _window;
   bool _wantsToPlay;
   sf::Sprite _sprBG;
-  // Joueur _joueur;
   Client _client;
 
   void runError();
-  void runWinner();
+  void runResult();
   void runWaitingRoom();
   void runBoards();
   void drawSpritesGrid(float,float);

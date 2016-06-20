@@ -76,7 +76,7 @@ void GameClient::runError()
     }
 }
 
-void GameClient::runWinner()
+void GameClient::runResult()
 {
   sf::RenderWindow windowWin(sf::VideoMode(200, 200),
 			     "YOU WIN",
@@ -589,9 +589,9 @@ void GameClient::runBoards()
        	messageServeur.setString(_client._messageServeur);
       }
 
-      if (_client.getWinner()){
+      if (_client.getWinner() !=0){
 	  //afficher gagnant et tout fermer
-	  runWinner();
+	  runResult();
 	  _window.close();
 	}
       

@@ -24,8 +24,9 @@ const PacketType STOP_PLAY = JEU_MSG+2;
 const PacketType SEND_FLOTTE = JEU_MSG+3;
 const PacketType MAJ_FLOTTE = JEU_MSG+4;
 const PacketType SEND_COUP = JEU_MSG+5;
-const PacketType GET_COUP = JEU_MSG+6;
+//const PacketType GET_COUP = JEU_MSG+6;
 const PacketType SEND_RESPONSE_COUP = JEU_MSG+7;
 const PacketType SEND_WINNER = JEU_MSG+8;
+const PacketType SEND_LOOSER = JEU_MSG+9;
   
 #endif

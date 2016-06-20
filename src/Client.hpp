@@ -30,7 +30,7 @@ private:
   bool _bloquant;          /*!<Flag pour rendre le socket bloquant>*/
   bool _joueurIsActif;     /*!<Flag pour signifier au programme principal de désactiver la zone de saisie>*/
   bool _closeRunWait;      /*!<Flag pour demander au programme principal de fermer la fenetre>*/ 
-  bool _Winner = false;  /*!<Flag pour demander au programme principal d'afficher la fenetre Winner>*/
+  int _winner;  /*!<Flag pour demander au programme principal d'afficher la fenetre Winner>*/
          
 public:
   /*!
@@ -63,8 +63,8 @@ public:
   
   bool getCloseRunWait() const;
   void setCloseRunWait(bool etat);
-  bool getWinner() const;
-  void setWinner(bool etat);
+  int getWinner() const;
+  void setWinner(int);
   std::string _listeJoueurs; // conteneur pour affichage WaitingRoom
   std::string _messageServeur; // conteneur pour affichage WaitingRoom
 

@@ -131,17 +131,27 @@ void Serveur::handlePackets()
 		    sendPacket<<SEND_RESPONSE_COUP<< 3 << boatState[i] << boatState[i+1];
 		    sendPacketClient(_jeu.getJCourant()->getSocketJoueur(),sendPacket);
 		  }
+		}else if (res==4){
+		  //joueur actif gagne
+		  sendMsgClient(_jeu.getJCourant()->getSocketJoueur(),
+				SEND_WINNER,
+				"Vous etes le gagnant !"); 
+
+		  //joueur inactif perd
+
+		  sendMsgClient(_jeu.getJInactif()->getSocketJoueur(),
+				SEND_LOOSER,
+				"Vous etes le perdant !");
+		  //fin partie
+		  break;
 		}
- 
-                declancheChangementJoueur();
-		
+		declancheChangementJoueur();
 	      }
 	      break;
 	      
 	    case  SEND_FLOTTE: 
 	      {std::string msg;
 		packet>>msg; //flotte sous forme de string
-                //it->second; //Pseudo
 		Joueur* j = _jeu.searchByName(it->second);
 		Flotte f;
 		std::istringstream iss(msg);
@@ -196,10 +206,6 @@ void Serveur::handlePackets()
 	    
 	    _partieEncours=false;
 
-	    /*  _jeu.initJoueur(it->second);
-		it=_clients.erase(it); // a voir si prob segmentation
-	    */
-
             std::cout<<"deconexion 2 "<< _partieEncours << std::endl;
 	    // send Win à l'autre
 	      if (it->second == _jeu.getJoueur1().getPseudo()) {
@@ -213,10 +219,6 @@ void Serveur::handlePackets()
 			    SEND_WINNER,
 			    "Vous etes le gagnant par forfait !");
 	    }
-	      
-              // SEND_WINNER
-	    //deconnecte l'autre
-	      
 
 	  }else{ //la partie n'est pas démarée
 	    if (!_sameName ){

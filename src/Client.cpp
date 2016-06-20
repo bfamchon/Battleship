@@ -2,7 +2,7 @@
 #include "PacketType.hpp"
 #include <iostream>
 
-Client::Client():_joueur(""),_closeRunWait(false),_messageServeur("") {}
+Client::Client():_joueur(""),_closeRunWait(false),_winner(0),_messageServeur("") {}
 
 Client::~Client() {}
 
@@ -11,8 +11,8 @@ Joueur Client::getJoueur(){
 }
 bool Client::getCloseRunWait() const{ return _closeRunWait;}
 void Client::setCloseRunWait(bool etat) { _closeRunWait = etat;}
-bool Client::getWinner() const{ return _Winner;}
-void Client::setWinner(bool etat) { _Winner = etat;}
+int Client::getWinner() const{ return _winner;}
+void Client::setWinner(int etat) { _winner = etat;}
 void Client::setBloquant(bool bloquant){
   _bloquant= bloquant;
 }
@@ -147,7 +147,14 @@ std::string Client::handlePackets(sf::Packet & packet){
       case SEND_WINNER:
       {
 	//une fois positionné le client a gagné
-	_Winner = true;
+	_winner = 1;
+      }
+      break;
+
+      case SEND_LOOSER:
+      {
+	//une fois positionné le client a perdu
+	_winner = -1;
       }
       break;
       
