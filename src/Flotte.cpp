@@ -238,15 +238,6 @@ bool Flotte::allBoatSink() const
   
 }
 
-int Flotte::getBoatSizeAt(int boatNum) const { return _bateaux[boatNum].getTaille(); }
-
-std::ostream& operator <<(std::ostream& os,const Flotte& f) {
-  for ( std::vector<Bateau>::const_iterator iter = f._bateaux.begin(); 
-	iter != f._bateaux.end(); 
-	iter++ )
-    os << *iter << '\n';
-  return os;
-}
 
 Bateau Flotte::getBoatAt(int boatNum) const { return _bateaux[boatNum]; }
 
@@ -298,7 +289,13 @@ void Flotte::mooveBoatVPos(int boatNum,Position p)
   _bateaux[boatNum].setEtatPos(false,p);
 }
 
-
+std::ostream& operator <<(std::ostream& os,const Flotte& f) {
+  for ( std::vector<Bateau>::const_iterator iter = f._bateaux.begin(); 
+	iter != f._bateaux.end(); 
+	iter++ )
+    os << *iter << '\n';
+  return os;
+}
 
 std::istream & operator>>(std::istream & is, Flotte & f) {
   std::string buffer;

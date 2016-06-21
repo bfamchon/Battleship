@@ -81,15 +81,6 @@ void Bateau::changeBoatPosition(int dir)
 
 Position Bateau::getPositionAt(int indice) const { return _etatPos[indice].second;  }
 
-std::ostream& operator <<(std::ostream& os, const Bateau& b) {
-  os << b._direction << ';' << b._coule << ';';
-
-  for ( unsigned int i=0 ; i < b._etatPos.size() ; ++i )
-    os << b._etatPos[i].first 
-       << '_' << b._etatPos[i].second._x 
-       << '_' << b._etatPos[i].second._y << ';';
-  return os;
-}
 
 void Bateau::reinitEtatPos() { _etatPos.erase(_etatPos.begin(),_etatPos.end()); }
 
@@ -104,3 +95,14 @@ void Bateau::setHited(Position p)
 }
 
 bool Bateau::getEtatAt(int indice) const { return _etatPos[indice].first; }
+
+
+std::ostream& operator <<(std::ostream& os, const Bateau& b) {
+  os << b._direction << ';' << b._coule << ';';
+
+  for ( unsigned int i=0 ; i < b._etatPos.size() ; ++i )
+    os << b._etatPos[i].first 
+       << '_' << b._etatPos[i].second._x 
+       << '_' << b._etatPos[i].second._y << ';';
+  return os;
+}

@@ -636,7 +636,7 @@ void GameClient::drawSpritesGrid(float posGridX, float posGridY)
   spr_hitCell.setTexture(txt_hitCell);
   for ( int i=0; i < 6 ; i ++ )
     {
-      int sizeBoat=_client.getJoueur().getFlotte().getBoatSizeAt(i);
+      int sizeBoat=_client.getJoueur().getFlotte().getBoatAt(i).getTaille();
       for ( int j=0; j < sizeBoat ; j++ )
 	{
 	  int boatPosX=_client.getJoueur().getFlotte().getBoatAt(i).getPositionAt(j)._x;
