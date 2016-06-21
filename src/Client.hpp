@@ -31,7 +31,7 @@ private:
   bool _joueurIsActif;     /*!<Flag pour signifier au programme principal de desactiver la zone de saisie > */
   bool _closeRunWait;      /*!<Flag pour demander au programme principal de fermer la fenetre > */ 
   int _winner;             /*!<Flag pour demander au programme principal d'afficher la fenetre Winner > */
-         
+  bool _serveurShutDown;   /*!<Flag pour signifier que le serveur s'arrete */        
 public:
   /*!
      *  \brief Constructeur
@@ -117,6 +117,19 @@ public:
      *  \param [in] <etat> {gagnant = true}
      */
   void setWinner(int etat);
+
+   /*!
+     *  \brief getter du flag Serveur s'arrette
+     *  Force l'arret de l'applicatiuon en cas d'arret du serveur
+     *  \return arret du serveur = true
+     */
+  int getShutDown() const;
+  /*!
+     *  \brief setter du flag Serveur s'arrette
+     *  Force l'arret de l'applicatiuon en cas d'arret du serveur  
+     *  \param [in] <etat> {arret du serveur  = true}
+     */
+  void setShutDown(int etat);
   
   std::string _listeJoueurs;   /*!< conteneur pour affichage de la liste des joueurs en attentedans la WaitingRoom > */
   std::string _messageServeur; /*!< conteneur pour affichage du message dans la WaitingRoom > */

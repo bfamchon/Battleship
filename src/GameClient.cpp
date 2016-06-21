@@ -119,6 +119,56 @@ void GameClient::runResult()
     }
 }
 
+void GameClient::runRegles()
+{
+  sf::RenderWindow windowRegles(sf::VideoMode(350, 350),"",sf::Style::Titlebar | sf::Style::Close);
+  sf::Sprite spr_result;
+  sf::Texture txt_result;
+  sf::Text reglesTexte;
+  sf::Font font;
+  
+  if (!font.loadFromFile("../Fonts/DooM.ttf"))
+    exit(-1);
+    
+  windowRegles.setPosition(sf::Vector2i(
+			 _window.getPosition().x+225,
+			 _window.getPosition().y+125)
+			   );
+  windowRegles.setTitle("Regles du jeu BattleShip !");
+  
+  if (!txt_result.loadFromFile("../Textures/grid_bg.png"))
+	exit(-1);
+  
+  spr_result.setTexture(txt_result);
+  spr_result.setPosition(0,0);
+
+  reglesTexte.setFont(font);
+  reglesTexte.setCharacterSize(12);
+  reglesTexte.setColor(Black);
+  reglesTexte.setPosition(5,5);
+  reglesTexte.setString("Plateau de 10*10.\n2 joueurs en coup par coup\n\nDescription des navires par joueur :\n     1 porte avion de 5 cases\n     1 croiseur de 4 cases\n     2 sous-marins de 3 cases\n     1 torpilleur de 2 cases\n     1 annexe de 1 case\n\nPlacement des navires :\nEn horizontale et/ou verticale.\nCote a cote autorise\nImpossible de poser 2 navires sur la\n meme case.\nJoueur du premier tour aleatoire \n1 coup = choisir une coordonnee \nhorizontale et verticale\nLe premier joueur qui a tous ses navires\ncoules a perdu.\nLe dernier a conserver au moins\nun navire en fin de partie a gagne.\nIl y a obligatoirement un gagnant.");
+
+  // reglesTexte.setString(temp);
+
+  
+  while (windowRegles.isOpen())
+    {
+      sf::Event event;
+      while (windowRegles.pollEvent(event))
+	{
+	  if (event.type == sf::Event::Closed)
+	    {
+	      windowRegles.close();
+	    }	  
+	}
+
+      windowRegles.clear(White);
+      windowRegles.draw(spr_result);
+      windowRegles.draw(reglesTexte);
+      windowRegles.display();
+    }
+}
+
 void GameClient::run()
 {
   std::string msg="";
@@ -128,7 +178,8 @@ void GameClient::run()
   std::string zoneSaisieTexte = "NothingForTheMoment";
   int lePort = 5500;
 
-  sf::Text connectText,quitText, saisieIP, saisiePseudo,saisiePort, messageServeur, serverText;
+  sf::Text connectText,quitText, saisieIP, saisiePseudo,saisiePort,
+           messageServeur, serverText;
 
   sf::Sprite spr_zoneIP,spr_zonePseudo,spr_zonePort;
   sf::Texture txt_typeZone;
@@ -159,7 +210,7 @@ void GameClient::run()
   quitText.setPosition(50,450);
 
   serverText.setFont(font);
-  serverText.setString("Start server");
+  serverText.setString("Afficher regles");
   serverText.setCharacterSize(20);
   serverText.setColor(Black);
   serverText.setPosition(50,400);
@@ -215,6 +266,7 @@ void GameClient::run()
 		  // Si le client clique dans la zone d'un texte
 		  if ( connectText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
+		      _client.setShutDown(false);
 		      if ( _client.connect(bufferIP,lePort) == sf::Socket::Done)
 			{
 			  music.stop();
@@ -239,7 +291,8 @@ void GameClient::run()
 		  // Start server by clicking here
 		  if ( serverText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 		    {
-		      system("xterm ./BattleShipSrv.out &");
+		      runRegles();
+		      //system("xterm ./BattleShipSrv.out &");
 		    }
 		  
 		  if (spr_zonePseudo.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
@@ -326,10 +379,11 @@ void GameClient::run()
 	}
 
       // if (_client.receive(msg) == sf::Socket::Done)
-        messageServeur.setString(_client._messageServeur);
-	
-      
-      
+      if (_client.getShutDown()){
+	//	std::cout <<"passe here"<<std::endl;   
+	messageServeur.setString("Serveur arrete !");
+      }else  {messageServeur.setString(_client._messageServeur);}
+
       _window.clear(White);
       
       _window.draw(_sprBG);
@@ -496,7 +550,11 @@ void GameClient::runWaitingRoom()
 	  _client.setCloseRunWait(false);
 	  _window.close();
 	}
-      
+
+      if (_client.getShutDown() ){
+	_client._messageServeur = "le serveur s'arrette !";
+        _window.close();
+      }
       _window.clear(White);
       _window.draw(_sprBG);
       _window.draw(spr_radis);
@@ -605,6 +663,10 @@ void GameClient::runBoards()
 	  _window.close();
 	}
       
+      if (_client.getShutDown() ){
+	_client._messageServeur = "le serveur s'arrette !";
+        _window.close();
+      }
       _window.clear(White);
       _window.draw(_sprBG);
       _window.draw(spr_grid);
