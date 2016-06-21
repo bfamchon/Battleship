@@ -1,3 +1,12 @@
+/**
+ * \file GameClient.hpp
+ * \brief Représente l'interface graphique cote client
+ * \author FAMCHON Baptite
+ * \version 1.0
+ * \date 16 juin 2016
+ *
+ *
+ */
 #ifndef GAMECLIENT_HPP
 #define GAMECLIENT_HPP
 
@@ -39,26 +48,86 @@ const sf::Color Gray (150,150,150);
 const sf::Color DarkGray (100,100,100);
 const sf::Color RedWine (80,28,28);
 
-
+/*!  \class GameClient
+   * \brief Represente l'interface graphique cote client
+   *
+   */
 class GameClient {
 private:
-  sf::RenderWindow _window;
-  bool _wantsToPlay;
-  sf::Sprite _sprBG;
-  Client _client;
+  sf::RenderWindow _window; /*!<Fenetre principale>*/
+  bool _wantsToPlay; /*!<Le joueur veut continuer à jouer>*/
+  sf::Sprite _sprBG; /*!<Le sprite du background>*/
+  Client _client; /*!<La liaison au client pour le reseau>*/
 
+  /*!
+   *  \brief Fenetre d'erreur
+   */
   void runError();
+
+  /*!
+   *  \brief Fenetre des resultats
+   */
   void runResult();
+
+  /*!
+   *  \brief Fenetre des regles
+   */
   void runRegles();
+
+  /*!
+   *  \brief Fenetre d'attente et placement des bateaux
+   */
   void runWaitingRoom();
+
+  /*!
+   *  \brief Fenetre de jeu
+   */
   void runBoards();
+
+  /*!
+   *  \brief Dessiner la flotte du joueur
+   *  \param [in] <posx> {Position x de la grille}
+   *  \param [in] <posy> {Position y de la grille}
+   */
   void drawSpritesGrid(float posx,float posy);
+
+  /*!
+   *  \brief Dessiner la grille des coups testes
+   *  \param [in] <posx> {Position x de la grille}
+   *  \param [in] <posy> {Position y de la grille}
+   */
   void drawSpritesHits(float posx,float posy);
-public:
+public:  
+  /*!
+   *  \brief Constructeur de GameClient
+   *  \param [in] <bg> {Texture du background}
+   */
   GameClient(const sf::Texture& bg);
+
+  /*!
+   *  \brief Destructeur de GameClient
+   *  
+   */
   ~GameClient();
+
+  /*!
+   *  \brief Lancer l'interface graphique
+   *  
+   */
   void run();
+
+  /*!
+   *  \brief Savoir si le joueur veut rejouer
+   *  \return Il veut continuer, ou non...
+   */
   bool getWantsToPlay();
+
+  /*!
+   *  \brief Positionner la fenetre sur l'ecran.
+   *         Le PC d'Eric avait quelques lags pour deplacer les fenetres, 
+   *         de base centrees sur l'ecran...
+   *  \param [in] <nb> {1 ou 2}
+   */
   void setWindowPosition(int nb); // eric pour debug
 };
 
