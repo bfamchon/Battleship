@@ -279,7 +279,11 @@ void Serveur::run()
 			{
 			  std::string s;
 			  std::getline(std::cin, s);
-			  broadCast(SERVEUR_MSG, "SERVEUR: "+s);
+			  if (s == "SHUTDOWN"){
+			    broadCast(SHUTDOWN_SERVEUR, "Le serveur s'arrette");
+			    _quit = true;
+			    
+			  } else broadCast(SERVEUR_MSG, "SERVEUR: "+s);
 			  std::cout << "SERVEUR_: " << s <<std::endl;
 			}
 		    });

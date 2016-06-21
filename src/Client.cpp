@@ -2,7 +2,7 @@
 #include "PacketType.hpp"
 #include <iostream>
 
-Client::Client():_joueur(""),_closeRunWait(false),_winner(0),_messageServeur("") {}
+Client::Client():_joueur(""),_closeRunWait(false),_winner(0),_serveurShutDown(false),_messageServeur("") {}
 
 Client::~Client() {}
 
@@ -15,6 +15,14 @@ int Client::getWinner() const{ return _winner;}
 void Client::setWinner(int etat) { _winner = etat;}
 void Client::setBloquant(bool bloquant){
   _bloquant= bloquant;
+}
+
+int Client::getShutDown() const {
+  return _serveurShutDown;
+}
+
+void Client::setShutDown(int etat){
+  _serveurShutDown = etat;
 }
 
 void Client::setJRandFlotte(){
@@ -158,6 +166,16 @@ std::string Client::handlePackets(sf::Packet & packet){
 	_winner = -1;
       }
       break;
+
+      case SHUTDOWN_SERVEUR:
+      {
+	//une fois positionné le client a perdu
+        setShutDown(true);
+	_messageServeur = "Serveur s'arrette !!";
+	
+      }
+      break;
+      
       
     }
   return retour;

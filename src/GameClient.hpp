@@ -49,6 +49,7 @@ private:
 
   void runError();
   void runResult();
+  void runRegles();
   void runWaitingRoom();
   void runBoards();
   void drawSpritesGrid(float posx,float posy);
