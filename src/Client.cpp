@@ -113,14 +113,14 @@ std::string Client::handlePackets(sf::Packet & packet){
       
     case START_PLAY:
       {
-	packet>> _messageServeur;
+	//	packet>> _messageServeur;
 	setJoueurIsActif(true);
       }
       break;
 
        case STOP_PLAY:
       {
-	packet>> _messageServeur;
+	//packet>> _messageServeur;
 	setJoueurIsActif(false);
       }
       break;
@@ -128,7 +128,7 @@ std::string Client::handlePackets(sf::Packet & packet){
       case SEND_RESPONSE_COUP:
       {
 	int res,x,y; 
-	packet >> res >> x >> y;
+        packet >> res >> x >> y;
 	_joueur.setHitAt(res,x,y);
       }
       break;
@@ -141,6 +141,7 @@ std::string Client::handlePackets(sf::Packet & packet){
 	
 	if( res == 3) {_messageServeur = "Touche et Coule !!!!!!!";}
 	if( res == 2) {_messageServeur = "Touche !";}
+	if( res == 1 ) {_messageServeur = "Manque !";}
       }
       break;
       
