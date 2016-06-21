@@ -5,17 +5,27 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
-/*
+
+/**
+ * \file Client.hpp
+ * \brief Représente l'ensemble des bateaux
+ * \author FAMCHON Baptite
+ * \version Final
+ * \date 16 juin 2016
+ *
  * Représente l'ensemble des bateaux
  *
- * ASKME: Baptiste FAMCHON
  */
 
-
+/*! \class Flotte
+   * \brief Représente l'ensemble des bateaux
+   *
+   *  La classe gere les connexion avec le serveur
+   */
 class Flotte {
 private:
-  std::vector<Bateau> _bateaux;
-  int _nbBateaux;
+  std::vector<Bateau> _bateaux; /*!<Représente la flotte>*/
+  int _nbBateaux; /*!<Un certain nombre de bateaux, ici 6>*/
 
 public:
   Flotte();

@@ -113,14 +113,14 @@ std::string Client::handlePackets(sf::Packet & packet){
       
     case START_PLAY:
       {
-	packet>> _messageServeur;
+	/*packet>> _messageServeur;*/
 	setJoueurIsActif(true);
       }
       break;
 
        case STOP_PLAY:
       {
-	packet>> _messageServeur;
+	/*packet>> _messageServeur;*/
 	setJoueurIsActif(false);
       }
       break;
