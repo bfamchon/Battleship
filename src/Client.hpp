@@ -1,6 +1,6 @@
 /**
  * \file Client.hpp
- * \brief Classe Cliente de gestion des echanges réseau de BattleShip 
+ * \brief Classe Cliente de gestion des echanges reseau de BattleShip 
  * \author Sailly E
  * \version 1.0
  * \date 20 juin 2016
@@ -17,7 +17,7 @@
 #include "Joueur.hpp"
 
 
-/*! \class CLient
+/*! \class Client
    * \brief classe client reseau
    *  La classe gere les connexion avec le serveur elle sert de lien 
    * entre l'interface graphique et le reseau
@@ -72,7 +72,7 @@ public:
   Joueur getJoueur();
   
   /*!
-     *  \brief Deplacer le bateau boatNum à la position p
+     *  \brief Deplacer le bateau boatNum a la position p
      *  \param [in] <boatNum> {indice du navire}
      *  \param [in] <p> {position du navire}
      */
@@ -80,13 +80,13 @@ public:
   
   /*!
      *  \brief getter de JoueurIsActif 
-     *   sert à bloquer ou debloquer la zone de saisie des coups  
+     *   sert a bloquer ou debloquer la zone de saisie des coups  
      *  \return l'etat du joueur
      */
   bool getJoueurIsActif() const;
   /*!
      *  \brief setter de JoueurIsActif 
-     *   sert à bloquer ou debloquer la zone de saisie des coups
+     *   sert a bloquer ou debloquer la zone de saisie des coups
      *  \param [in] <joueurIsActif> {etat du joueur}
      */
   void setJoueurIsActif(bool joueurIsActif);
@@ -100,7 +100,7 @@ public:
   bool getCloseRunWait() const;
   /*!
      *  \brief setter du flag CloseRunWait
-     *   sert à bloquer ou debloquer la zone de saisie des coups
+     *   sert a bloquer ou debloquer la zone de saisie des coups
      *  \param [in] <etat> {Fermer la fenetre}
      */
   void setCloseRunWait(bool etat);

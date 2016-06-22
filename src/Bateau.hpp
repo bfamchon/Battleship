@@ -1,11 +1,11 @@
 /**
  * \file Bateau.hpp
- * \brief Représente un bateau
+ * \brief Represente un bateau
  * \author FAMCHON Baptite
  * \version 1.0
  * \date 16 juin 2016
  *
- * Représente un bateau
+ * Represente un bateau
  *
  */
 
@@ -19,19 +19,19 @@
 #include "Position.hpp"
 
 /*
- * Représente un bateau
+ * Represente un bateau
  *
- * @param: _etatPos   > Touché(true 1) / intact(false 0) à la position
+ * @param: _etatPos   > Touche(true 1) / intact(false 0) a la position
  * @param: _nom       > nom du bateau
  * @param: _taille    > taille du bateau
  * @param: _direction > haut 1 bas 2 gauche 3 droite 4
- * @param: _coule     > coulé true ou false
+ * @param: _coule     > coule true ou false
  *
  * ASKME: Baptiste FAMCHON
  */
 
 /*!  \class Bateau
-   * \brief Représente un bateau
+   * \brief Represente un bateau
    *
    */
 class Bateau {
@@ -83,7 +83,7 @@ public:
   void setDir(int dir);
 
   /*!
-   *  \brief Récupérer la direction du bateau
+   *  \brief Recuperer la direction du bateau
    *  
    */ 
   int getDir() const;

@@ -45,7 +45,7 @@ bool Bateau::foundInBateau(Position p) const
 void Bateau::setDir(int dir) { _direction=dir; }
 int Bateau::getDir() const { return _direction; }
 /*
- * Affecter un état et position en fonction
+ * Affecter un etat et position en fonction
  * de la direction et de la taille.
  */
 void Bateau::setEtatPos(bool etat,Position pos)
@@ -64,18 +64,18 @@ void Bateau::setCoule(bool etatBateau) { _coule = etatBateau; }
 bool Bateau::getCoule() const { return _coule; }
 /*
  * Cette fonction change un bateau existant de position
- * dans une direction souhaitée.
+ * dans une direction souhaitee.
  * Utilisable lors de la position des navires.
  */
 void Bateau::changeBoatPosition(int dir)
 {
-  // récupérer la première position du bateau
+  // recuperer la premiere position du bateau
   Position basePos = _etatPos[0].second;
   // attribuer la nouvelle direction
   setDir(dir);
   // effacer le vecteur etatPos existant
   reinitEtatPos();
-  // le recréer avec la nouvelle direction affecté
+  // le recreer avec la nouvelle direction affecte
   setEtatPos(0,basePos);
 }
 
@@ -86,7 +86,7 @@ void Bateau::reinitEtatPos() { _etatPos.erase(_etatPos.begin(),_etatPos.end()); 
 
 void Bateau::setHited(Position p)
 {
-  // Chercher la bonne case et la mettre à touché
+  // Chercher la bonne case et la mettre a touche
   for ( unsigned int i = 0 ; i < _etatPos.size() ; ++i )
     {
       if ( (_etatPos[i].second._x == p._x) && (_etatPos[i].second._y == p._y)  )

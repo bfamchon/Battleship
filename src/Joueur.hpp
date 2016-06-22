@@ -1,11 +1,11 @@
 /**
  * \file Joueur.hpp
- * \brief Représente un joueur
+ * \brief Represente un joueur
  * \author FAMCHON Baptite
  * \version 1.0
  * \date 16 juin 2016
  *
- * Représente un joueur
+ * Represente un joueur
  *
  */
 
@@ -29,7 +29,7 @@ const int ALL_BOAT_SINK = 4;
  */
 
 /*!  \class Joueur
-   * \brief Représente un joueur
+   * \brief Represente un joueur
    *
    */
 class Joueur {
@@ -47,14 +47,14 @@ public:
   Joueur(std::string pseudo);
 
   /*!
-   *  \brief Initialiser les coups testes à un etat donne
+   *  \brief Initialiser les coups testes a un etat donne
    *  
    *  \param [in] <etatCoup> {Etat d'initialisation}
    */  
   void initTestedHits(int etatCoup);
 
   /*!
-   *  \brief Récupérer le pseudo
+   *  \brief Recuperer le pseudo
    *  \return Le pseudo
    *  
    */  
@@ -75,7 +75,7 @@ public:
   Flotte getFlotte() const;
 
   /*!
-   *  \brief Remplacer la flotte par celle que l'on passe en paramètre
+   *  \brief Remplacer la flotte par celle que l'on passe en parametre
    *  
    *  \param [in] <f> {La flotte que l'on veut}
    */  
@@ -119,7 +119,7 @@ public:
   void setSocketJoueur(sf::TcpSocket * socketJoueur);
 
   /*!
-   *  \brief Affecter l'etat voulu à la case x y du bateau
+   *  \brief Affecter l'etat voulu a la case x y du bateau
    *  \param [in] <etat> {Etat de la case}
    *  \param [in] <x> {Coordonne de la case}
    *  \param [in] <y> {Coordonne de la case}
@@ -142,7 +142,7 @@ public:
 
   /*!
    *  \brief Tourner le bateau voulu dans le sens des aiguilles d'une montre
-   *  \param [in] <boatNum> {Le numéro de bateau}
+   *  \param [in] <boatNum> {Le numero de bateau}
    */
   void turnBoat(int boatNum);
 };

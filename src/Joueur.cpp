@@ -21,13 +21,13 @@ int Joueur::getHitAt(int x,int y) const { return _testedHits[y*10+x]; }
 void Joueur::setHitAt(int etat, int x, int y) { _testedHits[y*10+x] = etat; }
 
 /* 
- * Le serveur envoie 2 ( touché )  ou 3 ( coulé )...
+ * Le serveur envoie 2 ( touche )  ou 3 ( coule )...
  *
  */
 void Joueur::setFlotteAt(int etat,int x,int y)
 {
   int boatNum = _flotte.searchBoatAt(Position{x,y});
-  // Le bateau est touché
+  // Le bateau est touche
   if ( etat == BOAT_SINK || etat == ALL_BOAT_SINK )
     _flotte.setBoatSink(boatNum);
   
@@ -37,7 +37,7 @@ void Joueur::setFlotteAt(int etat,int x,int y)
 
 void Joueur::setFlotte(const Flotte & f)
 {
-  // Au cas où elle contenait déjà des valeurs...
+  // Au cas ou elle contenait deja des valeurs...
   _flotte.initFlotte();
   std::ostringstream oss;
   oss << f;
@@ -54,7 +54,7 @@ void Joueur::setSocketJoueur(sf::TcpSocket * socketJoueur){
 
 /* 
  * Le serveur questionne la flotte du joueur pour le retour.
- * Le joueur attaqué met à jour sa flotte.
+ * Le joueur attaque met a jour sa flotte.
  *
  */
 int Joueur::searchInFlotte(Position p)
@@ -63,7 +63,7 @@ int Joueur::searchInFlotte(Position p)
     {
       int boatNum = _flotte.searchBoatAt(p);
       
-      // Le bateau est touché à la case p
+      // Le bateau est touche a la case p
       _flotte.setBoatHitAt(p,boatNum);
       if ( _flotte.allTouched(boatNum) )
 	{
@@ -81,5 +81,5 @@ int Joueur::searchInFlotte(Position p)
 // Tourner le bateau boatNum dans une direction valide
 void Joueur::turnBoat(int boatNum) { _flotte.turnBoatVPos(boatNum); }
 
-// Déplacer le bateau boatNum à la position p
+// Deplacer le bateau boatNum a la position p
 void Joueur::mooveBoat(int boatNum,Position p) { _flotte.mooveBoatVPos(boatNum,p); }

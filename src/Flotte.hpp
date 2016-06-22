@@ -1,11 +1,11 @@
 /**
  * \file Client.hpp
- * \brief Représente l'ensemble des bateaux
+ * \brief Represente l'ensemble des bateaux
  * \author FAMCHON Baptite
  * \version 1.0
  * \date 16 juin 2016
  *
- * Représente l'ensemble des bateaux
+ * Represente l'ensemble des bateaux
  *
  */
 #ifndef FLOTTE_HPP
@@ -17,12 +17,12 @@
 #include <sstream>
 
 /*! \class Flotte
-   * \brief Représente l'ensemble des bateaux
+   * \brief Represente l'ensemble des bateaux
    *
    */
 class Flotte {
 private:
-  std::vector<Bateau> _bateaux; /*!<Représente la flotte>*/
+  std::vector<Bateau> _bateaux; /*!<Represente la flotte>*/
   int _nbBateaux; /*!<Un certain nombre de bateaux, ici 6>*/
 
 public:
@@ -46,7 +46,7 @@ public:
 
   /*!
    *  \brief Trouver une direction valide,
-   *         l'ancienne est mémorisée pour ne pas etre reprise
+   *         l'ancienne est memorisee pour ne pas etre reprise
    *  \return La direction valide trouvee
    *  \param [in] <p> {Position testee}
    *  \param [in] <taille> {Taille du bateau}
@@ -143,7 +143,7 @@ public:
   Bateau getBoatAt(int boatNum)const;
 
   /*!
-   *  \brief Deplacer le bateau à la position demandee si valide
+   *  \brief Deplacer le bateau a la position demandee si valide
    *  \param [in] <boatNum> {Numero de bateau}
    *  \param [in] <p> {Position demandee}
    */

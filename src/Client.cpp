@@ -72,7 +72,7 @@ sf::Socket::Status Client::receive(std::string & msg)
   if(status==sf::Socket::Done)
     {
       msg = handlePackets(packet);
-      std::cout<<msg<<"\n"; //messages en console si retour positionÃ© dans handlePacke
+      std::cout<<msg<<"\n"; //messages en console si retour positione dans handlePacke
     }
   return status;
 }
@@ -137,7 +137,12 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	int res,x,y; 
         packet >> res >> x >> y;
-	_joueur.setHitAt(res,x,y);
+	if( res == 1 ) {_messageServeur = "Vous avez Manque !";
+	}else _joueur.setHitAt(res,x,y);
+
+	if( res == 3) {_messageServeur = "Vous avez Touche et Coule !!!!!!!";}
+	if( res == 2) {_messageServeur = "Vous avez Touche !";}
+
       }
       break;
 
@@ -146,30 +151,31 @@ std::string Client::handlePackets(sf::Packet & packet){
 	int res,x,y;
 	packet >> res >> x >> y;
 	_joueur.setFlotteAt(res,x,y);
-	
+
+	std::cout << "res "<<res<< std::endl;
 	if( res == 3) {_messageServeur = "Touche et Coule !!!!!!!";}
 	if( res == 2) {_messageServeur = "Touche !";}
-	if( res == 1 ) {_messageServeur = "Manque !";}
+	if( res != 3 && res !=2 ){_messageServeur = "Manque !";}
       }
       break;
       
       case SEND_WINNER:
       {
-	//une fois positionné le client a gagné
+	//une fois positionne le client a gagne
 	_winner = 1;
       }
       break;
 
       case SEND_LOOSER:
       {
-	//une fois positionné le client a perdu
+	//une fois positionne le client a perdu
 	_winner = -1;
       }
       break;
 
       case SHUTDOWN_SERVEUR:
       {
-	//une fois positionné le client a perdu
+	//une fois positionne le client a perdu
         setShutDown(true);
 	_messageServeur = "Serveur s'arrette !!";
 	

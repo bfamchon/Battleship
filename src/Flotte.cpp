@@ -3,7 +3,7 @@
 #include "RandomInRange.hpp"
 #include <algorithm>
 
-// Les 6 bateaux sont initialisés
+// Les 6 bateaux sont initialises
 Flotte::Flotte() : _nbBateaux(6) 
 {
   initFlotte();
@@ -29,14 +29,14 @@ void Flotte::genererFlotte()
   RandomInRange randomIn;
   int directionOk;
   Position randPos;
-  // Réinitialiser la flotte
+  // Reinitialiser la flotte
   initFlotte();
   
   for ( int i=0 ; i < 6 ; ++i )
     {
       do 
 	{
-	  // Positions aléatoires
+	  // Positions aleatoires
 	  randPos._x = randomIn(0,brdSize-1);
 	  randPos._y = randomIn(0,brdSize-1);
 	  
@@ -53,8 +53,8 @@ void Flotte::genererFlotte()
 
 /*
  * Trouver une direction valide
- * à une position p et pour une taille de bateau.
- * oldDir mémorisée pour ne pas reprendre la meme direction.
+ * A une position p et pour une taille de bateau.
+ * oldDir memorisee pour ne pas reprendre la meme direction.
  *
  */
 int Flotte::estValide(Position p,int taille,int oldDir)
@@ -84,7 +84,7 @@ int Flotte::estValide(Position p,int taille,int oldDir)
 	    break;
 	}
       dirTest.erase(dirTest.begin()+indice);
-      // Si on a supprimé le dernier, dernier indice = 2 et plus 3 !
+      // Si on a supprime le dernier, dernier indice = 2 et plus 3 !
       if ( indice == 3 )
 	indice = 0;
       
@@ -109,7 +109,7 @@ int Flotte::estValide(Position p,int taille,int oldDir)
 
 bool Flotte::estValideHaut(Position p,int taille)
 {
-  // valide si on ne trouve pas de position égale dans _bateaux vers le haut
+  // valide si on ne trouve pas de position egale dans _bateaux vers le haut
   if ( p._y-taille+1 < 0 )
     return false;
   while ( taille > 0 )
@@ -196,15 +196,15 @@ int Flotte::searchBoatAt(Position p) const
  */
 void Flotte::turnBoatVPos(int boatNum) 
 {
-  // Première case du bateau
+  // Premiere case du bateau
   Position p = _bateaux[boatNum].getPositionAt(0);
   int oldDir= _bateaux[boatNum].getDir();
   // Effacer le vecteur etatPos du bateau
   _bateaux[boatNum].reinitEtatPos();
   
-  // Récupérer une direction valide
+  // Recuperer une direction valide
   int direction = estValide(p,_bateaux[boatNum].getTaille(),oldDir);
-  // direction == 0 > Seul la direction de départ était correcte...
+  // direction == 0 > Seul la direction de depart etait correcte...
   if ( direction == 0 )
     direction=oldDir;
   

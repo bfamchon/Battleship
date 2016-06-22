@@ -4,8 +4,8 @@
 #include <random>
 
 /*
- * Classe pour générer un nombre aléatoire entre low et high
- * ( question de simplicité ... )
+ * Classe pour generer un nombre aleatoire entre low et high
+ * ( question de simplicite ... )
  * 
  * ASKME: Baptiste FAMCHON
  */

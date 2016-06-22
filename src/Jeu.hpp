@@ -1,3 +1,13 @@
+/**
+ * \file Client.hpp
+ * \brief Classe Jeu gere le jeu cote serveur 
+ * \author Sailly E
+ * \version 1.0
+ * \date 20 juin 2016
+ *
+ * Classe de gestion du jeu et du respect des regles cote Serveur
+ *
+ */
 #ifndef JEU_HPP
 #define JEU_HPP
 
@@ -5,7 +15,7 @@
 #include "Flotte.hpp"
 /*! \class Jeu
    * \brief classe Jeu sur le serveur
-   *  La classe gere le jeu et fait respecter les regles à tous les joueurs
+   *  La classe gere le jeu et fait respecter les regles a tous les joueurs
    */
 class Jeu {
 private:
@@ -68,7 +78,7 @@ public:
      */
   std::string getListeJoueur() const;
   /*!
-     *  \brief Initialisation du joueur après deconnection
+     *  \brief Initialisation du joueur apres deconnection
      *  \param [in] <nomJoueur> {pseudo du joueur}
      */
   void initJoueur(std::string nomJoueur);
@@ -81,7 +91,7 @@ public:
   /*!
      *  \brief Initialisation du socket pour le joueur
      *  \param [in] <socketJoueur> {pointeur sur le socket du joueur}
-     *  \param [in] <Joueur> {pointeur sur un Joueur}
+     *  \param [in] <joueur> {pointeur sur un Joueur}
      */
   void setSocketJoueur(sf::TcpSocket * socketJoueur,Joueur * joueur);
   /*!

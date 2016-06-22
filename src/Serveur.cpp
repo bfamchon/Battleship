@@ -21,7 +21,7 @@ Serveur::~Serveur()
 void Serveur::declancheChangementJoueur(){
 
   _jeu.changeJoueur();
-  //on met à jour les clients 
+  //on met a jour les clients 
   
   //envoi de stop play
   sendMsgClient(_jeu.getJInactif()->getSocketJoueur(),
@@ -104,12 +104,16 @@ void Serveur::handlePackets()
 		packet>> p._x >>p._y;
 		std::vector <int> boatState;
 	        int res = _jeu.searchInPlayerFlotte(p,_jeu.getJInactif(),&boatState);
-                //traiter ici si res == 4 gagné 
+                //traiter ici si res == 4 gagne 
 
 		if (res == 1) {
 		  sendPacket.clear();
 		  sendPacket<<SEND_RESPONSE_COUP<< res << p._x << p._y;
 		  sendPacketClient(_jeu.getJCourant()->getSocketJoueur(),sendPacket);
+		  //packet bidon pour declancher manque
+		  sendPacket.clear();
+		  sendPacket<<MAJ_FLOTTE<< 1 << 0 << 0;
+		  sendPacketClient(_jeu.getJInactif()->getSocketJoueur(),sendPacket);
 
 		} else if (res == 2) {
 		  sendPacket.clear();
@@ -122,10 +126,10 @@ void Serveur::handlePackets()
 
 		} else if (res == 3) {
 		  sendPacket.clear();
-		  // a voir celon Baptiste pour etat envoyé
+		  // a voir celon Baptiste pour etat envoye
 		  sendPacket<<MAJ_FLOTTE<< 3 << p._x << p._y;
 		  sendPacketClient(_jeu.getJInactif()->getSocketJoueur(),sendPacket);
-		  // Je t'ai adapté la boucle( Baptiste )
+		  // Je t'ai adapte la boucle( Baptiste )
 		  for (unsigned int i = 0 ; i < boatState.size() ; i+=2 ) {
 		    sendPacket.clear();
 		    sendPacket<<SEND_RESPONSE_COUP<< 3 << boatState[i] << boatState[i+1];
@@ -164,7 +168,7 @@ void Serveur::handlePackets()
 				"Bienvenue attente deuxieme joueur !");     
 		} else {
                   _partieEncours = true;
-		  //déja un joueur pret à jouer
+		  //deja un joueur pret a jouer
 		  if (sendMsgClientRet(it->first,
 				       SEND_USER_WAIT,
 				       "Bienvenue !") ==sf::Socket::Done){      
@@ -198,16 +202,16 @@ void Serveur::handlePackets()
 	case sf::Socket::Disconnected:
 	  
 	  std::cout<<it->second<<" s'est deconnecte\n";
-	  broadCast(GENERAL_MSG, it->second+" s'est déconnecte\n");
+	  broadCast(GENERAL_MSG, it->second+" s'est deconnecte\n");
 
 	  std::cout<<"deconexion " << _partieEncours << std::endl;
 	  if (_partieEncours){
-	    //kill joueur déconnécté
+	    //kill joueur deconnecte
 	    
 	    _partieEncours=false;
 
             std::cout<<"deconexion 2 "<< _partieEncours << std::endl;
-	    // send Win à l'autre
+	    // send Win a l'autre
 	      if (it->second == _jeu.getJoueur1().getPseudo()) {
 		std::cout<<"sendwinner 2 " << std::endl;
 		sendMsgClient(_jeu.getJoueur2().getSocketJoueur(),
@@ -220,7 +224,7 @@ void Serveur::handlePackets()
 			    "Vous etes le gagnant par forfait !");
 	    }
 
-	  }else{ //la partie n'est pas démarée
+	  }else{ //la partie n'est pas demaree
 	    if (!_sameName ){
 	      _jeu.initJoueur(it->second);
 	    }else _sameName = false;

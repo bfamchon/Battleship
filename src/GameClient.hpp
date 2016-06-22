@@ -1,6 +1,6 @@
 /**
  * \file GameClient.hpp
- * \brief Représente l'interface graphique cote client
+ * \brief Represente l'interface graphique cote client
  * \author FAMCHON Baptite
  * \version 1.0
  * \date 16 juin 2016
@@ -21,9 +21,9 @@
 #include "Joueur.hpp"
 
 /*
- * Constantes utiles pour simplifier l'écriture
+ * Constantes utiles pour simplifier l'ecriture
  * et la lecture du code.
- * Elles ne sont pas toutes utilisées pour le moment.
+ * Elles ne sont pas toutes utilisees pour le moment.
  *
  * ASKME: Baptiste FAMCHON
  */
@@ -55,7 +55,7 @@ const sf::Color RedWine (80,28,28);
 class GameClient {
 private:
   sf::RenderWindow _window; /*!<Fenetre principale>*/
-  bool _wantsToPlay; /*!<Le joueur veut continuer à jouer>*/
+  bool _wantsToPlay; /*!<Le joueur veut continuer a jouer>*/
   sf::Sprite _sprBG; /*!<Le sprite du background>*/
   Client _client; /*!<La liaison au client pour le reseau>*/
 

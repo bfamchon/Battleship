@@ -9,8 +9,8 @@
 
 /*
  * Initialise simplement la fenetre avec une taille de 800*600,
- * un titre, et une impossibilité de resize.
- * La fenetre est ensuite centrée sur l'écran.
+ * un titre, et une impossibilit� de resize.
+ * La fenetre est ensuite centre sur l'ecran.
  */
 
 GameClient::GameClient(const sf::Texture& bgPath) : _window(sf::VideoMode(800, 600),
@@ -25,8 +25,8 @@ GameClient::GameClient(const sf::Texture& bgPath) : _window(sf::VideoMode(800, 6
 }
 
 /*
- * La première interface est le menu, le client
- * a la possibilité de quitter, ou de rejoindre 
+ * La premiere interface est le menu, le client
+ * a la possibilite de quitter, ou de rejoindre 
  * un serveur.
  *
  */
@@ -182,7 +182,7 @@ void GameClient::run()
   sf::Music music;
   
   unsigned int fieldMaxSize = 15;
-  // Si le chargement des fichiers échoue
+  // Si le chargement des fichiers echoue
   if (!music.openFromFile("../Audio/menu.ogg"))
     exit(-1);
   if (!font.loadFromFile("../Fonts/DooM.ttf"))
@@ -402,7 +402,7 @@ void GameClient::run()
 }
 
 /*
- * La deuxième interface est la Waiting Room, le joueur
+ * La deuxieme interface est la Waiting Room, le joueur
  * choisit sa flotte, et attend l'autre personne 
  * 
  * CF explications de run()
@@ -420,7 +420,7 @@ void GameClient::runWaitingRoom()
   sf::Clock clock;
   sf::Time dCLickTime = sf::milliseconds(350);
 
-  // Récupération du numéro de bateau dans click
+  // Recuperation du numero de bateau dans click
   // Utilisation dans released
   int boatNumber=-1;
   
@@ -515,7 +515,7 @@ void GameClient::runWaitingRoom()
 		    }
 		}
 	    }
-	  // Utilisation du numéro de bateau ici
+	  // Utilisation du numero de bateau ici
 	  if ( event.type == sf::Event::MouseButtonReleased )
 	    {
 	      if ( boatNumber != -1 )
@@ -563,7 +563,7 @@ void GameClient::runWaitingRoom()
 }
 
 /*
- * La troisième interface est le jeu.
+ * La troisieme interface est le jeu.
  *
  * CF explications de run()
  * 

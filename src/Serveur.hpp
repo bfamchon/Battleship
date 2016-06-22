@@ -1,6 +1,6 @@
 /**
  * \file Client.hpp
- * \brief Classe Cliente de gestion des echanges réseau de BattleShip 
+ * \brief Classe Cliente de gestion des echanges reseau de BattleShip 
  * \author Sailly E
  * \version 1.0
  * \date 20 juin 2016
@@ -28,7 +28,7 @@ private:
   typedef std::unordered_map<sf::TcpSocket *, std::string> Clients;
   
   Clients _clients; /*!<Liste de socket client connectes au serveur */ 
-  Jeu _jeu;         /*!<Jeu cotés serveur (maitre du jeu) */ 
+  Jeu _jeu;         /*!<Jeu cotes serveur (maitre du jeu) */ 
   sf::TcpListener _listner;/*!<Processus d'ecoute du serveur */ 
   bool _quit;               /*!< Flag de sortie de boucle infinie*/ 
   bool _bloquant;			/*!< Sert a passer les socket en bloquant*/
@@ -91,7 +91,7 @@ private:
 			sf::Packet & packet);
   /*!
      *  \brief setter de _bloquant
-     *   utilisé pour rendre les sockets bloquant
+     *   utilise pour rendre les sockets bloquant
      *  \param [in] <bloquant> {bloquant = true}
      */
   void setBloquant(bool bloquant);

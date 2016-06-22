@@ -13,6 +13,7 @@ TESTFILE = MainTest.cpp
 BINDIR = ./bin
 OBJDIR = ./obj
 SRCDIR = ./src
+DOCDIR = ./Annexes
 
 PROGSRC = $(SRCDIR)/$(PROGFILE) 
 PROGBIN = $(BINDIR)/$(PROGFILE:.cpp=.out) 
@@ -60,4 +61,9 @@ cppcheck:
 	cppcheck --enable=all --inconclusive $(SRC) $(PROGSRC) $(SRVSRC) $(TESTSRC)
 clean:
 	find $(OBJDIR) -name "*.o" | xargs rm $(PROGBIN) $(SRVBIN) $(TESTBIN)
+
+doc:
+	mkdir -p $(DOCDIR)
+	doxygen ./BattleShip_Doxygen.mk
+	make -C $(DOCDIR)/latex/
 
