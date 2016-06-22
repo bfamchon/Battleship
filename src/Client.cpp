@@ -137,12 +137,12 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	int res,x,y; 
         packet >> res >> x >> y;
-	if( res == 1 ) {_messageServeur = "Vous avez Manque !";
-	}else _joueur.setHitAt(res,x,y);
+	_joueur.setHitAt(res,x,y);
 
 	if( res == 3) {_messageServeur = "Vous avez Touche et Coule !!!!!!!";}
 	if( res == 2) {_messageServeur = "Vous avez Touche !";}
 
+	if( res == 1 ) {_messageServeur = "Vous avez Manque !";}
       }
       break;
 
@@ -150,12 +150,12 @@ std::string Client::handlePackets(sf::Packet & packet){
       {
 	int res,x,y;
 	packet >> res >> x >> y;
-	_joueur.setFlotteAt(res,x,y);
+	if (res==1) {_messageServeur = "Manque !";
+	} else 	_joueur.setFlotteAt(res,x,y);
 
-	std::cout << "res "<<res<< std::endl;
+
 	if( res == 3) {_messageServeur = "Touche et Coule !!!!!!!";}
 	if( res == 2) {_messageServeur = "Touche !";}
-	if( res != 3 && res !=2 ){_messageServeur = "Manque !";}
       }
       break;
       

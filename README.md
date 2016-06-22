@@ -1,7 +1,7 @@
 # Battleship
 
 /////////////////////////////////
-//        LIVRABLE 1.00        //
+//        LIVRABLE 1.1.2       //
 /////////////////////////////////
 
 Jeu de bataille navale en réseau avec c++ & sfml 
@@ -24,7 +24,7 @@ Plus écran de règles, gagné, perdu, erreur (Pseudo invalide)
 Commandes utilisables pour l'installation :
 make clean
 make
-make doc    //génère la documentation doxygen et latex dans le répertoire ./Annexes/ 
+make doc    //si doxygen est installé sur votre machine : génère la documentation doxygen et latex dans le répertoire ./Annexes/ 
 
 I- DEMARRER LE JEU
 
@@ -56,3 +56,5 @@ Le dernier navire de l'adversaire coulé vous fait gagner
 II- TERMINER LE JEU
 
 Cliquer sur la croix puis sur  «quitter » pour se déconnecter ou la croix
+
+Pour le serveur saisir SHUTDOWN en ligne de commande ferme le serveur et déconnecte les clients
