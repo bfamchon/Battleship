@@ -204,7 +204,7 @@ void GameClient::run()
   quitText.setPosition(50,450);
 
   serverText.setFont(font);
-  serverText.setString("Afficher regles");
+  serverText.setString("See rules");
   serverText.setCharacterSize(20);
   serverText.setColor(Black);
   serverText.setPosition(50,400);
@@ -271,6 +271,7 @@ void GameClient::run()
 			      {
 				messageServeur.setString(_client._messageServeur); 
 			      } else {
+			      _client.setJoueurIsActif(false);
 			      runWaitingRoom();
 			    }
 			    
@@ -445,7 +446,7 @@ void GameClient::runWaitingRoom()
   randomPosText.setFont(font);
   randomPosText.setString("Generate random position");
   randomPosText.setCharacterSize(20);
-  randomPosText.setColor(Black);
+  randomPosText.setColor(Gray);
   randomPosText.setPosition(50,500);
 
 
@@ -529,7 +530,7 @@ void GameClient::runWaitingRoom()
 	  if ( randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 	    randomPosText.setColor(RedWine);
 	  if ( ! randomPosText.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
-	    randomPosText.setColor(Black);
+	    randomPosText.setColor(Gray);
 	  if ( spr_radis.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )
 	    spr_radis.setColor(DarkGray);
 	  if ( !spr_radis.getGlobalBounds().contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))) )

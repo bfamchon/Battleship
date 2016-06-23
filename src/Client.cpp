@@ -50,6 +50,7 @@ sf::Socket::Status Client::connect(const sf::IpAddress & IP, unsigned short port
 
   sf::Socket::Status stat= _mySocket.connect(IP,port);
   _mySocket.setBlocking(false);//_bloquant);
+  _winner=0;
   return stat;
 }
 
