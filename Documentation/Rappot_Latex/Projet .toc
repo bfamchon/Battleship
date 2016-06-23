@@ -1,0 +1,17 @@
+\contentsline {paragraph}{\IeC {\'E}tudiants : Eric SAILLY, Baptiste FAMCHON, Kossi EHO}{1}{Doc-Start}
+\contentsline {paragraph}{Encadrant : Julien DEHOS }{1}{Doc-Start}
+\contentsline {paragraph}{Date de d\IeC {\'e}but : 06 Juin 2016}{1}{Doc-Start}
+\contentsline {paragraph}{Date de fin : 24 Juin 2016 }{1}{Doc-Start}
+\contentsline {paragraph}{Objet du projet : Projet de Fin d'Etude}{1}{Doc-Start}
+\contentsline {section}{\numberline {1}Pr\IeC {\'e}sentation du projet}{2}{section.1}
+\contentsline {subsection}{\numberline {1.1}Contexte}{2}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Besoins, sp\IeC {\'e}cifications des demandes}{2}{subsection.1.2}
+\contentsline {section}{\numberline {2}R\IeC {\'e}alisation}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Pr\IeC {\'e}sentation du logiciel}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Pr\IeC {\'e}sentation technique}{5}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Gestion du r\IeC {\'e}seau}{5}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Organisation du code}{6}{subsection.2.4}
+\contentsline {section}{\numberline {3}Bilan}{7}{section.3}
+\contentsline {subsection}{\numberline {3.1}D\IeC {\'e}roulement du projet}{7}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}R\IeC {\'e}alisation des objectifs }{7}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Conclusion pour les projets futurs}{7}{subsection.3.3}
